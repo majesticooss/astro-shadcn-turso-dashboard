@@ -1,23 +1,23 @@
 ---
 import { Dashboard } from "@/components/Dashboard";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { userCanAccessResource } from "@/lib/auth";
 
 const user = Astro.locals.user;
 if (!user) {
 	return Astro.redirect("/login");
 }
+
+if (!userCanAccessResource(user, "dashboard")) {
+	return Astro.redirect("/unauthorized");
+}
 ---
 
 <AuthenticatedLayout>
-	<!-- <h1>Hi, {user.email}!</h1>
-	<p>Your user ID is {user.id}.</p>
-	<form id="logout-form" method="post" action="/api/logout">
-		<button>Sign out</button>
-	</form> -->
 	<Dashboard client:load />
 </AuthenticatedLayout>
 
-<script>
+<!-- <script>
 	import { navigate } from "astro:transitions/client";
 
 	let logoutHandler: EventListener;
@@ -43,4 +43,4 @@ if (!user) {
 			.getElementById("logout-form")
 			?.removeEventListener("submit", logoutHandler);
 	});
-</script>
+</script> -->
