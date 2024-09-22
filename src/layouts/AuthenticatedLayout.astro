@@ -5,15 +5,15 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
-	<div
+	<main
 		class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
 	>
 		<Sidebar client:load />
 		<div class="flex flex-col">
 			<Header client:idle />
-			<main class="flex flex-1 flex-col">
+			<section class="flex flex-1 flex-col">
 				<slot />
-			</main>
+			</section>
 		</div>
-	</div>
+	</main>
 </BaseLayout>
