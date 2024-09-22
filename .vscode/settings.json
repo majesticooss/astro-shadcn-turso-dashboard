@@ -1,0 +1,17 @@
+{
+	"css.customData": [
+		".vscode/tailwind.json"
+	],
+	"tailwindCSS.classAttributes": [
+		"class",
+		"className",
+		"ngClass",
+		"class:list"
+	],
+	"debug.allowBreakpointsEverywhere": true,
+	"editor.defaultFormatter": "biomejs.biome",
+	"files.trimTrailingWhitespace": true,
+	"[astro]": {
+		"editor.defaultFormatter": "astro-build.astro-vscode"
+	}
+}
