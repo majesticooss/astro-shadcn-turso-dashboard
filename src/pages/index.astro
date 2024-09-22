@@ -1,34 +1,46 @@
 ---
+import { Dashboard } from "@/components/Dashboard";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+
 const user = Astro.locals.user;
 if (!user) {
 	return Astro.redirect("/login");
 }
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Lucia example</title>
-	</head>
-	<body>
-		<h1>Hi, {user.username}!</h1>
-		<p>Your user ID is {user.id}.</p>
-		<form method="post" action="/api/logout">
-			<button>Sign out</button>
-		</form>
-	</body>
-</html>
+<AuthenticatedLayout>
+	<!-- <h1>Hi, {user.email}!</h1>
+	<p>Your user ID is {user.id}.</p>
+	<form id="logout-form" method="post" action="/api/logout">
+		<button>Sign out</button>
+	</form> -->
+	<Dashboard client:load />
+</AuthenticatedLayout>
 
 <script>
-	document.forms[0].addEventListener("submit", async (e) => {
-		e.preventDefault();
-		const formElement = e.target as HTMLFormElement;
-		await fetch(formElement.action, {
-			method: formElement.method,
-			body: new FormData(formElement)
-		});
-		window.location.href = "/login";
+	import { navigate } from "astro:transitions/client";
+
+	let logoutHandler: EventListener;
+
+	document.addEventListener("astro:page-load", () => {
+		const logoutForm = document.getElementById("logout-form");
+		if (logoutForm) {
+			logoutHandler = async (e) => {
+				e.preventDefault();
+				const formElement = e.target as HTMLFormElement;
+				await fetch(formElement.action, {
+					method: formElement.method,
+					body: new FormData(formElement),
+				});
+				navigate("/login");
+			};
+			logoutForm.addEventListener("submit", logoutHandler);
+		}
+	});
+
+	document.addEventListener("astro:before-preparation", () => {
+		document
+			.getElementById("logout-form")
+			?.removeEventListener("submit", logoutHandler);
 	});
 </script>

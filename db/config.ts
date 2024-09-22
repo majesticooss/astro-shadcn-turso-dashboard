@@ -6,7 +6,7 @@ const User = defineTable({
 			primaryKey: true,
 			identity: true,
 		}),
-		username: column.text({ unique: true }),
+		email: column.text({ unique: true }),
 		hashed_password: column.text(),
 	},
 });

@@ -4,17 +4,18 @@ import type { APIContext } from "astro";
 
 export async function POST(context: APIContext): Promise<Response> {
 	const formData = await context.request.formData();
-	const username = formData.get("username");
+	const email = formData.get("email");
 	if (
-		typeof username !== "string" ||
-		username.length < 3 ||
-		username.length > 31 ||
-		!/^[a-z0-9_-]+$/.test(username)
+		typeof email !== "string" ||
+		!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+			email,
+		)
 	) {
-		return new Response(JSON.stringify({ error: "Invalid username" }), {
+		return new Response(JSON.stringify({ error: "Invalid email" }), {
 			status: 400,
 		});
 	}
+
 	const password = formData.get("password");
 	if (
 		typeof password !== "string" ||
@@ -29,12 +30,12 @@ export async function POST(context: APIContext): Promise<Response> {
 	const existingUser = await db
 		.select()
 		.from(User)
-		.where(eq(User.username, username))
+		.where(eq(User.email, email))
 		.get();
 	if (!existingUser) {
 		return new Response(
 			JSON.stringify({
-				error: "Incorrect username or password",
+				error: "Incorrect email or password",
 			}),
 			{
 				status: 400,
@@ -49,7 +50,7 @@ export async function POST(context: APIContext): Promise<Response> {
 	if (!validPassword) {
 		return new Response(
 			JSON.stringify({
-				error: "Incorrect username or password",
+				error: "Incorrect email or password",
 			}),
 			{
 				status: 400,
@@ -57,7 +58,7 @@ export async function POST(context: APIContext): Promise<Response> {
 		);
 	}
 
-	const session = await lucia.createSession(existingUser.id, {});
+	const session = await lucia.createSession(existingUser.id.toString(), {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 	context.cookies.set(
 		sessionCookie.name,

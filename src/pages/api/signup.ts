@@ -4,22 +4,18 @@ import type { APIContext } from "astro";
 
 export async function POST(context: APIContext): Promise<Response> {
 	const formData = await context.request.formData();
-	const username = formData.get("username");
+	const email = formData.get("email");
 	if (
-		typeof username !== "string" ||
-		username.length < 3 ||
-		username.length > 31 ||
-		!/^[a-z0-9_-]+$/.test(username)
+		typeof email !== "string" ||
+		!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+			email,
+		)
 	) {
-		return new Response(
-			JSON.stringify({
-				error: "Invalid username",
-			}),
-			{
-				status: 400,
-			},
-		);
+		return new Response(JSON.stringify({ error: "Invalid email" }), {
+			status: 400,
+		});
 	}
+
 	const password = formData.get("password");
 	if (
 		typeof password !== "string" ||
@@ -42,7 +38,7 @@ export async function POST(context: APIContext): Promise<Response> {
 		const result = await db
 			.insert(User)
 			.values({
-				username: username,
+				email: email,
 				hashed_password: hashedPassword,
 			})
 			.returning({ insertedId: User.id });
@@ -61,11 +57,11 @@ export async function POST(context: APIContext): Promise<Response> {
 	} catch (e) {
 		if (
 			e instanceof Error &&
-			e.message.includes("UNIQUE constraint failed: User.username")
+			e.message.includes("UNIQUE constraint failed: User.email")
 		) {
 			return new Response(
 				JSON.stringify({
-					error: "Username already used",
+					error: "email already used",
 				}),
 				{
 					status: 400,

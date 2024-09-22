@@ -1,5 +1,10 @@
 ---
-import '@fontsource/geist-mono';
-import '@fontsource/geist-sans';
-import '@/styles/globals.css'
+import Head from "@/components/Head.astro";
 ---
+
+<html class="h-full" lang="en">
+	<Head />
+	<body class="h-full">
+		<slot />
+	</body>
+</html>
