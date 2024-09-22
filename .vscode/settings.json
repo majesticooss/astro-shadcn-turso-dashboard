@@ -8,6 +8,16 @@
 		"ngClass",
 		"class:list"
 	],
+	"tailwindCSS.experimental.classRegex": [
+		[
+			"cva\\(([^)]*)\\)",
+			"[\"'`]([^\"'`]*).*?[\"'`]"
+		],
+		[
+			"cx\\(([^)]*)\\)",
+			"(?:'|\"|`)([^']*)(?:'|\"|`)"
+		]
+	],
 	"debug.allowBreakpointsEverywhere": true,
 	"editor.defaultFormatter": "biomejs.biome",
 	"files.trimTrailingWhitespace": true,
