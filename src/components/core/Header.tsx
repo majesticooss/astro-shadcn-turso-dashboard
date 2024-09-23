@@ -1,4 +1,5 @@
 import { navigate } from "astro:transitions/client";
+import { ModeToggle } from "@/components/core/ModeToggle";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -9,16 +10,15 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { CircleUser, Menu, Search } from "lucide-react";
 import type React from "react";
 
 interface HeaderProps {
-	onOpenSidebar?: () => void;
+	onOpenSidebar: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
-	const handleLogout = async (e: Event) => {
+	const handleLogout = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		try {
 			await fetch("/api/logout", {
@@ -33,19 +33,15 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
 
 	return (
 		<header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-			<Sheet>
-				<SheetTrigger asChild>
-					<Button
-						variant="outline"
-						size="icon"
-						className="shrink-0 md:hidden"
-						onClick={onOpenSidebar}
-					>
-						<Menu className="h-5 w-5" />
-						<span className="sr-only">Toggle navigation menu</span>
-					</Button>
-				</SheetTrigger>
-			</Sheet>
+			<Button
+				variant="outline"
+				size="icon"
+				className="shrink-0 md:hidden"
+				onClick={onOpenSidebar}
+			>
+				<Menu className="h-5 w-5" />
+				<span className="sr-only">Toggle navigation menu</span>
+			</Button>
 			<div className="w-full flex-1">
 				<form>
 					<div className="relative">
@@ -58,6 +54,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
 					</div>
 				</form>
 			</div>
+			<ModeToggle />
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button variant="secondary" size="icon" className="rounded-full">

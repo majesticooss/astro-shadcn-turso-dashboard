@@ -1,19 +1,10 @@
 ---
-import Header from "@/components/core/Header.tsx";
-import Sidebar from "@/components/core/Sidebar";
+import Layout from "@/layouts/AuthenticatedLayout";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
-	<main
-		class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
-	>
-		<Sidebar client:load />
-		<div class="flex flex-col">
-			<Header client:idle />
-			<section class="flex flex-1 flex-col">
-				<slot />
-			</section>
-		</div>
-	</main>
+	<Layout client:load>
+		<slot />
+	</Layout>
 </BaseLayout>

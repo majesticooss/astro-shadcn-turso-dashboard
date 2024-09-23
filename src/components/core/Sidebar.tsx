@@ -8,7 +8,7 @@ import {
 	ShoppingCart,
 	Users,
 } from "lucide-react";
-import React from "react";
+import type React from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,13 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 
-const Sidebar = () => {
+interface SidebarProps {
+	className?: string;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
 	return (
-		<aside className="hidden border-r bg-muted/40 md:block">
+		<aside className={`border-r bg-muted/40 ${className}`}>
 			<div className="flex h-full max-h-screen flex-col gap-2">
 				<div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
 					<Link href="/" className="flex items-center gap-2 font-semibold">
