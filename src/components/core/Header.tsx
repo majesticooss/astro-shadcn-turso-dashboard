@@ -1,5 +1,4 @@
 import { navigate } from "astro:transitions/client";
-import { ModeToggle } from "@/components/core/ModeToggle";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -10,7 +9,8 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { CircleUser, Menu, Search } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import { CircleUser, Menu, Moon, Search, Sun } from "lucide-react";
 import type React from "react";
 
 interface HeaderProps {
@@ -18,6 +18,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
+	const { theme, setThemePreference } = useTheme();
+
 	const handleLogout = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		try {
@@ -31,34 +33,37 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
 		}
 	};
 
+	const toggleTheme = () => {
+		setThemePreference(theme === "dark" ? "light" : "dark");
+	};
+
 	return (
-		<header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+		<header className="flex h-10 items-center gap-4 border-b border-muted bg-muted/20 px-4 lg:h-12 lg:px-6">
 			<Button
 				variant="outline"
 				size="icon"
-				className="shrink-0 md:hidden"
+				className="shrink-0 md:hidden size-6"
 				onClick={onOpenSidebar}
 			>
-				<Menu className="h-5 w-5" />
+				<Menu className="size-4" />
 				<span className="sr-only">Toggle navigation menu</span>
 			</Button>
 			<div className="w-full flex-1">
 				<form>
 					<div className="relative">
-						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+						<Search className="absolute left-2.5 top-[0.45rem] size-3 text-muted-foreground" />
 						<Input
 							type="search"
 							placeholder="Search products..."
-							className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+							className="w-full h-7 appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
 						/>
 					</div>
 				</form>
 			</div>
-			<ModeToggle />
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button variant="secondary" size="icon" className="rounded-full">
-						<CircleUser className="h-5 w-5" />
+					<Button variant="ghost" size="icon" className="size-7">
+						<CircleUser className="size-5" />
 						<span className="sr-only">Toggle user menu</span>
 					</Button>
 				</DropdownMenuTrigger>
@@ -67,6 +72,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
 					<DropdownMenuSeparator />
 					<DropdownMenuItem>Settings</DropdownMenuItem>
 					<DropdownMenuItem>Support</DropdownMenuItem>
+					<DropdownMenuItem onClick={toggleTheme}>
+						{theme === "dark" ? (
+							<>
+								<span>Light Mode</span>
+							</>
+						) : (
+							<>
+								<span>Dark Mode</span>
+							</>
+						)}
+					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onSelect={handleLogout}>Logout</DropdownMenuItem>
 				</DropdownMenuContent>

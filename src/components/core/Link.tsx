@@ -11,11 +11,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 	({ className, asChild = false, ...props }, ref) => {
 		const Comp = asChild ? Slot : "a";
 		return (
-			<Comp
-				className={cn("text-blue-600 hover:underline", className)}
-				ref={ref}
-				{...props}
-			/>
+			<Comp className={cn("hover:underline", className)} ref={ref} {...props} />
 		);
 	},
 );
