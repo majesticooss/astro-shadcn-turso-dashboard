@@ -11,11 +11,9 @@ if (!user) {
 if (!userCanAccessResource(user, "dashboard")) {
 	return Astro.redirect("/unauthorized");
 }
----
 
-<AuthenticatedLayout>
-	<Products client:load />
-</AuthenticatedLayout>
+return Astro.redirect("/dashboard");
+---
 
 <!-- <script>
 	import { navigate } from "astro:transitions/client";

@@ -53,29 +53,29 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", currentPath }) => {
 				</div>
 				<div className="flex-1 pt-1">
 					<nav className="grid items-start gap-0.5 px-2 text-sm font-medium lg:px-4">
-						<Link href="/dashboard" className={getLinkClasses("/dashboard")}>
+						<a href="/dashboard" className={getLinkClasses("/dashboard")}>
 							<Home className="h-4 w-4" />
 							Dashboard
-						</Link>
-						<Link href="/orders" className={getLinkClasses("/orders")}>
+						</a>
+						<a href="/orders" className={getLinkClasses("/orders")}>
 							<ShoppingCart className="h-4 w-4" />
 							Orders
 							<Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
 								6
 							</Badge>
-						</Link>
-						<Link href="/products" className={getLinkClasses("/products")}>
+						</a>
+						<a href="/products" className={getLinkClasses("/products")}>
 							<Package className="h-4 w-4" />
 							Products
-						</Link>
-						<Link href="/customers" className={getLinkClasses("/customers")}>
+						</a>
+						<a href="/customers" className={getLinkClasses("/customers")}>
 							<Users className="h-4 w-4" />
 							Customers
-						</Link>
-						<Link href="/analytics" className={getLinkClasses("/analytics")}>
+						</a>
+						<a href="/analytics" className={getLinkClasses("/analytics")}>
 							<LineChart className="h-4 w-4" />
 							Analytics
-						</Link>
+						</a>
 					</nav>
 				</div>
 				<div className="mt-auto p-4">

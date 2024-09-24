@@ -117,7 +117,9 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
 			</Sheet>
 			<div className="flex flex-col">
 				<Header onOpenSidebar={handleOpenSidebar} />
-				<main className="flex flex-1 flex-col">{children}</main>
+				<main className="flex flex-1 basis-0 flex-col overflow-auto">
+					{children}
+				</main>
 			</div>
 		</div>
 	);
