@@ -1,0 +1,18 @@
+---
+import { Products } from "@/components/Products";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { userCanAccessResource } from "@/lib/auth";
+
+const user = Astro.locals.user;
+if (!user) {
+	return Astro.redirect("/login");
+}
+
+if (!userCanAccessResource(user, "dashboard")) {
+	return Astro.redirect("/unauthorized");
+}
+---
+
+<AuthenticatedLayout>
+	<Products client:load />
+</AuthenticatedLayout>

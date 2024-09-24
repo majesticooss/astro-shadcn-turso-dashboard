@@ -22,7 +22,15 @@ import {
 import type React from "react";
 import { useState } from "react";
 
-const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({
+interface AuthenticatedLayoutProps {
+	className?: string;
+	currentPath: string;
+	children: React.ReactNode;
+}
+
+const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
+	className = "",
+	currentPath,
 	children,
 }) => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -33,7 +41,10 @@ const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({
 
 	return (
 		<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-			<Sidebar className="hidden border-r bg-muted/20 border-muted md:block" />
+			<Sidebar
+				className="hidden border-r bg-muted/20 border-muted md:block"
+				currentPath={currentPath}
+			/>
 			<Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
 				<SheetContent
 					side="left"

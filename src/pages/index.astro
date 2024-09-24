@@ -1,5 +1,5 @@
 ---
-import { Dashboard } from "@/components/Dashboard";
+import { Products } from "@/components/Products";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { userCanAccessResource } from "@/lib/auth";
 
@@ -14,7 +14,7 @@ if (!userCanAccessResource(user, "dashboard")) {
 ---
 
 <AuthenticatedLayout>
-	<Dashboard client:load />
+	<Products client:load />
 </AuthenticatedLayout>
 
 <!-- <script>

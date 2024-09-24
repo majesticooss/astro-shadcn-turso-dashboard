@@ -22,9 +22,26 @@ import {
 
 interface SidebarProps {
 	className?: string;
+	currentPath: string; // Add this prop
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
+const Sidebar: React.FC<SidebarProps> = ({ className = "", currentPath }) => {
+	// Helper function to determine if a link is active
+	const isLinkActive = (href: string) => {
+		return (
+			currentPath === href || (href !== "/" && currentPath.startsWith(href))
+		);
+	};
+
+	// Helper function to get link classes
+	const getLinkClasses = (href: string) => {
+		const baseClasses =
+			"flex items-center gap-3 rounded-lg px-3 py-2 transition-all";
+		return isLinkActive(href)
+			? `${baseClasses} bg-muted text-primary`
+			: `${baseClasses} text-muted-foreground hover:text-primary`;
+	};
+
 	return (
 		<aside className={`h-full ${className}`}>
 			<div className="flex h-full max-h-screen flex-col gap-2">
@@ -36,41 +53,26 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
 				</div>
 				<div className="flex-1 pt-1">
 					<nav className="grid items-start gap-0.5 px-2 text-sm font-medium lg:px-4">
-						<Link
-							href="#"
-							className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-						>
+						<Link href="/dashboard" className={getLinkClasses("/dashboard")}>
 							<Home className="h-4 w-4" />
 							Dashboard
 						</Link>
-						<Link
-							href="#"
-							className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-						>
+						<Link href="/orders" className={getLinkClasses("/orders")}>
 							<ShoppingCart className="h-4 w-4" />
 							Orders
 							<Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
 								6
 							</Badge>
 						</Link>
-						<Link
-							href="#"
-							className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-						>
+						<Link href="/products" className={getLinkClasses("/products")}>
 							<Package className="h-4 w-4" />
-							Products{" "}
+							Products
 						</Link>
-						<Link
-							href="#"
-							className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-						>
+						<Link href="/customers" className={getLinkClasses("/customers")}>
 							<Users className="h-4 w-4" />
 							Customers
 						</Link>
-						<Link
-							href="#"
-							className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-						>
+						<Link href="/analytics" className={getLinkClasses("/analytics")}>
 							<LineChart className="h-4 w-4" />
 							Analytics
 						</Link>

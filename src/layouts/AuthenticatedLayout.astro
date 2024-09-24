@@ -1,10 +1,11 @@
 ---
 import Layout from "@/layouts/AuthenticatedLayout";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout>
-	<Layout client:load>
+	<Layout client:load currentPath={currentPath}>
 		<slot />
 	</Layout>
 </BaseLayout>
