@@ -43,7 +43,9 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", currentPath }) => {
 	};
 
 	return (
-		<aside className={`h-full ${className}`}>
+		<aside
+			className={`h-full w-full hidden md:border-r bg-background md:bg-muted/20 border-muted md:block fixed md:relative z-30 ${className}`}
+		>
 			<div className="flex h-full max-h-screen flex-col gap-2">
 				<div className="flex h-14 items-center border-b border-muted px-4 lg:h-12 lg:px-6">
 					<Link href="/" className="flex items-center gap-2 font-semibold">

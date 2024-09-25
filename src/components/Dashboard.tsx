@@ -38,8 +38,8 @@ export const description = "A collection of health charts.";
 
 export function Dashboard() {
 	return (
-		<div className="chart-wrapper mx-auto grid grid-cols-3 flex-wrap items-start justify-center gap-6 p-6 sm:p-8">
-			<div className="grid w-full gap-6 sm:grid-cols-2  lg:grid-cols-1 ">
+		<div className="chart-wrapper mx-auto grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 flex-wrap items-start justify-center gap-6 p-6 sm:p-8">
+			<div className="grid w-full gap-6 grid-cols-1 ">
 				<Card x-chunk="charts-01-chunk-0">
 					<CardHeader className="space-y-0 pb-2">
 						<CardDescription>Today</CardDescription>
