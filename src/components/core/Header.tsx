@@ -118,7 +118,7 @@ const Header: React.FC = () => {
 	}, []);
 
 	return (
-		<header className="flex h-12 items-center gap-4 border-b border-muted bg-muted/20 px-4 lg:px-6">
+		<header className="flex h-12 items-center gap-4 border-b border-muted bg-muted/40 px-4 lg:px-6">
 			<Button
 				variant="outline"
 				size="icon"

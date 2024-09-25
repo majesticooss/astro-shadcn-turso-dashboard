@@ -44,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", currentPath }) => {
 
 	return (
 		<aside
-			className={`h-full w-full hidden md:border-r bg-background md:bg-muted/20 border-muted md:block fixed md:relative z-30 ${className}`}
+			className={`h-full w-full hidden md:border-r bg-background md:bg-muted/40 border-muted md:block fixed md:relative z-30 ${className}`}
 		>
 			<div className="flex h-full max-h-screen flex-col gap-2">
 				<div className="flex h-14 items-center border-b border-muted px-4 lg:h-12 lg:px-6">
@@ -56,26 +56,26 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "", currentPath }) => {
 				<div className="flex-1 pt-1">
 					<nav className="grid items-start gap-0.5 px-2 text-sm font-medium lg:px-4">
 						<a href="/dashboard" className={getLinkClasses("/dashboard")}>
-							<Home className="h-4 w-4" />
+							<Home className="size-4" />
 							Dashboard
 						</a>
 						<a href="/orders" className={getLinkClasses("/orders")}>
-							<ShoppingCart className="h-4 w-4" />
+							<ShoppingCart className="size-4" />
 							Orders
-							<Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+							<Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
 								6
 							</Badge>
 						</a>
 						<a href="/products" className={getLinkClasses("/products")}>
-							<Package className="h-4 w-4" />
+							<Package className="size-4" />
 							Products
 						</a>
 						<a href="/customers" className={getLinkClasses("/customers")}>
-							<Users className="h-4 w-4" />
+							<Users className="size-4" />
 							Customers
 						</a>
 						<a href="/analytics" className={getLinkClasses("/analytics")}>
-							<LineChart className="h-4 w-4" />
+							<LineChart className="size-4" />
 							Analytics
 						</a>
 					</nav>
