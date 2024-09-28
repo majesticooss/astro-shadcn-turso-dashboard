@@ -1,6 +1,4 @@
 ---
-import { Products } from "@/components/Products";
-import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { userCanAccessResource } from "@/lib/auth";
 
 const user = Astro.locals.user;
@@ -14,31 +12,3 @@ if (!userCanAccessResource(user, "dashboard")) {
 
 return Astro.redirect("/dashboard");
 ---
-
-<!-- <script>
-	import { navigate } from "astro:transitions/client";
-
-	let logoutHandler: EventListener;
-
-	document.addEventListener("astro:page-load", () => {
-		const logoutForm = document.getElementById("logout-form");
-		if (logoutForm) {
-			logoutHandler = async (e) => {
-				e.preventDefault();
-				const formElement = e.target as HTMLFormElement;
-				await fetch(formElement.action, {
-					method: formElement.method,
-					body: new FormData(formElement),
-				});
-				navigate("/login");
-			};
-			logoutForm.addEventListener("submit", logoutHandler);
-		}
-	});
-
-	document.addEventListener("astro:before-preparation", () => {
-		document
-			.getElementById("logout-form")
-			?.removeEventListener("submit", logoutHandler);
-	});
-</script> -->
