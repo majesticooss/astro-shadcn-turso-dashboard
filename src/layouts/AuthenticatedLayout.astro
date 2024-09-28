@@ -37,9 +37,7 @@ const handleNavigate = (href: string) => {
 			<header
 				class="sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8"
 			>
-				<MaxWidthWrapper
-					className="flex max-w-7xl items-center gap-x-3 px-0"
-				>
+				<MaxWidthWrapper className="flex items-center gap-x-3 px-0">
 					<MobileSheetSidebar
 						links={filteredLinks}
 						currentPath={currentPath}
@@ -55,13 +53,17 @@ const handleNavigate = (href: string) => {
 					</div>
 
 					<ModeToggle client:load />
-					<UserAccountNav client:load />
+					<UserAccountNav
+						client:load
+						user={user}
+						onSignOut={() => window.handleSignOut()}
+					/>
 				</MaxWidthWrapper>
 			</header>
 
 			<main class="flex-1 p-4 xl:px-8">
 				<MaxWidthWrapper
-					className="flex h-full max-w-7xl flex-col gap-4 px-0 lg:gap-6"
+					className="flex h-full flex-col gap-4 px-0 lg:gap-6"
 				>
 					<slot />
 				</MaxWidthWrapper>

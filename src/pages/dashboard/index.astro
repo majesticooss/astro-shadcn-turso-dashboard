@@ -1,5 +1,4 @@
 ---
-import { Dashboard } from "@/components/Dashboard";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { userCanAccessResource } from "@/lib/auth";
 
@@ -13,6 +12,4 @@ if (!userCanAccessResource(user, "dashboard")) {
 }
 ---
 
-<AuthenticatedLayout>
-	<Dashboard client:load />
-</AuthenticatedLayout>
+<AuthenticatedLayout> Test </AuthenticatedLayout>
