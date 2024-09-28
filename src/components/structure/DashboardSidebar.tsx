@@ -89,7 +89,10 @@ export function DashboardSidebar({
 											<div className="h-4" />
 										)}
 										{section.items.map((item) => {
-											const Icon = Icons[item.icon || "arrowRight"];
+											const Icon =
+												Icons[
+													(item.icon as keyof typeof Icons) || "arrowRight"
+												];
 											return (
 												item.href && (
 													<Fragment key={`link-fragment-${item.title}`}>
@@ -204,7 +207,10 @@ export function MobileSheetSidebar({
 										</p>
 
 										{section.items.map((item) => {
-											const Icon = Icons[item.icon || "arrowRight"];
+											const Icon =
+												Icons[
+													(item.icon as keyof typeof Icons) || "arrowRight"
+												];
 											return (
 												item.href && (
 													<Fragment key={`link-fragment-${item.title}`}>
