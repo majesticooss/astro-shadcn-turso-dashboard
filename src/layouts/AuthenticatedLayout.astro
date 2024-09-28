@@ -1,19 +1,70 @@
 ---
-import Header from "@/components/core/Header";
-import Sidebar from "@/components/core/Sidebar";
+import { ModeToggle } from "@/components/dashboard/ModeToggle";
+import { SearchCommand } from "@/components/dashboard/SearchCommand";
+import { UserAccountNav } from "@/components/dashboard/UserAccountNav";
+import {
+	DashboardSidebar,
+	MobileSheetSidebar,
+} from "@/components/structure/DashboardSidebar";
+import MaxWidthWrapper from "@/components/structure/MaxWidthWrapper";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { sidebarLinks } from "config";
+
 const currentPath = Astro.url.pathname;
+const user = Astro.locals.user;
+
+const filteredLinks = sidebarLinks.map((section) => ({
+	...section,
+	items: section.items.filter(({ authorizeOnly }) => !authorizeOnly),
+}));
+
+const handleNavigate = (href: string) => {
+	// For client-side navigation, you might want to use a client-side router library
+	// This is a simple redirection for demonstration purposes
+	window.location.href = href;
+};
 ---
 
 <BaseLayout>
-	<div
-		class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
-	>
-		<Sidebar currentPath={currentPath} client:load />
-		<div class="flex flex-col">
-			<Header client:load />
-			<main class="flex flex-1 basis-0 flex-col overflow-auto">
-				<slot />
+	<div class="relative flex min-h-screen w-full">
+		<DashboardSidebar
+			links={filteredLinks}
+			currentPath={currentPath}
+			client:load
+		/>
+
+		<div class="flex flex-1 flex-col">
+			<header
+				class="sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8"
+			>
+				<MaxWidthWrapper
+					className="flex max-w-7xl items-center gap-x-3 px-0"
+				>
+					<MobileSheetSidebar
+						links={filteredLinks}
+						currentPath={currentPath}
+						client:load
+					/>
+
+					<div class="w-full flex-1">
+						<SearchCommand
+							links={filteredLinks}
+							onNavigate={handleNavigate}
+							client:load
+						/>
+					</div>
+
+					<ModeToggle client:load />
+					<UserAccountNav client:load />
+				</MaxWidthWrapper>
+			</header>
+
+			<main class="flex-1 p-4 xl:px-8">
+				<MaxWidthWrapper
+					className="flex h-full max-w-7xl flex-col gap-4 px-0 lg:gap-6"
+				>
+					<slot />
+				</MaxWidthWrapper>
 			</main>
 		</div>
 	</div>
