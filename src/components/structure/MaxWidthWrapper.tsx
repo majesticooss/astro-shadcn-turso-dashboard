@@ -11,15 +11,5 @@ export default function MaxWidthWrapper({
 	large?: boolean;
 	children: ReactNode;
 }) {
-	return (
-		<div
-			className={cn(
-				"container",
-				large ? "max-w-screen-2xl" : "max-w-6xl",
-				className,
-			)}
-		>
-			{children}
-		</div>
-	);
+	return <div className={cn("container", className)}>{children}</div>;
 }

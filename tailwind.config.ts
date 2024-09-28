@@ -9,7 +9,14 @@ const config: Config = {
 		files: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
 		extract,
 	},
+	future: {
+		hoverOnlyWhenSupported: true,
+	},
 	theme: {
+		container: {
+			center: true,
+			padding: ".8rem",
+		},
 		screens,
 		fontSize,
 		extend: {
@@ -61,9 +68,81 @@ const config: Config = {
 				},
 			},
 			fontFamily: {
-				sans: ["Geist Sans", ...defaultTheme.fontFamily.sans],
-				display: ["Geist Sans", ...defaultTheme.fontFamily.sans],
-				mono: ["Geist Mono", ...defaultTheme.fontFamily.mono],
+				sans: ["Inter", "Inter-fallback", ...defaultTheme.fontFamily.sans],
+				heading: ["CalSans-SemiBold", ...defaultTheme.fontFamily.sans],
+				satoshi: ["Satoshi", ...defaultTheme.fontFamily.sans],
+			},
+			keyframes: {
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
+				},
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
+				},
+				// Fade up and down
+				"fade-up": {
+					"0%": {
+						opacity: "0",
+						transform: "translateY(10px)",
+					},
+					"80%": {
+						opacity: "0.7",
+					},
+					"100%": {
+						opacity: "1",
+						transform: "translateY(0px)",
+					},
+				},
+				"fade-down": {
+					"0%": {
+						opacity: "0",
+						transform: "translateY(-10px)",
+					},
+					"80%": {
+						opacity: "0.6",
+					},
+					"100%": {
+						opacity: "1",
+						transform: "translateY(0px)",
+					},
+				},
+				// Fade in and out
+				"fade-in": {
+					"0%": {
+						opacity: "0",
+					},
+					"50%": {
+						opacity: "0.6",
+					},
+					"100%": {
+						opacity: "1",
+					},
+				},
+				"fade-out": {
+					"0%": {
+						opacity: "0",
+					},
+					"50%": {
+						opacity: "0.6",
+					},
+					"100%": {
+						opacity: "1",
+					},
+				},
+			},
+			animation: {
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
+
+				// Fade up and down
+				"fade-up": "fade-up 0.5s",
+				"fade-down": "fade-down 0.5s",
+
+				// Fade in and out
+				"fade-in": "fade-in 0.4s",
+				"fade-out": "fade-out 0.4s",
 			},
 		},
 	},

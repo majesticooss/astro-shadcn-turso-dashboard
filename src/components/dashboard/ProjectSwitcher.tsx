@@ -1,8 +1,5 @@
-"use client";
-
+import Link from "@/components/core/Link";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -31,17 +28,23 @@ const projects: ProjectType[] = [
 		color: "bg-blue-500",
 	},
 ];
-const selected: ProjectType = projects[1];
+
+interface ProjectSwitcherProps {
+	large?: boolean;
+	user: {
+		isLoggedIn: boolean;
+		isLoading: boolean;
+	};
+}
 
 export default function ProjectSwitcher({
 	large = false,
-}: {
-	large?: boolean;
-}) {
-	const { data: session, status } = useSession();
+	user,
+}: ProjectSwitcherProps) {
 	const [openPopover, setOpenPopover] = useState(false);
+	const [selected, setSelected] = useState<ProjectType>(projects[1]);
 
-	if (!projects || status === "loading") {
+	if (!projects || user?.isLoading) {
 		return <ProjectSwitcherPlaceholder />;
 	}
 
@@ -80,6 +83,7 @@ export default function ProjectSwitcher({
 						selected={selected}
 						projects={projects}
 						setOpenPopover={setOpenPopover}
+						setSelected={setSelected}
 					/>
 				</PopoverContent>
 			</Popover>
@@ -87,38 +91,45 @@ export default function ProjectSwitcher({
 	);
 }
 
+interface ProjectListProps {
+	selected: ProjectType;
+	projects: ProjectType[];
+	setOpenPopover: (open: boolean) => void;
+	setSelected: (project: ProjectType) => void;
+}
+
 function ProjectList({
 	selected,
 	projects,
 	setOpenPopover,
-}: {
-	selected: ProjectType;
-	projects: ProjectType[];
-	setOpenPopover: (open: boolean) => void;
-}) {
+	setSelected,
+}: ProjectListProps) {
 	return (
 		<div className="flex flex-col gap-1">
-			{projects.map(({ slug, color }) => (
+			{projects.map((project) => (
 				<Link
-					key={slug}
+					key={project.slug}
 					className={cn(
 						buttonVariants({ variant: "ghost" }),
 						"relative flex h-9 items-center gap-3 p-3 text-muted-foreground hover:text-foreground",
 					)}
 					href="#"
-					onClick={() => setOpenPopover(false)}
+					onClick={() => {
+						setSelected(project);
+						setOpenPopover(false);
+					}}
 				>
-					<div className={cn("size-3 shrink-0 rounded-full", color)} />
+					<div className={cn("size-3 shrink-0 rounded-full", project.color)} />
 					<span
 						className={`flex-1 truncate text-sm ${
-							selected.slug === slug
+							selected.slug === project.slug
 								? "font-medium text-foreground"
 								: "font-normal"
 						}`}
 					>
-						{slug}
+						{project.slug}
 					</span>
-					{selected.slug === slug && (
+					{selected.slug === project.slug && (
 						<span className="absolute inset-y-0 right-0 flex items-center pr-3 text-foreground">
 							<Check size={18} aria-hidden="true" />
 						</span>

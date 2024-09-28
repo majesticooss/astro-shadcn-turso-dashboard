@@ -10,9 +10,7 @@ export interface LinkProps
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 	({ className, asChild = false, ...props }, ref) => {
 		const Comp = asChild ? Slot : "a";
-		return (
-			<Comp className={cn("hover:underline", className)} ref={ref} {...props} />
-		);
+		return <Comp className={cn(className)} ref={ref} {...props} />;
 	},
 );
 
