@@ -42,11 +42,6 @@ export function DashboardSidebar({
 		setIsSidebarExpanded(!isTablet);
 	}, [isTablet]);
 
-	if (!isMounted) {
-		// Return a skeleton or simplified version of sidebar for SSR
-		return <div className="h-screen w-[68px] md:block" />;
-	}
-
 	return (
 		<TooltipProvider delayDuration={0}>
 			<div className="sticky top-0 h-full">
@@ -59,7 +54,7 @@ export function DashboardSidebar({
 					>
 						<div className="flex h-full max-h-screen flex-1 flex-col gap-2">
 							<div className="flex h-14 items-center p-4 lg:h-[60px]">
-								{isSidebarExpanded ? (
+								{isMounted && isSidebarExpanded ? (
 									<ProjectSwitcher
 										user={{ isLoggedIn: true, isLoading: false }}
 									/>
