@@ -1,4 +1,5 @@
 ---
+import { fade } from "astro:transitions";
 import { ModeToggle } from "@/components/dashboard/ModeToggle";
 import { SearchCommand } from "@/components/dashboard/SearchCommand";
 import { UserAccountNav } from "@/components/dashboard/UserAccountNav";
@@ -58,7 +59,10 @@ const handleNavigate = (href: string) => {
 				</MaxWidthWrapper>
 			</header>
 
-			<main class="flex-1 p-4 xl:px-8" transition:animate="slide">
+			<main
+				class="flex-1 p-4 xl:px-8"
+				transition:animate={fade({ duration: "0.1s" })}
+			>
 				<MaxWidthWrapper
 					className="flex h-full flex-col gap-4 px-0 lg:gap-6"
 				>
