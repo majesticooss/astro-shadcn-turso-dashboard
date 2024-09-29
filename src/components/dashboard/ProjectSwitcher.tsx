@@ -51,11 +51,14 @@ export default function ProjectSwitcher({
 	return (
 		<div>
 			<Popover open={openPopover} onOpenChange={setOpenPopover}>
-				<PopoverTrigger>
-					<Button
-						className="h-8 px-2"
-						variant={openPopover ? "secondary" : "ghost"}
-						onClick={() => setOpenPopover(!openPopover)}
+				<PopoverTrigger asChild>
+					<div
+						className={cn(
+							"flex items-center justify-between h-8 px-2 rounded-md",
+							openPopover ? "bg-secondary" : "bg-background hover:bg-muted/50",
+							"cursor-pointer select-none",
+						)}
+						onKeyUp={() => setOpenPopover(!openPopover)}
 					>
 						<div className="flex items-center space-x-3 pr-2">
 							<div
@@ -76,7 +79,7 @@ export default function ProjectSwitcher({
 							className="size-4 text-muted-foreground"
 							aria-hidden="true"
 						/>
-					</Button>
+					</div>
 				</PopoverTrigger>
 				<PopoverContent align="start" className="max-w-60 p-2">
 					<ProjectList
@@ -90,7 +93,6 @@ export default function ProjectSwitcher({
 		</div>
 	);
 }
-
 interface ProjectListProps {
 	selected: ProjectType;
 	projects: ProjectType[];

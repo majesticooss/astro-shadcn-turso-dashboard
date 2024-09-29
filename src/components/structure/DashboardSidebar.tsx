@@ -30,15 +30,22 @@ export function DashboardSidebar({
 	currentPath,
 }: DashboardSidebarProps) {
 	const { isTablet } = useMediaQuery();
-	const [isSidebarExpanded, setIsSidebarExpanded] = useState(!isTablet);
+	const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+	const [isMounted, setIsMounted] = useState(false);
 
 	const toggleSidebar = () => {
 		setIsSidebarExpanded(!isSidebarExpanded);
 	};
 
 	useEffect(() => {
+		setIsMounted(true);
 		setIsSidebarExpanded(!isTablet);
 	}, [isTablet]);
+
+	if (!isMounted) {
+		// Return a skeleton or simplified version of sidebar for SSR
+		return <div className="h-screen w-[68px] md:block" />;
+	}
 
 	return (
 		<TooltipProvider delayDuration={0}>
@@ -52,7 +59,11 @@ export function DashboardSidebar({
 					>
 						<div className="flex h-full max-h-screen flex-1 flex-col gap-2">
 							<div className="flex h-14 items-center p-4 lg:h-[60px]">
-								{isSidebarExpanded ? <ProjectSwitcher /> : null}
+								{isSidebarExpanded ? (
+									<ProjectSwitcher
+										user={{ isLoggedIn: true, isLoading: false }}
+									/>
+								) : null}
 
 								<Button
 									variant="ghost"
@@ -195,7 +206,10 @@ export function MobileSheetSidebar({
 									</span>
 								</Link>
 
-								<ProjectSwitcher large />
+								<ProjectSwitcher
+									user={{ isLoggedIn: true, isLoading: false }}
+									large
+								/>
 
 								{links.map((section) => (
 									<section
