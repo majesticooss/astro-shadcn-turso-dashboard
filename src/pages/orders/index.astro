@@ -1,4 +1,5 @@
 ---
+import OrdersPage from "@/components/routes/Orders";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { userCanAccessResource } from "@/lib/auth";
 
@@ -12,4 +13,6 @@ if (!userCanAccessResource(user, "dashboard")) {
 }
 ---
 
-<AuthenticatedLayout />
+<AuthenticatedLayout>
+	<OrdersPage client:load />
+</AuthenticatedLayout>

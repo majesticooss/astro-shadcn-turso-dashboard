@@ -1,6 +1,8 @@
+import { navigate } from "astro:transitions/client";
 import Link from "@/components/core/Link";
 import { LayoutDashboard, Lock, LogOut, Settings } from "lucide-react";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Drawer } from "vaul";
 
 import { UserAvatar } from "@/components/dashboard/UserAvatar";
@@ -22,16 +24,27 @@ interface User {
 
 interface UserAccountNavProps {
 	user: User | null;
-	onSignOut: () => void;
 }
 
-export function UserAccountNav({ user, onSignOut }: UserAccountNavProps) {
+export function UserAccountNav({ user }: UserAccountNavProps) {
 	const [open, setOpen] = useState(false);
 	const closeDrawer = () => {
 		setOpen(false);
 	};
 
 	const { isMobile } = useMediaQuery();
+
+	const handleLogout = async () => {
+		try {
+			await fetch("/api/logout", {
+				method: "POST",
+				credentials: "include",
+			});
+			navigate("/login");
+		} catch (error) {
+			console.error("Logout failed:", error);
+		}
+	};
 
 	if (!user)
 		return (
@@ -106,9 +119,9 @@ export function UserAccountNav({ user, onSignOut }: UserAccountNavProps) {
 
 							<li
 								className="rounded-lg text-foreground hover:bg-muted"
-								onClick={(event) => {
-									event.preventDefault();
-									onSignOut();
+								onTouchEnd={(e) => {
+									e.preventDefault();
+									handleLogout();
 								}}
 							>
 								<div className="flex w-full items-center gap-3 px-2.5 py-2">
@@ -173,9 +186,9 @@ export function UserAccountNav({ user, onSignOut }: UserAccountNavProps) {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					className="cursor-pointer"
-					onSelect={(event) => {
-						event.preventDefault();
-						onSignOut();
+					onSelect={(e) => {
+						e.preventDefault();
+						handleLogout();
 					}}
 				>
 					<div className="flex items-center space-x-2.5">

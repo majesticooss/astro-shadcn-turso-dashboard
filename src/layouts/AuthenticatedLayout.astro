@@ -54,11 +54,7 @@ const handleNavigate = (href: string) => {
 					</div>
 
 					<ModeToggle client:load />
-					<UserAccountNav
-						client:load
-						user={user}
-						onSignOut={() => window.handleSignOut()}
-					/>
+					<UserAccountNav client:load user={user} />
 				</MaxWidthWrapper>
 			</header>
 
