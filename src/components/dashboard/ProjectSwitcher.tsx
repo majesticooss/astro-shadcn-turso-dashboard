@@ -1,6 +1,6 @@
 import Link from "@/components/core/Link";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -43,6 +43,16 @@ export default function ProjectSwitcher({
 }: ProjectSwitcherProps) {
 	const [openPopover, setOpenPopover] = useState(false);
 	const [selected, setSelected] = useState<ProjectType>(projects[1]);
+	const triggerRef = useRef<HTMLDivElement>(null);
+	const popoverContentRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (openPopover && popoverContentRef.current) {
+			// Prevent automatic focus
+			popoverContentRef.current.setAttribute("tabindex", "-1");
+			popoverContentRef.current.style.outline = "none";
+		}
+	}, [openPopover]);
 
 	if (!projects || user?.isLoading) {
 		return <ProjectSwitcherPlaceholder />;
@@ -53,12 +63,22 @@ export default function ProjectSwitcher({
 			<Popover open={openPopover} onOpenChange={setOpenPopover}>
 				<PopoverTrigger asChild>
 					<div
+						ref={triggerRef}
+						tabIndex={0}
+						role="button"
+						aria-haspopup="true"
+						aria-expanded={openPopover}
 						className={cn(
 							"flex items-center justify-between h-8 px-2 rounded-md",
 							openPopover ? "bg-secondary" : "bg-background hover:bg-muted/50",
 							"cursor-pointer select-none",
 						)}
-						onKeyUp={() => setOpenPopover(!openPopover)}
+						onClick={() => setOpenPopover(!openPopover)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								setOpenPopover(!openPopover);
+							}
+						}}
 					>
 						<div className="flex items-center space-x-3 pr-2">
 							<div
@@ -81,7 +101,11 @@ export default function ProjectSwitcher({
 						/>
 					</div>
 				</PopoverTrigger>
-				<PopoverContent align="start" className="max-w-60 p-2">
+				<PopoverContent
+					ref={popoverContentRef}
+					align="start"
+					className="max-w-60 p-2"
+				>
 					<ProjectList
 						selected={selected}
 						projects={projects}
@@ -93,6 +117,7 @@ export default function ProjectSwitcher({
 		</div>
 	);
 }
+
 interface ProjectListProps {
 	selected: ProjectType;
 	projects: ProjectType[];
