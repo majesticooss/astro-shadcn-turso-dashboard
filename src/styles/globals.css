@@ -77,6 +77,10 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+	scrollbar-gutter: stable;
+}
+
 @layer utilities {
 	.step {
 		counter-increment: step;

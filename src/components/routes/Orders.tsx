@@ -8,7 +8,7 @@ export const metadata = constructMetadata({
 	description: "Check and manage your latest orders.",
 });
 
-export default async function OrdersPage() {
+export default function OrdersPage() {
 	return (
 		<>
 			<DashboardHeader

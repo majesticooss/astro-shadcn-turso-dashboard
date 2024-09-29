@@ -138,7 +138,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
 	}
 
 	return (
-		<DropdownMenu open={open} onOpenChange={setOpen}>
+		<DropdownMenu open={open} modal={false} onOpenChange={setOpen}>
 			<DropdownMenuTrigger>
 				<UserAvatar
 					user={{ name: user.name, image: user.image }}
