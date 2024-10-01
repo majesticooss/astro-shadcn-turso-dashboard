@@ -1,5 +1,5 @@
 import { Session, User, db } from "astro:db";
-import { Lucia, type User as UserType } from "lucia";
+import { Lucia } from "lucia";
 import { AstroDBAdapter } from "lucia-adapter-astrodb";
 
 const adapter = new AstroDBAdapter(db, Session, User);
@@ -25,7 +25,7 @@ export async function hashPassword(password: string): Promise<string> {
 	return btoa(String.fromCharCode(...new Uint8Array(hash)));
 }
 
-export async function userCanAccessResource(user: UserType, resource: string) {
+export async function userCanAccessResource(user: User, resource: URL) {
 	// Check if the user has access to the resource
 	return true;
 }

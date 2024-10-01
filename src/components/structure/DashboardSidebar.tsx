@@ -1,5 +1,4 @@
 import Link from "@/components/core/Link";
-import type { NavItem, SidebarNavItem } from "@/env";
 import { Menu, PanelLeftClose, PanelRightClose } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 

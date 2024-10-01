@@ -8,7 +8,7 @@ if (!user) {
 	return Astro.redirect("/login");
 }
 
-if (!userCanAccessResource(user, "dashboard")) {
+if (!userCanAccessResource(user, Astro.url)) {
 	return Astro.redirect("/unauthorized");
 }
 ---

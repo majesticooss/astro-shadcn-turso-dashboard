@@ -38,12 +38,14 @@ const handleNavigate = (href: string) => {
 		<div class="flex flex-1 flex-col">
 			<header
 				class="sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8"
+				transition:persist
 			>
 				<MaxWidthWrapper className="flex items-center gap-x-3 px-0">
 					<MobileSheetSidebar
 						links={filteredLinks}
 						currentPath={currentPath}
 						client:load
+						transition:persist
 					/>
 
 					<div class="w-full flex-1">
@@ -51,11 +53,16 @@ const handleNavigate = (href: string) => {
 							links={filteredLinks}
 							onNavigate={handleNavigate}
 							client:load
+							transition:persist
 						/>
 					</div>
 
-					<ModeToggle client:load />
-					<UserAccountNav client:load user={user} />
+					<ModeToggle client:load transition:persist />
+					<UserAccountNav
+						client:load
+						user={user}
+						transition:persist
+					/>
 				</MaxWidthWrapper>
 			</header>
 

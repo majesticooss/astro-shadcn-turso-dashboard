@@ -1,5 +1,3 @@
-import type { SidebarNavItem, SiteConfig } from "@/env";
-
 export const siteDomain = "admin.novafy.app";
 export const siteUrl = `https://${siteDomain}`;
 

@@ -1,4 +1,3 @@
-import type { SidebarNavItem } from "@/env";
 import React from "react";
 
 import { Button } from "@/components/ui/button";

@@ -23,9 +23,42 @@ const Session = defineTable({
 	},
 });
 
+const Tenant = defineTable({
+	columns: {
+		id: column.number({
+			primaryKey: true,
+			identity: true,
+		}),
+		name: column.text(),
+	},
+});
+
+const UserTenant = defineTable({
+	columns: {
+		id: column.number({
+			primaryKey: true,
+			identity: true,
+		}),
+		userId: column.number({
+			references: () => User.columns.id,
+		}),
+		tenantId: column.number({
+			references: () => Tenant.columns.id,
+		}),
+	},
+	indexes: {
+		userTenantUnique: {
+			on: ["userId", "tenantId"],
+			unique: true,
+		},
+	},
+});
+
 export default defineDb({
 	tables: {
 		User,
 		Session,
+		Tenant,
+		UserTenant,
 	},
 });

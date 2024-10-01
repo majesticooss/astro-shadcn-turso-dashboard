@@ -18,6 +18,7 @@ import {
 	LineChart,
 	Loader2,
 	type LucideIcon,
+	type LucideProps,
 	MessagesSquare,
 	Moon,
 	MoreVertical,
