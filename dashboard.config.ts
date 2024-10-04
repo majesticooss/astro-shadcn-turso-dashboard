@@ -30,7 +30,7 @@ export const sidebarLinks: SidebarNavItem[] = [
 	{
 		title: "PAGES",
 		items: [
-			{ href: "/dashboard/settings", icon: "settings", title: "Settings" },
+			{ href: "/settings", icon: "settings", title: "Settings" },
 			{
 				href: "#",
 				icon: "messages",

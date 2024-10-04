@@ -1,10 +1,6 @@
-"use client";
-
-import { type FormData, updateUserName } from "@/actions/update-user-name";
+import { z } from "astro:schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { User } from "@prisma/client";
-import { useSession } from "next-auth/react";
-import { useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -13,21 +9,30 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { userNameSchema } from "@/lib/validations/user";
+
+// Assuming this is imported from a shared location
+const userNameSchema = z.object({
+	name: z.string().min(2).max(32),
+});
+
+type FormData = z.infer<typeof userNameSchema>;
 
 interface UserNameFormProps {
-	user: Pick<User, "id" | "name">;
+	user: {
+		id: string;
+		name: string;
+	};
+	updateUserNameAction: (
+		formData: FormData,
+	) => Promise<{ success: boolean; error?: string }>;
 }
 
-export function UserNameForm({ user }: UserNameFormProps) {
-	const { update } = useSession();
+export function UserNameForm({
+	user,
+	updateUserNameAction,
+}: UserNameFormProps) {
 	const [updated, setUpdated] = useState(false);
 	const [isPending, startTransition] = useTransition();
-	const updateUserNameWithId = updateUserName.bind(null, user.id);
-
-	const checkUpdate = (value) => {
-		setUpdated(user.name !== value);
-	};
 
 	const {
 		handleSubmit,
@@ -40,16 +45,20 @@ export function UserNameForm({ user }: UserNameFormProps) {
 		},
 	});
 
+	const checkUpdate = (value: string) => {
+		setUpdated(user.name !== value);
+	};
+
 	const onSubmit = handleSubmit((data) => {
 		startTransition(async () => {
-			const { status } = await updateUserNameWithId(data);
+			const result = await updateUserNameAction(data);
 
-			if (status !== "success") {
+			if (!result.success) {
 				toast.error("Something went wrong.", {
-					description: "Your name was not updated. Please try again.",
+					description:
+						result.error || "Your name was not updated. Please try again.",
 				});
 			} else {
-				await update();
 				setUpdated(false);
 				toast.success("Your name has been updated.");
 			}
@@ -70,8 +79,9 @@ export function UserNameForm({ user }: UserNameFormProps) {
 						id="name"
 						className="flex-1"
 						size={32}
-						{...register("name")}
-						onChange={(e) => checkUpdate(e.target.value)}
+						{...register("name", {
+							onChange: (e) => checkUpdate(e.target.value),
+						})}
 					/>
 					<Button
 						type="submit"
