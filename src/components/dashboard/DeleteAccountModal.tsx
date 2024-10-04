@@ -139,13 +139,13 @@ export function useDeleteAccountModal({ user }: DeleteAccountModalProps) {
 				user={{ name: user?.name, image: user?.image }}
 			/>
 		);
-	}, [showDeleteAccountModal, setShowDeleteAccountModal, user]);
+	}, [showDeleteAccountModal, user]);
 
 	return useMemo(
 		() => ({
 			setShowDeleteAccountModal,
 			DeleteAccountModal: DeleteAccountModalCallback,
 		}),
-		[setShowDeleteAccountModal, DeleteAccountModalCallback],
+		[DeleteAccountModalCallback],
 	);
 }
