@@ -50,18 +50,20 @@ export function UserNameForm({
 	};
 
 	const onSubmit = handleSubmit((data) => {
-		startTransition(async () => {
-			const result = await updateUserNameAction(data);
+		startTransition(() => {
+			(async () => {
+				const result = await updateUserNameAction(data);
 
-			if (!result.success) {
-				toast.error("Something went wrong.", {
-					description:
-						result.error || "Your name was not updated. Please try again.",
-				});
-			} else {
-				setUpdated(false);
-				toast.success("Your name has been updated.");
-			}
+				if (!result.success) {
+					toast.error("Something went wrong.", {
+						description:
+							result.error || "Your name was not updated. Please try again.",
+					});
+				} else {
+					setUpdated(false);
+					toast.success("Your name has been updated.");
+				}
+			})();
 		});
 	});
 
