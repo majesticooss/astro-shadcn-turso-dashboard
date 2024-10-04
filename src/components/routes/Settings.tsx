@@ -2,14 +2,23 @@ import { DeleteAccountSection } from "@/components/dashboard/DeleteAccount";
 import { DashboardHeader } from "@/components/dashboard/Header";
 import { UserNameForm } from "@/components/forms/UserNameForm";
 import { UserRoleForm } from "@/components/forms/UserRoleForm";
-import { constructMetadata } from "@/lib/utils";
+import React from "react";
 
-export const metadata = constructMetadata({
-	title: "Settings - Next Template",
-	description: "Configure your account and website settings.",
-});
+interface User {
+	id: string;
+	username: string;
+	role: string;
+}
 
-export default async function SettingsPage({ user }: { user: User }) {
+interface SettingsPageProps {
+	user: User | null;
+}
+
+export default function SettingsPage({ user }: SettingsPageProps) {
+	if (!user) {
+		return <div>Loading...</div>; // Or some other placeholder/error state
+	}
+
 	return (
 		<>
 			<DashboardHeader
@@ -17,7 +26,7 @@ export default async function SettingsPage({ user }: { user: User }) {
 				text="Manage account and website settings."
 			/>
 			<div className="divide-y divide-muted pb-10">
-				<UserNameForm user={{ id: user.id, name: user?.username || "" }} />
+				<UserNameForm user={{ id: user.id, name: user.username || "" }} />
 				<UserRoleForm user={{ id: user.id, role: user.role }} />
 				<DeleteAccountSection />
 			</div>

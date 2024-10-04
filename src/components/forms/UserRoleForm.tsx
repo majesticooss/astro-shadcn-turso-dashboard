@@ -1,13 +1,9 @@
-"use client";
-
-import { type FormData, updateUserRole } from "@/actions/update-user-role";
+import { actions } from "astro:actions";
+import { z } from "astro:schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type User, UserRole } from "@prisma/client";
-import { useSession } from "next-auth/react";
-import { useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { z } from "zod";
 
 import { SectionColumns } from "@/components/dashboard/SectionColumns";
 import { Button } from "@/components/ui/button";
@@ -27,41 +23,58 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { userRoleSchema } from "@/lib/validations/user";
 
-interface UserNameFormProps {
-	user: Pick<User, "id" | "role">;
+// Assuming these are imported from a shared location
+const UserRole = {
+	ADMIN: "ADMIN",
+	USER: "USER",
+	// Add other roles as needed
+};
+
+const userRoleSchema = z.object({
+	role: z.enum(Object.values(UserRole) as [string, ...string[]]),
+});
+
+type FormData = z.infer<typeof userRoleSchema>;
+
+interface UserRoleFormProps {
+	user: {
+		id: string;
+		role: string;
+	};
 }
 
-export function UserRoleForm({ user }: UserNameFormProps) {
-	const { update } = useSession();
+export function UserRoleForm({ user }: UserRoleFormProps) {
 	const [updated, setUpdated] = useState(false);
 	const [isPending, startTransition] = useTransition();
-	const updateUserRoleWithId = updateUserRole.bind(null, user.id);
-
 	const roles = Object.values(UserRole);
 	const [role, setRole] = useState(user.role);
 
 	const form = useForm<FormData>({
 		resolver: zodResolver(userRoleSchema),
-		values: {
-			role: role,
+		defaultValues: {
+			role: user.role as UserRole,
 		},
 	});
 
-	const onSubmit = (data: z.infer<typeof userRoleSchema>) => {
-		startTransition(async () => {
-			const { status } = await updateUserRoleWithId(data);
-
-			if (status !== "success") {
-				toast.error("Something went wrong.", {
-					description: "Your role was not updated. Please try again.",
+	const onSubmit = (data: FormData) => {
+		startTransition(() => {
+			(async () => {
+				const { status, error } = await actions.updateUserRole({
+					userId: user.id,
+					...data,
 				});
-			} else {
-				await update();
-				setUpdated(false);
-				toast.success("Your role has been updated.");
-			}
+
+				if (status !== "success") {
+					toast.error("Something went wrong.", {
+						description:
+							error || "Your role was not updated. Please try again.",
+					});
+				} else {
+					setUpdated(false);
+					toast.success("Your role has been updated.");
+				}
+			})();
 		});
 	};
 
@@ -70,7 +83,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
 			<form onSubmit={form.handleSubmit(onSubmit)}>
 				<SectionColumns
 					title="Your Role"
-					description="Select the role what you want for test the app."
+					description="Select the role you want to test the app."
 				>
 					<div className="flex w-full items-center gap-2">
 						<FormField
@@ -80,13 +93,11 @@ export function UserRoleForm({ user }: UserNameFormProps) {
 								<FormItem className="w-full space-y-0">
 									<FormLabel className="sr-only">Role</FormLabel>
 									<Select
-										// TODO:(FIX) Option value not update. Use useState for the moment
 										onValueChange={(value: UserRole) => {
 											setUpdated(user.role !== value);
 											setRole(value);
-											// field.onChange;
+											field.onChange(value);
 										}}
-										name={field.name}
 										defaultValue={user.role}
 									>
 										<FormControl>
@@ -96,7 +107,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
 										</FormControl>
 										<SelectContent>
 											{roles.map((role) => (
-												<SelectItem key={role} value={role.toString()}>
+												<SelectItem key={role} value={role}>
 													{role}
 												</SelectItem>
 											))}
@@ -124,7 +135,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
 					</div>
 					<div className="flex flex-col justify-between p-1">
 						<p className="text-[13px] text-muted-foreground">
-							Remove this field on real production
+							Remove this field in real production
 						</p>
 					</div>
 				</SectionColumns>

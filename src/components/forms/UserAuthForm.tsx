@@ -1,7 +1,4 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
@@ -30,16 +27,23 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
 	});
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 	const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
-	const searchParams = useSearchParams();
+
+	// Use URLSearchParams instead of useSearchParams
+	const searchParams = React.useMemo(() => {
+		if (typeof window !== "undefined") {
+			return new URLSearchParams(window.location.search);
+		}
+		return new URLSearchParams();
+	}, []);
 
 	async function onSubmit(data: FormData) {
 		setIsLoading(true);
 
-		const signInResult = await signIn("resend", {
-			email: data.email.toLowerCase(),
-			redirect: false,
-			callbackUrl: searchParams?.get("from") || "/dashboard",
-		});
+		// You'll need to implement your own signIn function or use a library compatible with Astro
+		const signInResult: {
+			ok?: boolean;
+			error?: string;
+		} = {}; // TODO: Implement
 
 		setIsLoading(false);
 
@@ -53,6 +57,12 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
 			description: "We sent you a login link. Be sure to check your spam too.",
 		});
 	}
+
+	// Implement your own signIn function for Google
+	const signInWithGoogle = () => {
+		setIsGoogleLoading(true);
+		// Implement Google sign-in logic here
+	};
 
 	return (
 		<div className={cn("grid gap-6", className)} {...props}>
@@ -103,10 +113,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
 			<button
 				type="button"
 				className={cn(buttonVariants({ variant: "outline" }))}
-				onClick={() => {
-					setIsGoogleLoading(true);
-					signIn("google");
-				}}
+				onClick={signInWithGoogle}
 				disabled={isLoading || isGoogleLoading}
 			>
 				{isGoogleLoading ? (

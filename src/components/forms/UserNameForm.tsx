@@ -1,3 +1,4 @@
+import { actions } from "astro:actions";
 import { z } from "astro:schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState, useTransition } from "react";
@@ -10,7 +11,6 @@ import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-// Assuming this is imported from a shared location
 const userNameSchema = z.object({
 	name: z.string().min(2).max(32),
 });
@@ -22,15 +22,9 @@ interface UserNameFormProps {
 		id: string;
 		name: string;
 	};
-	updateUserNameAction: (
-		formData: FormData,
-	) => Promise<{ success: boolean; error?: string }>;
 }
 
-export function UserNameForm({
-	user,
-	updateUserNameAction,
-}: UserNameFormProps) {
+export function UserNameForm({ user }: UserNameFormProps) {
 	const [updated, setUpdated] = useState(false);
 	const [isPending, startTransition] = useTransition();
 
@@ -52,16 +46,21 @@ export function UserNameForm({
 	const onSubmit = handleSubmit((data) => {
 		startTransition(() => {
 			(async () => {
-				const result = await updateUserNameAction(data);
-
-				if (!result.success) {
+				try {
+					const result = await actions.updateUsername({ id: user.id, ...data });
+					if (result.success) {
+						setUpdated(false);
+						toast.success("Your name has been updated.");
+					} else {
+						throw new Error(result.error || "Failed to update name");
+					}
+				} catch (error) {
 					toast.error("Something went wrong.", {
 						description:
-							result.error || "Your name was not updated. Please try again.",
+							error instanceof Error
+								? error.message
+								: "Your name was not updated. Please try again.",
 					});
-				} else {
-					setUpdated(false);
-					toast.success("Your name has been updated.");
 				}
 			})();
 		});

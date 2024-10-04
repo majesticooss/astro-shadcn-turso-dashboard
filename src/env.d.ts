@@ -54,6 +54,6 @@ declare global {
 		mainNav: MainNavItem[];
 		sidebarNav: SidebarNavItem[];
 	};
-}
 
-type UserRole = "admin" | "user";
+	type UserRole = "admin" | "user";
+}

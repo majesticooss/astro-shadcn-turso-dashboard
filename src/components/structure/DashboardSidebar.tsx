@@ -8,7 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+	Sheet,
+	SheetContent,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
 import {
 	Tooltip,
 	TooltipContent,
@@ -187,6 +192,7 @@ export function MobileSheetSidebar({
 					</Button>
 				</SheetTrigger>
 				<SheetContent side="left" className="flex flex-col p-0">
+					<SheetTitle className="hidden">Menu</SheetTitle>
 					<ScrollArea className="h-full overflow-y-auto">
 						<div className="flex h-screen flex-col">
 							<nav className="flex flex-1 flex-col gap-y-8 p-6 text-lg font-medium">

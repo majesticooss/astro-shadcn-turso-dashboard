@@ -68,7 +68,7 @@ function DeleteAccountModal({
 			className="gap-0"
 		>
 			<div className="flex flex-col items-center justify-center space-y-3 border-b p-4 pt-8 sm:px-16">
-				<UserAvatar user={{ name: user.name, image: user.image }} />
+				<UserAvatar user={{ name: user?.name, image: user?.image }} />
 				<h3 className="text-lg font-semibold">Delete Account</h3>
 				<p className="text-center text-sm text-muted-foreground">
 					<b>Warning:</b> This will permanently delete your account and your
