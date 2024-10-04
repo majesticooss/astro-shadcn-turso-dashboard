@@ -120,7 +120,15 @@ function DeleteAccountModal({
 	);
 }
 
-export function useDeleteAccountModal() {
+interface DeleteAccountModalProps {
+	user: {
+		id: string;
+		name: string;
+		image: string;
+	};
+}
+
+export function useDeleteAccountModal({ user }: DeleteAccountModalProps) {
 	const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
 	const DeleteAccountModalCallback = useCallback(() => {
@@ -128,9 +136,10 @@ export function useDeleteAccountModal() {
 			<DeleteAccountModal
 				showDeleteAccountModal={showDeleteAccountModal}
 				setShowDeleteAccountModal={setShowDeleteAccountModal}
+				user={{ name: user?.name, image: user?.image }}
 			/>
 		);
-	}, [showDeleteAccountModal, setShowDeleteAccountModal]);
+	}, [showDeleteAccountModal, setShowDeleteAccountModal, user]);
 
 	return useMemo(
 		() => ({

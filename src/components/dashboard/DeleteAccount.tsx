@@ -6,9 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { siteConfig } from "config";
 
-export function DeleteAccountSection() {
+interface DeleteAccountSectionProps {
+	user: {
+		id: string;
+	};
+}
+
+export function DeleteAccountSection({ user }: DeleteAccountSectionProps) {
 	const { setShowDeleteAccountModal, DeleteAccountModal } =
-		useDeleteAccountModal();
+		useDeleteAccountModal(user);
 
 	const userPaidPlan = true;
 
