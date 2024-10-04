@@ -9,12 +9,14 @@ import { siteConfig } from "config";
 interface DeleteAccountSectionProps {
 	user: {
 		id: string;
+		name: string;
+		image: string;
 	};
 }
 
 export function DeleteAccountSection({ user }: DeleteAccountSectionProps) {
 	const { setShowDeleteAccountModal, DeleteAccountModal } =
-		useDeleteAccountModal(user);
+		useDeleteAccountModal({ user });
 
 	const userPaidPlan = true;
 

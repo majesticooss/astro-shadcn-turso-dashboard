@@ -28,7 +28,9 @@ export default function SettingsPage({ user }: SettingsPageProps) {
 			<div className="divide-y divide-muted pb-10">
 				<UserNameForm user={{ id: user.id, name: user.username || "" }} />
 				<UserRoleForm user={{ id: user.id, role: user.role }} />
-				<DeleteAccountSection user={{ id: user.id }} />
+				<DeleteAccountSection
+					user={{ id: user.id, name: user.username, image: user?.image }}
+				/>
 			</div>
 		</>
 	);
