@@ -1,35 +1,43 @@
-import { createAuthClient as createVanillaClient } from "better-auth/client";
-import { passkeyClient, twoFactorClient } from "better-auth/client/plugins";
-import { createAuthClient } from "better-auth/solid";
+import {
+	adminClient,
+	multiSessionClient,
+	oneTapClient,
+	organizationClient,
+	passkeyClient,
+	twoFactorClient,
+} from "better-auth/client/plugins";
+import { createAuthClient } from "better-auth/react";
+import { toast } from "sonner";
+
+export const client = createAuthClient({
+	plugins: [
+		organizationClient(),
+		twoFactorClient({
+			redirect: true,
+			twoFactorPage: "/two-factor",
+		}),
+		passkeyClient(),
+		adminClient(),
+		multiSessionClient(),
+		// oneTapClient({
+		// 	clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+		// }),
+	],
+	fetchOptions: {
+		onError(e) {
+			if (e.error.status === 429) {
+				toast.error("Too many requests. Please try again later.");
+			}
+		},
+	},
+});
+
 export const {
+	signUp,
 	signIn,
 	signOut,
 	useSession,
-	signUp,
-	passkey: passkeyActions,
-	useListPasskeys,
-	twoFactor: twoFactorActions,
-	$Infer,
-	updateUser,
-	changePassword,
-	revokeSession,
-	revokeSessions,
-} = createAuthClient({
-	baseURL:
-		process.env.NODE_ENV === "development"
-			? process.env.BETTER_AUTH_URL
-			: undefined,
-	plugins: [
-		passkeyClient(),
-		twoFactorClient({
-			twoFactorPage: "/two-factor",
-		}),
-	],
-});
-
-export const { useSession: useVanillaSession } = createVanillaClient({
-	baseURL:
-		process.env.NODE_ENV === "development"
-			? process.env.BETTER_AUTH_URL
-			: undefined,
-});
+	organization,
+	useListOrganizations,
+	useActiveOrganization,
+} = client;
