@@ -2,19 +2,8 @@
 /// <reference types="astro/client" />
 
 import type { Icons } from "@/components/ui/icons";
-import type { Session as LuciaSession, User as LuciaUser } from "lucia";
 
 declare global {
-	type User = typeof LuciaUser;
-	type Session = typeof LuciaSession;
-
-	namespace App {
-		interface Locals {
-			user: User | null;
-			session: Session | null;
-		}
-	}
-
 	type SiteConfig = {
 		name: string;
 		description: string;

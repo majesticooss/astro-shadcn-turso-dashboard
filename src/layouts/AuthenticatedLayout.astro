@@ -9,10 +9,13 @@ import {
 } from "@/components/structure/DashboardSidebar";
 import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { auth } from "@/lib/auth";
 import { sidebarLinks } from "config";
 
 const currentPath = Astro.url.pathname;
-const user = Astro.locals.user;
+const session = await auth.api.getSession({
+	headers: Astro.request.headers,
+});
 
 const filteredLinks = sidebarLinks.map((section) => ({
 	...section,
@@ -60,7 +63,7 @@ const handleNavigate = (href: string) => {
 					<ModeToggle client:load transition:persist />
 					<UserAccountNav
 						client:load
-						user={user}
+						user={session?.user}
 						transition:persist
 					/>
 				</MaxWidthWrapper>

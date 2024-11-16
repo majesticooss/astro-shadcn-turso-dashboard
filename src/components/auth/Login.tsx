@@ -10,55 +10,35 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useEffect, useRef } from "react";
+import { passkeyActions, signIn } from "@/lib/auth-client";
+import type React from "react";
+import { useState } from "react";
 
 export const description =
 	"A login form with email and password, submitting to /api/login with client-side handling. There's a link to sign up if you don't have an account. Uses Astro's View Transitions API for navigation.";
 
 export function LoginForm() {
-	const formRef = useRef(null);
-	const errorMessageRef = useRef(null);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
-	useEffect(() => {
-		const form = formRef.current;
-		if (form) {
-			form.addEventListener("submit", handleSubmit);
-		}
-
-		return () => {
-			if (form) {
-				form.removeEventListener("submit", handleSubmit);
-			}
-		};
-	}, []);
-
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (errorMessageRef.current) {
-			errorMessageRef.current.innerText = "";
-		}
-		const formElement = e.target;
+		setErrorMessage("");
+
 		try {
-			const response = await fetch(formElement.action, {
-				method: formElement.method,
-				body: new FormData(formElement),
-				headers: {
-					Accept: "application/json",
+			await signIn.email({
+				email,
+				password,
+				fetchOptions: {
+					onError(context) {
+						setErrorMessage(context.error.message);
+					},
 				},
+				callbackURL: "/",
 			});
-			if (response.ok) {
-				navigate("/");
-			} else {
-				const data = await response.json();
-				if (errorMessageRef.current) {
-					errorMessageRef.current.innerText =
-						data.error || "An error occurred during login.";
-				}
-			}
 		} catch (error) {
-			if (errorMessageRef.current) {
-				errorMessageRef.current.innerText = "An error occurred during login.";
-			}
+			setErrorMessage("An error occurred during login.");
 		}
 	};
 
@@ -71,12 +51,7 @@ export function LoginForm() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<form
-					ref={formRef}
-					method="post"
-					action="/api/login"
-					onSubmit={handleSubmit}
-				>
+				<form onSubmit={handleSubmit}>
 					<div className="grid gap-4">
 						<div className="grid gap-2">
 							<Label htmlFor="email">Email</Label>
@@ -86,6 +61,8 @@ export function LoginForm() {
 								type="email"
 								placeholder="m@example.com"
 								required
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</div>
 						<div className="grid gap-2">
@@ -98,13 +75,22 @@ export function LoginForm() {
 									Forgot your password?
 								</Link>
 							</div>
-							<Input id="password" name="password" type="password" required />
+							<Input
+								id="password"
+								name="password"
+								type="password"
+								required
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+							/>
 						</div>
 						<Button type="submit" className="w-full">
 							Login
 						</Button>
 					</div>
-					<p ref={errorMessageRef} className="mt-2 text-sm text-red-600" />
+					{errorMessage && (
+						<p className="mt-2 text-sm text-red-600">{errorMessage}</p>
+					)}
 				</form>
 				<div className="mt-4 text-center text-sm">
 					Don&apos;t have an account?{" "}

@@ -1,8 +1,13 @@
 ---
 import { LoginForm } from "@/components/auth/Login";
 import PublicLayout from "@/layouts/PublicLayout.astro";
+import { auth, userCanAccessResource } from "@/lib/auth";
 
-if (Astro.locals.user) {
+const session = await auth.api.getSession({
+	headers: Astro.request.headers,
+});
+
+if (session?.user) {
 	return Astro.redirect("/");
 }
 ---

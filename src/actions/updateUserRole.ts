@@ -2,41 +2,41 @@ import { defineAction } from "astro:actions";
 import { z } from "astro/zod";
 
 const UserRole = {
-  ADMIN: "ADMIN",
-  USER: "USER",
-  // Add other roles as needed
+	ADMIN: "ADMIN",
+	USER: "USER",
+	// Add other roles as needed
 };
 
 const userRoleSchema = z.object({
-  role: z.enum(Object.values(UserRole) as [string, ...string[]]),
+	role: z.enum(Object.values(UserRole) as [string, ...string[]]),
 });
 
 export const updateUserRole = defineAction({
-  input: userRoleSchema,
-  handler: async ({ role }, { cookies, locals }) => {
-    try {
-      // Assuming you have a user in locals from your auth setup
-      const user = locals.user;
-      if (!user) {
-        	throw new Error("User not authenticated");
-      }
+	input: userRoleSchema,
+	handler: async ({ role }, { cookies, locals }) => {
+		try {
+			// Assuming you have a user in locals from your auth setup
+			const user = locals.user;
+			if (!user) {
+				throw new Error("User not authenticated");
+			}
 
-      // Update the user role in your database
+			// Update the user role in your database
 
-      // For Astro, you might need to handle cache invalidation differently
-      // instead of using Next.js's revalidatePath
-      // You could potentially set a cookie or return a value to trigger a reload
+			// For Astro, you might need to handle cache invalidation differently
+			// instead of using Next.js's revalidatePath
+			// You could potentially set a cookie or return a value to trigger a reload
 
-      return {
-        success: true,
-        data: { role },
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        error: "Failed to update user role",
-      };
-    }
-  },
+			return {
+				success: true,
+				data: { role },
+			};
+		} catch (error) {
+			console.error(error);
+			return {
+				success: false,
+				error: "Failed to update user role",
+			};
+		}
+	},
 });

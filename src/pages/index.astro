@@ -1,8 +1,11 @@
 ---
-import { userCanAccessResource } from "@/lib/auth";
+import { auth, userCanAccessResource } from "@/lib/auth";
 
-const user = Astro.locals.user;
-if (!user) {
+const session = await auth.api.getSession({
+	headers: Astro.request.headers,
+});
+
+if (!session?.user) {
 	return Astro.redirect("/login");
 }
 

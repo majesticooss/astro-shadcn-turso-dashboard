@@ -1,50 +1,56 @@
-import { Session, User, db } from "astro:db";
-import { Lucia } from "lucia";
-import { AstroDBAdapter } from "lucia-adapter-astrodb";
+import { LibsqlDialect } from "@libsql/kysely-libsql";
+import { betterAuth } from "better-auth";
+import { passkey, twoFactor } from "better-auth/plugins";
 
-const adapter = new AstroDBAdapter(db, Session, User);
-
-export const lucia = new Lucia(adapter, {
-	sessionCookie: {
-		attributes: {
-			secure: import.meta.env.PROD,
+export const auth = betterAuth({
+	database: {
+		dialect: new LibsqlDialect({
+			url: process.env.TURSO_DATABASE_URL || "",
+			authToken: process.env.TURSO_AUTH_TOKEN || "",
+		}),
+		type: "sqlite",
+	},
+	account: {
+		accountLinking: {
+			enabled: true,
+			trustedProviders: ["google"],
 		},
 	},
-	getUserAttributes: (attributes) => {
-		return {
-			// attributes has the type of DatabaseUserAttributes
-			username: attributes.username,
-		};
+	emailAndPassword: {
+		enabled: true,
+	},
+	socialProviders: {
+		// google: {
+		// 	clientId: import.meta.env.GOOGLE_CLIENT_ID!,
+		// 	clientSecret: import.meta.env.GOOGLE_CLIENT_SECRET!,
+		// },
+		// github: {
+		// 	clientId: import.meta.env.GITHUB_CLIENT_ID!,
+		// 	clientSecret: import.meta.env.GITHUB_CLIENT_SECRET!,
+		// },
+	},
+	plugins: [
+		passkey(),
+		twoFactor({
+			otpOptions: {
+				async sendOTP({ user, otp }, request) {
+					console.log(`Sending OTP to ${user.email}: ${otp}`);
+					// await resend.emails.send({
+					// 	from: "Acme <no-reply@demo.better-auth.com>",
+					// 	to: user.email,
+					// 	subject: "Your OTP",
+					// 	html: `Your OTP is ${otp}`,
+					// });
+				},
+			},
+		}),
+	],
+	rateLimit: {
+		enabled: true,
 	},
 });
 
-export async function hashPassword(password: string): Promise<string> {
-	const encoder = new TextEncoder();
-	const data = encoder.encode(password);
-	const hash = await crypto.subtle.digest("SHA-256", data);
-	return btoa(String.fromCharCode(...new Uint8Array(hash)));
-}
-
-export async function userCanAccessResource(user: User, resource: URL) {
+export async function userCanAccessResource(user, resource: URL) {
 	// Check if the user has access to the resource
 	return true;
-}
-
-export async function comparePasswords(
-	storedHash: string,
-	password: string,
-): Promise<boolean> {
-	const hashedPassword = await hashPassword(password);
-	return storedHash === hashedPassword;
-}
-
-declare module "lucia" {
-	interface Register {
-		Lucia: typeof lucia;
-		DatabaseUserAttributes: DatabaseUserAttributes;
-	}
-}
-
-interface DatabaseUserAttributes {
-	username: string;
 }

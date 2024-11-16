@@ -1,18 +1,21 @@
 ---
 import SettingsPage from "@/components/routes/Settings";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
-import { userCanAccessResource } from "@/lib/auth";
+import { auth, userCanAccessResource } from "@/lib/auth";
 
-const user = Astro.locals.user;
-if (!user) {
+const session = await auth.api.getSession({
+	headers: Astro.request.headers,
+});
+
+if (!session) {
 	return Astro.redirect("/login");
 }
 
-if (!userCanAccessResource(user, Astro.url)) {
+if (!userCanAccessResource(session.user, Astro.url)) {
 	return Astro.redirect("/unauthorized");
 }
 ---
 
 <AuthenticatedLayout>
-	<SettingsPage client:load user={user} />
+	<SettingsPage client:load user={session.user} />
 </AuthenticatedLayout>

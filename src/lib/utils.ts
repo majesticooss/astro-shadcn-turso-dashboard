@@ -98,9 +98,8 @@ export async function fetcher<JSON = any>(
 			};
 			error.status = res.status;
 			throw error;
-		} else {
-			throw new Error("An unexpected error occurred");
 		}
+		throw new Error("An unexpected error occurred");
 	}
 
 	return res.json();
@@ -118,7 +117,7 @@ export function nFormatter(num: number, digits?: number) {
 		{ value: 1e18, symbol: "E" },
 	];
 	const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-	var item = lookup
+	const item = lookup
 		.slice()
 		.reverse()
 		.find((item) => num >= item.value);
