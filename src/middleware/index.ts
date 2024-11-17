@@ -19,7 +19,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
 	// If user is logged in and tries to access login/signup pages,
 	// redirect them to dashboard
-	if (session && PUBLIC_PAGES.includes(currentPath)) {
+	if (session && (PUBLIC_PAGES.includes(currentPath) || currentPath === "/")) {
 		return context.redirect("/dashboard");
 	}
 

@@ -1,82 +1,24 @@
 ---
 import { fade } from "astro:transitions";
-import { ModeToggle } from "@/components/dashboard/ModeToggle";
-import { SearchCommand } from "@/components/dashboard/SearchCommand";
-import { UserAccountNav } from "@/components/dashboard/UserAccountNav";
-import {
-	DashboardSidebar,
-	MobileSheetSidebar,
-} from "@/components/structure/DashboardSidebar";
-import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
+import { DashboardWrapper } from "@/components/dashboard/DashboardWrapper";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { sidebarLinks } from "config";
 
 const currentPath = Astro.url.pathname;
-
 const { session } = Astro.locals;
 
 const filteredLinks = sidebarLinks.map((section) => ({
 	...section,
 	items: section.items.filter(({ authorizeOnly }) => !authorizeOnly),
 }));
-
-const handleNavigate = (href: string) => {
-	// For client-side navigation, you might want to use a client-side router library
-	// This is a simple redirection for demonstration purposes
-	window.location.href = href;
-};
 ---
 
 <BaseLayout>
-	<div class="relative flex min-h-screen w-full">
-		<DashboardSidebar
-			links={filteredLinks}
-			currentPath={currentPath}
-			client:load
-			transition:persist
-		/>
-
-		<div class="flex flex-1 flex-col">
-			<header
-				class="sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8"
-				transition:persist
-			>
-				<MaxWidthWrapper className="flex items-center gap-x-3 px-0">
-					<MobileSheetSidebar
-						links={filteredLinks}
-						currentPath={currentPath}
-						client:load
-						transition:persist
-					/>
-
-					<div class="w-full flex-1">
-						<SearchCommand
-							links={filteredLinks}
-							onNavigate={handleNavigate}
-							client:load
-							transition:persist
-						/>
-					</div>
-
-					<ModeToggle client:load transition:persist />
-					<UserAccountNav
-						client:load
-						user={session?.user ?? null}
-						transition:persist
-					/>
-				</MaxWidthWrapper>
-			</header>
-
-			<main
-				class="flex-1 p-4 xl:px-8"
-				transition:animate={fade({ duration: "0.1s" })}
-			>
-				<MaxWidthWrapper
-					className="flex h-full flex-col gap-4 px-0 lg:gap-6"
-				>
-					<slot />
-				</MaxWidthWrapper>
-			</main>
-		</div>
-	</div>
+	<DashboardWrapper
+		links={filteredLinks}
+		currentPath={currentPath}
+		client:load
+	>
+		<slot />
+	</DashboardWrapper>
 </BaseLayout>
