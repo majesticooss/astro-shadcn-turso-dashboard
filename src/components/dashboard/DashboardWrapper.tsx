@@ -1,7 +1,7 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AppSidebar } from "@/components/structure/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 interface DashboardWrapperProps {

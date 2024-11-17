@@ -3,10 +3,10 @@
 import { Frame, type LucideIcon, Map, PieChart } from "lucide-react";
 import * as React from "react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
+import { NavMain } from "@/components/structure/nav-main";
+import { NavProjects } from "@/components/structure/nav-projects";
+import { NavUser } from "@/components/structure/nav-user";
+import { TeamSwitcher } from "@/components/structure/team-switcher";
 import {
 	Sidebar,
 	SidebarContent,
