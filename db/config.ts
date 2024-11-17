@@ -1,56 +1,83 @@
+// https://5-0-0-beta.docs.astro.build/en/guides/astro-db/
+
 import { column, defineDb, defineTable } from "astro:db";
 
 const User = defineTable({
 	columns: {
-		id: column.number({
-			primaryKey: true,
-			identity: true,
-		}),
+		id: column.text({ primaryKey: true }),
+		name: column.text(),
 		email: column.text({ unique: true }),
-		hashed_password: column.text(),
+		emailVerified: column.boolean(),
+		image: column.text({ optional: true }),
+		createdAt: column.date(),
+		updatedAt: column.date(),
+		twoFactorEnabled: column.boolean({ optional: true }),
 	},
 });
 
 const Session = defineTable({
 	columns: {
-		id: column.text({
-			primaryKey: true,
-		}),
+		id: column.text({ primaryKey: true }),
 		expiresAt: column.date(),
-		userId: column.number({
+		ipAddress: column.text({ optional: true }),
+		userAgent: column.text({ optional: true }),
+		userId: column.text({
 			references: () => User.columns.id,
 		}),
 	},
 });
 
-const Tenant = defineTable({
+const Account = defineTable({
 	columns: {
-		id: column.number({
-			primaryKey: true,
-			identity: true,
+		id: column.text({ primaryKey: true }),
+		accountId: column.text(),
+		providerId: column.text(),
+		userId: column.text({
+			references: () => User.columns.id,
 		}),
-		name: column.text(),
+		accessToken: column.text({ optional: true }),
+		refreshToken: column.text({ optional: true }),
+		idToken: column.text({ optional: true }),
+		expiresAt: column.date({ optional: true }),
+		password: column.text({ optional: true }),
 	},
 });
 
-const UserTenant = defineTable({
+const Verification = defineTable({
 	columns: {
-		id: column.number({
-			primaryKey: true,
-			identity: true,
-		}),
-		userId: column.number({
+		id: column.text({ primaryKey: true }),
+		identifier: column.text(),
+		value: column.text(),
+		expiresAt: column.date(),
+		createdAt: column.date(),
+	},
+});
+
+const Passkey = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		name: column.text({ optional: true }),
+		publicKey: column.text(),
+		userId: column.text({
 			references: () => User.columns.id,
 		}),
-		tenantId: column.number({
-			references: () => Tenant.columns.id,
-		}),
+		webauthnUserID: column.text(),
+		counter: column.number(),
+		deviceType: column.text(),
+		backedUp: column.boolean(),
+		transports: column.text({ optional: true }),
+		createdAt: column.date(),
 	},
-	indexes: {
-		userTenantUnique: {
-			on: ["userId", "tenantId"],
-			unique: true,
-		},
+});
+
+const TwoFactor = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		secret: column.text(),
+		backupCodes: column.text(),
+		userId: column.text({
+			references: () => User.columns.id,
+		}),
 	},
 });
 
@@ -58,7 +85,9 @@ export default defineDb({
 	tables: {
 		User,
 		Session,
-		Tenant,
-		UserTenant,
+		Account,
+		Verification,
+		Passkey,
+		TwoFactor,
 	},
 });

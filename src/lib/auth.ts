@@ -5,8 +5,8 @@ import { passkey, twoFactor } from "better-auth/plugins";
 export const auth = betterAuth({
 	database: {
 		dialect: new LibsqlDialect({
-			url: process.env.TURSO_DATABASE_URL || "",
-			authToken: process.env.TURSO_AUTH_TOKEN || "",
+			url: process.env.ASTRO_DB_REMOTE_URL || "",
+			authToken: process.env.ASTRO_DB_APP_TOKEN || "",
 		}),
 		type: "sqlite",
 		schema: {
