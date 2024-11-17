@@ -4,12 +4,6 @@ import { UserNameForm } from "@/components/forms/UserNameForm";
 import { UserRoleForm } from "@/components/forms/UserRoleForm";
 import React from "react";
 
-interface User {
-	id: string;
-	username: string;
-	role: string;
-}
-
 interface SettingsPageProps {
 	user: User | null;
 }

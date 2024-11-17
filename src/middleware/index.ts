@@ -1,16 +1,19 @@
 import { defineMiddleware } from "astro:middleware";
-import { auth } from "@/lib/auth";
+import { auth, userCanAccessResource } from "@/lib/auth";
 
-// `context` and `next` are automatically typed
 export const onRequest = defineMiddleware(async (context, next) => {
-	const isAuthed = await auth.api
+	const session = await auth.api
 		.getSession({
 			headers: context.request.headers,
 		})
 		.catch((e) => {
 			return null;
 		});
-	if (context.url.pathname === "/dashboard" && !isAuthed) {
+
+	// Add session to locals so it's accessible in pages
+	context.locals.session = session;
+
+	if (context.url.pathname === "/dashboard" && !session) {
 		return context.redirect("/");
 	}
 	return next();

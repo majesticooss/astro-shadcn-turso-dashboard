@@ -1,13 +1,3 @@
 ---
-import { auth, userCanAccessResource } from "@/lib/auth";
 
-const session = await auth.api.getSession({
-	headers: Astro.request.headers,
-});
-
-if (!session?.user) {
-	return Astro.redirect("/login");
-}
-
-return Astro.redirect("/dashboard");
 ---

@@ -4,6 +4,19 @@
 import type { Icons } from "@/components/ui/icons";
 
 declare global {
+	type User = {
+		id: string;
+		email: string;
+	};
+
+	namespace App {
+		interface Locals {
+			session: {
+				user: User | null;
+			} | null;
+		}
+	}
+
 	type SiteConfig = {
 		name: string;
 		description: string;

@@ -15,13 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-interface User {
-	name: string | null;
-	email: string | null;
-	image: string | null;
-	role: string;
-}
-
 interface UserAccountNavProps {
 	user: User | null;
 }

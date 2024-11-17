@@ -1,19 +1,6 @@
 ---
 import OrdersPage from "@/components/routes/Orders";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
-import { auth, userCanAccessResource } from "@/lib/auth";
-
-const session = await auth.api.getSession({
-	headers: Astro.request.headers,
-});
-
-if (!session) {
-	return Astro.redirect("/login");
-}
-
-if (!userCanAccessResource(session.user, Astro.url)) {
-	return Astro.redirect("/unauthorized");
-}
 ---
 
 <AuthenticatedLayout>

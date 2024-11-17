@@ -9,6 +9,14 @@ export const auth = betterAuth({
 			authToken: process.env.TURSO_AUTH_TOKEN || "",
 		}),
 		type: "sqlite",
+		schema: {
+			usersTable: "users",
+			sessionsTable: "sessions",
+			userColumns: {
+				role: "text",
+				customField: "text",
+			},
+		},
 	},
 	account: {
 		accountLinking: {
@@ -50,7 +58,7 @@ export const auth = betterAuth({
 	},
 });
 
-export async function userCanAccessResource(user, resource: URL) {
+export async function userCanAccessResource(user: User | null, resource: URL) {
 	// Check if the user has access to the resource
 	return true;
 }
