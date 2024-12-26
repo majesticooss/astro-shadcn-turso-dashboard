@@ -2,7 +2,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"command": "bun x astro dev",
+			"command": "bun x astro dev --host 127.0.0.1",
 			"name": "server",
 			"request": "launch",
 			"type": "node-terminal",
