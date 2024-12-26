@@ -1,7 +1,6 @@
 import {
 	adminClient,
 	multiSessionClient,
-	oneTapClient,
 	organizationClient,
 	passkeyClient,
 	twoFactorClient,
@@ -12,16 +11,10 @@ import { toast } from "sonner";
 export const client = createAuthClient({
 	plugins: [
 		organizationClient(),
-		twoFactorClient({
-			redirect: true,
-			twoFactorPage: "/two-factor",
-		}),
+		twoFactorClient(),
 		passkeyClient(),
 		adminClient(),
 		multiSessionClient(),
-		// oneTapClient({
-		// 	clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-		// }),
 	],
 	fetchOptions: {
 		onError(e) {

@@ -1,6 +1,6 @@
 import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { betterAuth } from "better-auth";
-import { passkey, twoFactor } from "better-auth/plugins";
+import { twoFactor } from "better-auth/plugins";
 
 export const auth = betterAuth({
 	database: {
@@ -38,7 +38,6 @@ export const auth = betterAuth({
 		// },
 	},
 	plugins: [
-		passkey(),
 		twoFactor({
 			otpOptions: {
 				async sendOTP({ user, otp }, request) {
