@@ -34,6 +34,12 @@ export const auth = betterAuth({
 			otpOptions: {
 				async sendOTP({ user, otp }, request) {
 					console.log(`Sending OTP to ${user.email}: ${otp}`);
+					// await resend.emails.send({
+					// 	from: "Acme <no-reply@demo.better-auth.com>",
+					// 	to: user.email,
+					// 	subject: "Your OTP",
+					// 	html: `Your OTP is ${otp}`,
+					// });
 				},
 			},
 		}),
