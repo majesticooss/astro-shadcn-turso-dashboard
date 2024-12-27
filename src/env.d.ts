@@ -59,3 +59,14 @@ declare global {
 
 	type UserRole = "admin" | "user";
 }
+
+interface ImportMetaEnv {
+	readonly ASTRO_DB_REMOTE_URL: string;
+	readonly ASTRO_DB_APP_TOKEN: string;
+	readonly BETTER_AUTH_SECRET: string;
+	readonly BETTER_AUTH_URL: string;
+}
+
+interface ImportMeta {
+	readonly env: ImportMetaEnv;
+}
