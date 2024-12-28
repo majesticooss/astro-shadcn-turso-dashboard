@@ -82,7 +82,7 @@ export function LoginForm({
 									<div className="flex items-center">
 										<Label htmlFor="password">Password</Label>
 										<a
-											href="#"
+											href="/forgot-password"
 											className="ml-auto text-sm underline-offset-4 hover:underline"
 										>
 											Forgot your password?
@@ -105,7 +105,7 @@ export function LoginForm({
 							</div>
 							<div className="text-center text-sm">
 								Don&apos;t have an account?{" "}
-								<a href="#" className="underline underline-offset-4">
+								<a href="/signup" className="underline underline-offset-4">
 									Sign up
 								</a>
 							</div>
@@ -114,8 +114,9 @@ export function LoginForm({
 				</CardContent>
 			</Card>
 			<div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-				By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-				and <a href="#">Privacy Policy</a>.
+				By clicking continue, you agree to our{" "}
+				<a href="/terms">Terms of Service</a> and{" "}
+				<a href="/privacy">Privacy Policy</a>.
 			</div>
 		</div>
 	);
