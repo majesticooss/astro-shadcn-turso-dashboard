@@ -27,18 +27,26 @@ export function LoginForm() {
 		setErrorMessage("");
 
 		try {
-			await signIn.email({
+			const result = await signIn.email({
 				email,
 				password,
 				fetchOptions: {
 					onError(context) {
+						console.error("Sign in error:", context.error);
 						setErrorMessage(context.error.message);
 					},
 				},
 				callbackURL: "/",
 			});
+
+			if (result.data?.user) {
+				await navigate("/");
+			} else {
+				setErrorMessage("Login failed. Please check your credentials.");
+			}
 		} catch (error) {
-			setErrorMessage("An error occurred during login.");
+			console.error("Login error:", error);
+			setErrorMessage("An error occurred during login. Please try again.");
 		}
 	};
 

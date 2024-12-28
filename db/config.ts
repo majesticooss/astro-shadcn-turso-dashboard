@@ -1,5 +1,3 @@
-// https://5-0-0-beta.docs.astro.build/en/guides/astro-db/
-
 import { column, defineDb, defineTable } from "astro:db";
 
 const User = defineTable({
@@ -12,17 +10,26 @@ const User = defineTable({
 		createdAt: column.date(),
 		updatedAt: column.date(),
 		twoFactorEnabled: column.boolean({ optional: true }),
+		phoneNumber: column.text({ optional: true }),
+		phoneNumberVerified: column.boolean({ optional: true }),
 	},
 });
 
 const Session = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
+		userId: column.text({
+			references: () => User.columns.id,
+		}),
+		token: column.text(),
 		expiresAt: column.date(),
 		ipAddress: column.text({ optional: true }),
 		userAgent: column.text({ optional: true }),
-		userId: column.text({
-			references: () => User.columns.id,
+		createdAt: column.date(),
+		updatedAt: column.date(),
+		activeOrganizationId: column.text({
+			optional: true,
+			references: () => Organization.columns.id,
 		}),
 	},
 });
@@ -30,16 +37,19 @@ const Session = defineTable({
 const Account = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
-		accountId: column.text(),
-		providerId: column.text(),
 		userId: column.text({
 			references: () => User.columns.id,
 		}),
+		accountId: column.text(),
+		providerId: column.text(),
 		accessToken: column.text({ optional: true }),
 		refreshToken: column.text({ optional: true }),
-		idToken: column.text({ optional: true }),
-		expiresAt: column.date({ optional: true }),
+		accessTokenExpiresAt: column.date({ optional: true }),
+		refreshTokenExpiresAt: column.date({ optional: true }),
+		scope: column.text({ optional: true }),
 		password: column.text({ optional: true }),
+		createdAt: column.date(),
+		updatedAt: column.date(),
 	},
 });
 
@@ -73,11 +83,66 @@ const Passkey = defineTable({
 const TwoFactor = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
-		secret: column.text(),
-		backupCodes: column.text(),
 		userId: column.text({
 			references: () => User.columns.id,
 		}),
+		secret: column.text(),
+		backupCodes: column.text(),
+		createdAt: column.date(),
+		updatedAt: column.date(),
+		lastUsedAt: column.date({ optional: true }),
+		verifiedAt: column.date({ optional: true }),
+	},
+});
+
+const Organization = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		name: column.text(),
+		slug: column.text({ unique: true }),
+		logo: column.text({ optional: true }),
+		metadata: column.text({ optional: true }),
+		createdAt: column.date(),
+	},
+});
+
+const Member = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		userId: column.text({
+			references: () => User.columns.id,
+		}),
+		organizationId: column.text({
+			references: () => Organization.columns.id,
+		}),
+		role: column.text(),
+		createdAt: column.date(),
+	},
+});
+
+const Invitation = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		email: column.text(),
+		organizationId: column.text({
+			references: () => Organization.columns.id,
+		}),
+		role: column.text(),
+		status: column.text(),
+		expiresAt: column.date(),
+		createdAt: column.date(),
+	},
+});
+
+const OTP = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		phoneNumber: column.text(),
+		code: column.text(),
+		expiresAt: column.date(),
+		createdAt: column.date(),
+		verified: column.boolean(),
+		type: column.text(),
 	},
 });
 
@@ -89,5 +154,9 @@ export default defineDb({
 		Verification,
 		Passkey,
 		TwoFactor,
+		Organization,
+		 Member,
+		Invitation,
+		OTP,
 	},
 });

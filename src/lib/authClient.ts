@@ -4,6 +4,8 @@ import {
 	organizationClient,
 	passkeyClient,
 	twoFactorClient,
+	magicLinkClient,
+	phoneNumberClient
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { toast } from "sonner";
@@ -15,6 +17,9 @@ export const client = createAuthClient({
 		passkeyClient(),
 		adminClient(),
 		multiSessionClient(),
+		magicLinkClient(),
+		phoneNumberClient(),
+		adminClient()
 	],
 	fetchOptions: {
 		onError(e) {
@@ -24,7 +29,6 @@ export const client = createAuthClient({
 		},
 	},
 });
-
 export const {
 	signUp,
 	signIn,

@@ -1,6 +1,10 @@
 export const siteDomain = "admin.novafy.app";
 export const siteUrl = `https://${siteDomain}`;
 
+export const mailConfig = {
+	from: "noreply@mail.majestico.co",
+}
+
 export const siteConfig: SiteConfig = {
 	name: "Next Starter",
 	description:
