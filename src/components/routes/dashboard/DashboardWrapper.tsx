@@ -1,6 +1,6 @@
 "use client";
 
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardHeader } from "@/components/routes/dashboard/DashboardHeader";
 import { AppSidebar } from "@/components/shadcn/app-sidebar";
 import {
 	SidebarInset,

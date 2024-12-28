@@ -1,22 +1,14 @@
-import { Link } from "@/components/core/Link";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { navigate } from "astro:transitions/client";
+import { SignupForm } from "@/components/shadcn/signup-form";
 import { signUp } from "@/lib/authClient";
+import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 
 export const description =
-	"A sign up form with first name, last name, email and password inside a card. There's an option to sign up with GitHub and a link to login if you already have an account";
+	"A signup form with name, email and password, submitting with client-side handling. There's an option to sign up with social providers and a link to login if you already have an account. Uses Astro's View Transitions API for navigation.";
 
-export function RegisterForm() {
+export function Signup() {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
@@ -28,95 +20,53 @@ export function RegisterForm() {
 		setErrorMessage("");
 
 		try {
-			await signUp.email({
-				name: `${firstName} ${lastName}`,
-				email,
-				password,
-			}, {
-				onRequest: (ctx) => {
-					//show loading
+			const result = await signUp.email(
+				{
+					name: `${firstName} ${lastName}`,
+					email,
+					password,
 				},
-				onSuccess: (ctx) => {
-					//redirect to the dashboard
+				{
+					onError: (ctx) => {
+						console.error("Sign up error:", ctx.error);
+						setErrorMessage(ctx.error.message);
+					},
 				},
-				onError: (ctx) => {
-					alert(ctx.error.message);
-				},
-			});
+			);
+
+			if (result.data?.user) {
+				await navigate("/");
+			} else {
+				setErrorMessage("Sign up failed. Please try again.");
+			}
 		} catch (error) {
-			setErrorMessage("An error occurred during registration.");
+			console.error("Sign up error:", error);
+			setErrorMessage("An error occurred during sign up. Please try again.");
 		}
 	};
 
 	return (
-		<Card className="mx-auto max-w-sm">
-			<CardHeader>
-				<CardTitle className="text-xl">Sign Up</CardTitle>
-				<CardDescription>
-					Enter your information to create an account
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<form onSubmit={handleSubmit}>
-					<div className="grid gap-4">
-						<div className="grid grid-cols-2 gap-4">
-							<div className="grid gap-2">
-								<Label htmlFor="first-name">First name</Label>
-								<Input
-									id="first-name"
-									value={firstName}
-									onChange={(e) => setFirstName(e.target.value)}
-									placeholder="Max"
-									required
-								/>
-							</div>
-							<div className="grid gap-2">
-								<Label htmlFor="last-name">Last name</Label>
-								<Input
-									id="last-name"
-									value={lastName}
-									onChange={(e) => setLastName(e.target.value)}
-									placeholder="Robinson"
-									required
-								/>
-							</div>
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="email">Email</Label>
-							<Input
-								id="email"
-								type="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								placeholder="m@example.com"
-								required
-							/>
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="password">Password</Label>
-							<Input
-								id="password"
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								required
-							/>
-						</div>
-						<Button type="submit" className="w-full">
-							Create an account
-						</Button>
+		<div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+			<div className="flex w-full max-w-sm flex-col gap-6">
+				<a href="/" className="flex items-center gap-2 self-center font-medium">
+					<div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+						<GalleryVerticalEnd className="size-4" />
 					</div>
-					{errorMessage && (
-						<p className="mt-2 text-sm text-red-600">{errorMessage}</p>
-					)}
-				</form>
-				<div className="mt-4 text-center text-sm">
-					Already have an account?{" "}
-					<Link href="/login" className="underline">
-						Sign in
-					</Link>
-				</div>
-			</CardContent>
-		</Card>
+					Acme Inc.
+				</a>
+				<SignupForm
+					onSubmit={handleSubmit}
+					firstName={firstName}
+					setFirstName={setFirstName}
+					lastName={lastName}
+					setLastName={setLastName}
+					email={email}
+					setEmail={setEmail}
+					password={password}
+					setPassword={setPassword}
+					errorMessage={errorMessage}
+				/>
+			</div>
+		</div>
 	);
 }

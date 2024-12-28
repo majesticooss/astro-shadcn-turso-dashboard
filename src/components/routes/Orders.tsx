@@ -1,5 +1,5 @@
 import { EmptyPlaceholder } from "@/components/core/EmptyPlaceholder";
-import { DashboardHeader } from "@/components/dashboard/Header";
+import { DashboardHeader } from "@/components/routes/dashboard/Header";
 import { Button } from "@/components/ui/button";
 import { constructMetadata } from "@/lib/utils";
 

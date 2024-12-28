@@ -1,7 +1,7 @@
 "use client";
 
-import { useDeleteAccountModal } from "@/components/dashboard/DeleteAccountModal";
-import { SectionColumns } from "@/components/dashboard/SectionColumns";
+import { useDeleteAccountModal } from "@/components/routes/dashboard/DeleteAccountModal";
+import { SectionColumns } from "@/components/routes/dashboard/SectionColumns";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { siteConfig } from "config";

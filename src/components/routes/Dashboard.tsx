@@ -7,7 +7,7 @@ import { RadialChartGrid } from "@/components/charts/RadialChartGrid";
 import { RadialShapeChart } from "@/components/charts/RadialShapeChart";
 import { RadialStackedChart } from "@/components/charts/RadialStackedChart";
 import { RadialTextChart } from "@/components/charts/RadialTextChart";
-import { DashboardHeader } from "@/components/dashboard/Header";
+import { DashboardHeader } from "@/components/routes/dashboard/Header";
 import { constructMetadata } from "@/lib/utils";
 
 export const metadata = constructMetadata({

@@ -1,7 +1,7 @@
-import { DeleteAccountSection } from "@/components/dashboard/DeleteAccount";
-import { DashboardHeader } from "@/components/dashboard/Header";
-import { UserNameForm } from "@/components/forms/UserNameForm";
-import { UserRoleForm } from "@/components/forms/UserRoleForm";
+import { DeleteAccountSection } from "@/components/routes/dashboard/DeleteAccount";
+import { DashboardHeader } from "@/components/routes/dashboard/Header";
+import { UserNameForm } from "@/components/routes/settings/UserNameForm";
+import { UserRoleForm } from "@/components/routes/settings/UserRoleForm";
 
 interface SettingsPageProps {
 	user: User | null;

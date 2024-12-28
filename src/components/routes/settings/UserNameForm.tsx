@@ -5,7 +5,7 @@ import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { SectionColumns } from "@/components/dashboard/SectionColumns";
+import { SectionColumns } from "@/components/routes/dashboard/SectionColumns";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";

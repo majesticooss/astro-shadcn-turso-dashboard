@@ -5,7 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { Drawer } from "vaul";
 
-import { UserAvatar } from "@/components/dashboard/UserAvatar";
+import { UserAvatar } from "@/components/routes/dashboard/UserAvatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
