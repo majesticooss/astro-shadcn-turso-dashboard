@@ -66,7 +66,14 @@ export function Login() {
 					</div>
 					Acme Inc.
 				</a>
-				<LoginForm />
+				<LoginForm
+					onSubmit={handleSubmit}
+					email={email}
+					password={password}
+					onEmailChange={setEmail}
+					onPasswordChange={setPassword}
+					errorMessage={errorMessage}
+				/>
 			</div>
 		</div>
 	);

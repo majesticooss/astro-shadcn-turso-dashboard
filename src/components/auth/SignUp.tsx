@@ -34,7 +34,7 @@ export function Signup() {
 				},
 			);
 
-			if (result.data?.user) {
+			if (result.data?.token) {
 				await navigate("/");
 			} else {
 				setErrorMessage("Sign up failed. Please try again.");
