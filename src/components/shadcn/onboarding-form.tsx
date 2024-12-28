@@ -56,17 +56,19 @@ export function OnboardingForm({
 								<Button
 									type="button"
 									variant="outline"
-									className={`h-auto flex flex-col items-center justify-center p-4 relative ${
+									className={`group relative min-h-[120px] p-6 ${
 										companyChoice === "new"
 											? "bg-primary/20 border-primary"
 											: ""
 									}`}
 									onClick={() => onCompanyChoiceChange("new")}
 								>
-									<Building className="mb-2 h-6 w-6" />
-									<span className="text-center text-sm">
-										Create a new company
-									</span>
+									<div className="flex flex-col items-center gap-2 w-full">
+										<Building className="h-6 w-6 shrink-0" />
+										<span className="text-center text-sm whitespace-normal">
+											Create new company
+										</span>
+									</div>
 									{companyChoice === "new" && (
 										<div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
 											<Check className="h-4 w-4 text-primary-foreground" />
@@ -76,17 +78,19 @@ export function OnboardingForm({
 								<Button
 									type="button"
 									variant="outline"
-									className={`h-auto flex flex-col items-center justify-center p-4 relative ${
+									className={`group relative min-h-[120px] p-6 ${
 										companyChoice === "existing"
 											? "bg-primary/20 border-primary"
 											: ""
 									}`}
 									onClick={() => onCompanyChoiceChange("existing")}
 								>
-									<Users className="mb-2 h-6 w-6" />
-									<span className="text-center text-sm">
-										Join an existing company
-									</span>
+									<div className="flex flex-col items-center gap-2 w-full">
+										<Users className="h-6 w-6 shrink-0" />
+										<span className="text-center text-sm whitespace-normal">
+											Join existing company
+										</span>
+									</div>
 									{companyChoice === "existing" && (
 										<div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
 											<Check className="h-4 w-4 text-primary-foreground" />
