@@ -2,7 +2,6 @@ import { DeleteAccountSection } from "@/components/dashboard/DeleteAccount";
 import { DashboardHeader } from "@/components/dashboard/Header";
 import { UserNameForm } from "@/components/forms/UserNameForm";
 import { UserRoleForm } from "@/components/forms/UserRoleForm";
-import React from "react";
 
 interface SettingsPageProps {
 	user: User | null;

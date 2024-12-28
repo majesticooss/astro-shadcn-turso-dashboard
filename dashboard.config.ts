@@ -16,6 +16,8 @@ export const siteConfig: SiteConfig = {
 		github: "https://github.com/mickasmt/next-auth-roles-template",
 	},
 	mailSupport: "support@next-starter.fake",
+	author: "Majestico",
+	themeColor: "#ffffff",
 };
 
 export const sidebarLinks: SidebarNavItem[] = [

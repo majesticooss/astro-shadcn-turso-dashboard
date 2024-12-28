@@ -87,33 +87,14 @@ export default async function seed() {
 		await db.insert(Member).values(memberData).returning();
 	}
 
-	// Create sessions
-	for (const sessionData of [
-		{
-			id: randomUUID(),
-			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-			token: randomUUID(),
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			ipAddress: "192.168.1.1",
-			userAgent: "Mozilla/5.0",
-			userId: users[0].id,
-			activeOrganizationId: organizations[0].id,
-			impersonatedBy: null,
-		},
-	]) {
-		await db.insert(Session).values(sessionData).returning();
-	}
-
 	// Create accounts
-	const TEST_PASSWORD = "password123";
-	const TEST_PASSWORD_HASH = "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u";
+	const test1234 = "8aa4e3c417ae301b30bb282ba46a297d:1ae40a78100fa97a4f3e9ad4434cbb83ff3d909fd330e304c46fc99bdfacec41a4947e88e7ea9f15b84b914ece5780c92e4b913cea734c1a25ba4633af6f74ad";
 
 	for (const accountData of [
 		{
 			id: randomUUID(),
-			accountId: "local_1",
-			providerId: "credentials",
+			accountId: randomUUID(),
+			providerId: "credential",
 			userId: users[0].id,
 			accessToken: null,
 			refreshToken: null,
@@ -121,22 +102,7 @@ export default async function seed() {
 			accessTokenExpiresAt: null,
 			refreshTokenExpiresAt: null,
 			scope: null,
-			password: TEST_PASSWORD_HASH,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		},
-		{
-			id: randomUUID(),
-			accountId: "github_123",
-			providerId: "github",
-			userId: users[1].id,
-			accessToken: "gho_token",
-			refreshToken: "ghr_token",
-			idToken: null,
-			accessTokenExpiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
-			refreshTokenExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-			scope: "read:user",
-			password: null,
+			password: test1234,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		},

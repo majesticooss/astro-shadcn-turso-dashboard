@@ -5,7 +5,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { sidebarLinks } from "config";
 
 const currentPath = Astro.url.pathname;
-const { session } = Astro.locals;
+const { session, user } = Astro.locals;
 
 const filteredLinks = sidebarLinks.map((section) => ({
 	...section,

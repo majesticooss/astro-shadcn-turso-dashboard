@@ -79,9 +79,8 @@ export function formatDate(input: string | number): string {
 // Utils from precedent.dev
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
 	if (!timestamp) return "never";
-	return `${ms(Date.now() - new Date(timestamp).getTime())}${
-		timeOnly ? "" : " ago"
-	}`;
+	return `${ms(Date.now() - new Date(timestamp).getTime())}${timeOnly ? "" : " ago"
+		}`;
 };
 
 export async function fetcher<JSON = any>(
@@ -141,13 +140,13 @@ export const getBlurDataURL = async (url: string | null) => {
 		return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 	}
 
-	if (url.startsWith("/_static/")) {
-		url = `${siteConfig.url}${url}`;
-	}
+	const finalUrl = url.startsWith("/_static/")
+		? `${siteConfig.url}${url}`
+		: url;
 
 	try {
 		const response = await fetch(
-			`https://wsrv.nl/?url=${url}&w=50&h=50&blur=5`,
+			`https://wsrv.nl/?url=${finalUrl}&w=50&h=50&blur=5`,
 		);
 		const buffer = await response.arrayBuffer();
 		const base64 = Buffer.from(buffer).toString("base64");

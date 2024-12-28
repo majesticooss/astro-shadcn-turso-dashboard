@@ -27,17 +27,19 @@ export function LoginForm() {
 		setErrorMessage("");
 
 		try {
-			const result = await signIn.email({
-				email,
-				password,
-				fetchOptions: {
-					onError(context) {
-						console.error("Sign in error:", context.error);
-						setErrorMessage(context.error.message);
+			const result = await signIn.email(
+				{
+					email,
+					password,
+					callbackURL: "/",
+				},
+				{
+					onError: (ctx) => {
+						console.error("Sign in error:", ctx.error);
+						setErrorMessage(ctx.error.message);
 					},
 				},
-				callbackURL: "/",
-			});
+			);
 
 			if (result.data?.user) {
 				await navigate("/");

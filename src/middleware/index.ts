@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 
 // Pages that don't require authentication
 const PUBLIC_PAGES = ["/login", "/signup"];
+const EXCLUDED_PAGES = ["/api"];
 
 // All other pages require authentication
 export const onRequest = defineMiddleware(async (context, next) => {

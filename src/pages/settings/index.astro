@@ -3,9 +3,9 @@ import SettingsPage from "@/components/routes/Settings";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 
 // Get session from locals
-const { session } = Astro.locals;
+const { session, user } = Astro.locals;
 ---
 
 <AuthenticatedLayout>
-	<SettingsPage client:load user={session?.user ?? null} />
+	<SettingsPage client:load user={user ?? null} />
 </AuthenticatedLayout>

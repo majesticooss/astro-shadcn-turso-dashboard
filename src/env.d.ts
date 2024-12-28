@@ -4,10 +4,7 @@
 import type { Icons } from "@/components/ui/icons";
 
 declare global {
-	type User = {
-		id: string;
-		email: string;
-	};
+	type User = import("better-auth").User;
 
 	namespace App {
 		interface Locals {
@@ -22,6 +19,8 @@ declare global {
 		url: string;
 		ogImage: string;
 		mailSupport: string;
+		author: string;
+		themeColor: string;
 		links: {
 			twitter: string;
 			github: string;
