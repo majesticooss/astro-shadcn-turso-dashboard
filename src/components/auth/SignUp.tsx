@@ -34,8 +34,8 @@ export function Signup() {
 				},
 			);
 
-			if (result.data?.token) {
-				await navigate("/");
+			if (!result.error) {
+				await navigate("/check-email");
 			} else {
 				setErrorMessage("Sign up failed. Please try again.");
 			}

@@ -43,13 +43,13 @@ export const auth = betterAuth({
 	emailVerification: {
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
-		verificationEmailURL: "/confirm-email",
+		verificationEmailURL: "/account-confirmed",
 		sendVerificationEmail: async ({ user, url, token }, request) => {
 			await resend.emails.send({
 				from: mailConfig.from,
 				to: user.email,
 				subject: "Verify your email",
-				html: `Click this link to verify your email: <a href="${url}?token=${token}">${url}</a>`,
+				html: `Click this link to verify your account: <a href="${url}">${url}</a>`,
 			});
 		}
 	},
