@@ -41,21 +41,17 @@ export function SearchCommand({ links, onNavigate }: SearchCommandProps) {
 			<Button
 				variant="outline"
 				className={cn(
-					"relative h-9 w-full justify-start rounded-md bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-72",
+					"relative h-9 w-[160px] justify-start rounded-md bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:w-[200px] md:w-[240px]",
 					"flex items-center gap-2",
 				)}
 				onClick={() => setOpen(true)}
 			>
-				<Icons.search className="h-4 w-4" />
-				<span className="inline-flex items-center gap-1">
-					Search
-					<span className="hidden sm:inline-flex">&nbsp;documentation</span>
+				<Icons.search className="h-4 w-4 shrink-0" />
+				<span className="inline-flex items-center gap-1 truncate overflow-hidden">
+					<span className="truncate">Search</span>
 				</span>
-				<kbd className="pointer-events-none absolute right-[0.3rem] top-[0.45rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+				<kbd className="pointer-events-none absolute right-[0.3rem] top-[0.45rem] h-5 select-none flex items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 ">
 					<span className="text-xs">⌘</span>K
-				</kbd>
-				<kbd className="pointer-events-none absolute right-[0.3rem] top-[0.45rem] flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium sm:hidden">
-					K
 				</kbd>
 			</Button>
 
