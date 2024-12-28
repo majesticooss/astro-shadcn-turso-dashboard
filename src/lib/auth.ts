@@ -26,13 +26,13 @@ export const auth = betterAuth({
 			),
 		}),
 		type: "sqlite",
-		schema: {
-			usersTable: "users",
-			sessionsTable: "sessions",
-			userColumns: {
-				role: "text",
-			},
-		},
+		// schema: {
+		// 	usersTable: "users",
+		// 	sessionsTable: "sessions",
+		// 	userColumns: {
+		// 		role: "text",
+		// 	},
+		// },
 	},
 	account: {
 		accountLinking: {
@@ -43,12 +43,13 @@ export const auth = betterAuth({
 	emailVerification: {
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
+		verificationEmailURL: "/confirm-email",
 		sendVerificationEmail: async ({ user, url, token }, request) => {
 			await resend.emails.send({
 				from: mailConfig.from,
 				to: user.email,
 				subject: "Verify your email",
-				html: `Click this link to verify your email: <a href="${url}">${url}</a>`,
+				html: `Click this link to verify your email: <a href="${url}?token=${token}">${url}</a>`,
 			});
 		}
 	},
