@@ -13,8 +13,8 @@ import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
 interface SearchCommandProps {
-	links: SidebarNavItem[];
-	onNavigate: (href: string) => void;
+	links?: SidebarNavItem[];
+	onNavigate?: (href: string) => void;
 }
 
 export function SearchCommand({ links, onNavigate }: SearchCommandProps) {
@@ -42,15 +42,20 @@ export function SearchCommand({ links, onNavigate }: SearchCommandProps) {
 				variant="outline"
 				className={cn(
 					"relative h-9 w-full justify-start rounded-md bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-72",
+					"flex items-center gap-2",
 				)}
 				onClick={() => setOpen(true)}
 			>
-				<span className="inline-flex">
+				<Icons.search className="h-4 w-4" />
+				<span className="inline-flex items-center gap-1">
 					Search
-					<span className="hidden sm:inline-flex">&nbsp;documentation</span>...
+					<span className="hidden sm:inline-flex">&nbsp;documentation</span>
 				</span>
 				<kbd className="pointer-events-none absolute right-[0.3rem] top-[0.45rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
 					<span className="text-xs">⌘</span>K
+				</kbd>
+				<kbd className="pointer-events-none absolute right-[0.3rem] top-[0.45rem] flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium sm:hidden">
+					K
 				</kbd>
 			</Button>
 
@@ -58,7 +63,7 @@ export function SearchCommand({ links, onNavigate }: SearchCommandProps) {
 				<CommandInput placeholder="Type a command or search..." />
 				<CommandList>
 					<CommandEmpty>No results found.</CommandEmpty>
-					{links.map((section) => (
+					{links?.map((section) => (
 						<CommandGroup key={section.title} heading={section.title}>
 							{section.items.map((item) => {
 								const Icon =
@@ -68,7 +73,7 @@ export function SearchCommand({ links, onNavigate }: SearchCommandProps) {
 										key={item.title}
 										onSelect={() => {
 											runCommand(() => {
-												if (item.href) {
+												if (item.href && onNavigate) {
 													onNavigate(item.href);
 												}
 											});
