@@ -1,18 +1,29 @@
 import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { betterAuth } from "better-auth";
-import { twoFactor, organization, magicLink, emailOTP, phoneNumber, admin } from "better-auth/plugins";
-import { Resend } from 'resend';
+import { admin, emailOTP, magicLink, organization, phoneNumber, twoFactor } from "better-auth/plugins";
 import { mailConfig } from "config";
+import { Resend } from 'resend';
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY);
+
+function getDatabaseUrl() {
+	if (import.meta.env.DEV) {
+		// Use local Astro DB in development
+		return 'file:./.astro/content.db'
+	}
+	// Use remote database in production
+	return import.meta.env.ASTRO_DB_REMOTE_URL || process.env.ASTRO_DB_REMOTE_URL
+}
 
 export const auth = betterAuth({
 	database: {
 		dialect: new LibsqlDialect({
-			url:
-				import.meta.env.ASTRO_DB_REMOTE_URL || process.env.ASTRO_DB_REMOTE_URL,
-			authToken:
-				import.meta.env.ASTRO_DB_APP_TOKEN || process.env.ASTRO_DB_APP_TOKEN,
+			url: getDatabaseUrl(),
+			// Only include authToken for remote database
+			...(import.meta.env.DEV
+				? {}
+				: { authToken: import.meta.env.ASTRO_DB_APP_TOKEN || process.env.ASTRO_DB_APP_TOKEN }
+			),
 		}),
 		type: "sqlite",
 		schema: {

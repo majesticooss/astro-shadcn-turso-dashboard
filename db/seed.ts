@@ -1,6 +1,6 @@
+import { randomUUID } from "node:crypto";
 import { db } from "astro:db";
-import { Account, Session, User, Organization, Member } from "astro:db";
-import { randomUUID } from "crypto";
+import { Account, Member, Organization, Session, User } from "astro:db";
 
 export default async function seed() {
 	// Create test users
