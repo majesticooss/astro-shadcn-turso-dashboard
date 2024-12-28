@@ -9,41 +9,44 @@ const User = defineTable({
 		image: column.text({ optional: true }),
 		createdAt: column.date(),
 		updatedAt: column.date(),
-		twoFactorEnabled: column.boolean({ optional: true }),
-		phoneNumber: column.text({ optional: true }),
+		phoneNumber: column.text({ unique: true, optional: true }),
 		phoneNumberVerified: column.boolean({ optional: true }),
+		role: column.text({ optional: true }),
+		banned: column.boolean({ optional: true }),
+		banReason: column.text({ optional: true }),
+		banExpires: column.date({ optional: true }),
+		twoFactorEnabled: column.boolean({ optional: true }),
 	},
 });
 
 const Session = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
+		expiresAt: column.date(),
+		token: column.text({ unique: true }),
+		createdAt: column.date(),
+		updatedAt: column.date(),
+		ipAddress: column.text({ optional: true }),
+		userAgent: column.text({ optional: true }),
 		userId: column.text({
 			references: () => User.columns.id,
 		}),
-		token: column.text(),
-		expiresAt: column.date(),
-		ipAddress: column.text({ optional: true }),
-		userAgent: column.text({ optional: true }),
-		createdAt: column.date(),
-		updatedAt: column.date(),
-		activeOrganizationId: column.text({
-			optional: true,
-			references: () => Organization.columns.id,
-		}),
+		activeOrganizationId: column.text({ optional: true }),
+		impersonatedBy: column.text({ optional: true }),
 	},
 });
 
 const Account = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
+		accountId: column.text(),
+		providerId: column.text(),
 		userId: column.text({
 			references: () => User.columns.id,
 		}),
-		accountId: column.text(),
-		providerId: column.text(),
 		accessToken: column.text({ optional: true }),
 		refreshToken: column.text({ optional: true }),
+		idToken: column.text({ optional: true }),
 		accessTokenExpiresAt: column.date({ optional: true }),
 		refreshTokenExpiresAt: column.date({ optional: true }),
 		scope: column.text({ optional: true }),
@@ -60,38 +63,7 @@ const Verification = defineTable({
 		value: column.text(),
 		expiresAt: column.date(),
 		createdAt: column.date(),
-	},
-});
-
-const Passkey = defineTable({
-	columns: {
-		id: column.text({ primaryKey: true }),
-		name: column.text({ optional: true }),
-		publicKey: column.text(),
-		userId: column.text({
-			references: () => User.columns.id,
-		}),
-		webauthnUserID: column.text(),
-		counter: column.number(),
-		deviceType: column.text(),
-		backedUp: column.boolean(),
-		transports: column.text({ optional: true }),
-		createdAt: column.date(),
-	},
-});
-
-const TwoFactor = defineTable({
-	columns: {
-		id: column.text({ primaryKey: true }),
-		userId: column.text({
-			references: () => User.columns.id,
-		}),
-		secret: column.text(),
-		backupCodes: column.text(),
-		createdAt: column.date(),
 		updatedAt: column.date(),
-		lastUsedAt: column.date({ optional: true }),
-		verifiedAt: column.date({ optional: true }),
 	},
 });
 
@@ -101,19 +73,19 @@ const Organization = defineTable({
 		name: column.text(),
 		slug: column.text({ unique: true }),
 		logo: column.text({ optional: true }),
-		metadata: column.text({ optional: true }),
 		createdAt: column.date(),
+		metadata: column.text({ optional: true }),
 	},
 });
 
 const Member = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
-		userId: column.text({
-			references: () => User.columns.id,
-		}),
 		organizationId: column.text({
 			references: () => Organization.columns.id,
+		}),
+		userId: column.text({
+			references: () => User.columns.id,
 		}),
 		role: column.text(),
 		createdAt: column.date(),
@@ -123,26 +95,27 @@ const Member = defineTable({
 const Invitation = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
-		email: column.text(),
 		organizationId: column.text({
 			references: () => Organization.columns.id,
 		}),
+		email: column.text(),
 		role: column.text(),
 		status: column.text(),
 		expiresAt: column.date(),
-		createdAt: column.date(),
+		inviterId: column.text({
+			references: () => User.columns.id,
+		}),
 	},
 });
 
-const OTP = defineTable({
+const TwoFactor = defineTable({
 	columns: {
 		id: column.text({ primaryKey: true }),
-		phoneNumber: column.text(),
-		code: column.text(),
-		expiresAt: column.date(),
-		createdAt: column.date(),
-		verified: column.boolean(),
-		type: column.text(),
+		secret: column.text(),
+		backupCodes: column.text(),
+		userId: column.text({
+			references: () => User.columns.id,
+		}),
 	},
 });
 
@@ -152,11 +125,9 @@ export default defineDb({
 		Session,
 		Account,
 		Verification,
-		Passkey,
-		TwoFactor,
 		Organization,
-		 Member,
+		Member,
 		Invitation,
-		OTP,
+		TwoFactor,
 	},
 });

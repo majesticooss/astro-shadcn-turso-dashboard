@@ -6,14 +6,19 @@ const PUBLIC_PAGES = ["/login", "/signup"];
 
 // All other pages require authentication
 export const onRequest = defineMiddleware(async (context, next) => {
-	const session = await auth.api
+	const isAuthed = await auth.api
 		.getSession({
 			headers: context.request.headers,
 		})
 		.catch(() => null);
 
-	// Add session to locals so it's accessible in pages
-	context.locals.session = session;
+	if (isAuthed) {
+		context.locals.user = isAuthed.user;
+		context.locals.session = isAuthed.session;
+	} else {
+		context.locals.user = null;
+		context.locals.session = null;
+	}
 
 	const currentPath = context.url.pathname;
 

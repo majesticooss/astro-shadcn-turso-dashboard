@@ -11,9 +11,8 @@ declare global {
 
 	namespace App {
 		interface Locals {
-			session: {
-				user: User | null;
-			} | null;
+			user: import("better-auth").User | null;
+			session: import("better-auth").Session | null;
 		}
 	}
 
