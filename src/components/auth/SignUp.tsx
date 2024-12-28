@@ -32,14 +32,15 @@ export function RegisterForm() {
 				name: `${firstName} ${lastName}`,
 				email,
 				password,
-				callbackURL: "/",
-				fetchOptions: {
-					onError(context) {
-						setErrorMessage(context.error.message);
-					},
-					onSuccess() {
-						window.location.href = "/";
-					},
+			}, {
+				onRequest: (ctx) => {
+					//show loading
+				},
+				onSuccess: (ctx) => {
+					//redirect to the dashboard
+				},
+				onError: (ctx) => {
+					alert(ctx.error.message);
 				},
 			});
 		} catch (error) {
