@@ -1,10 +1,8 @@
 ---
-import { LoginForm } from "@/components/auth/Login";
+import { Login as LoginForm } from "@/components/auth/Login";
 import PublicLayout from "@/layouts/PublicLayout.astro";
 ---
 
 <PublicLayout>
-	<div class="grid h-full place-content-center">
-		<LoginForm client:load />
-	</div>
+	<LoginForm client:load />
 </PublicLayout>
