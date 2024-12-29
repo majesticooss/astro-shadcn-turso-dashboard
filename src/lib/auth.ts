@@ -1,24 +1,24 @@
 import { LibsqlDialect } from "@libsql/kysely-libsql";
-import { betterAuth } from "better-auth";
+import { type BetterAuthOptions, betterAuth } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { admin, emailOTP, magicLink, organization, phoneNumber, twoFactor } from "better-auth/plugins";
 import { mailConfig } from "config";
 import { Resend } from 'resend';
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY);
 
-function getDatabaseUrl() {
+// Primary database connection for auth and organizations
+function getPrimaryDatabaseUrl() {
 	if (import.meta.env.DEV) {
-		// Use local Astro DB in development
 		return 'file:./.astro/content.db'
 	}
-	// Use remote database in production
 	return import.meta.env.ASTRO_DB_REMOTE_URL || process.env.ASTRO_DB_REMOTE_URL
 }
 
-export const auth = betterAuth({
+const config: BetterAuthOptions = {
 	database: {
 		dialect: new LibsqlDialect({
-			url: getDatabaseUrl(),
+			url: getPrimaryDatabaseUrl(),
 			// Only include authToken for remote database
 			...(import.meta.env.DEV
 				? {}
@@ -34,6 +34,34 @@ export const auth = betterAuth({
 		// 	},
 		// },
 	},
+	hooks: {
+		after: createAuthMiddleware(async (ctx) => {
+			// if (ctx.path.startsWith("/sign-up")) {
+			// 	const newSession = ctx.context.newSession;
+			// 	if (newSession) {
+			// 	}
+			// }
+		}),
+		// organization: {
+		// 	create: {
+		// 		before: async (organization) => {
+		// 			// Create new database for organization
+		// 			const { url: dbUrl, authToken } = await createOrganizationDatabase(organization);
+
+		// 			// Add database info to organization metadata
+		// 			return {
+		// 				data: {
+		// 					...organization,
+		// 					metadata: JSON.stringify({
+		// 						dbUrl,
+		// 						dbAuthToken: authToken
+		// 					})
+		// 				}
+		// 			};
+		// 		}
+		// 	}
+		// }
+	},
 	account: {
 		accountLinking: {
 			enabled: true,
@@ -43,7 +71,6 @@ export const auth = betterAuth({
 	emailVerification: {
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
-		verificationEmailURL: "/account-confirmed",
 		sendVerificationEmail: async ({ user, url, token }, request) => {
 			await resend.emails.send({
 				from: mailConfig.from,
@@ -56,6 +83,7 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: true,
+		autoSignIn: true,
 		sendResetPassword: async ({ user, url, token }, request) => {
 			await resend.emails.send({
 				from: mailConfig.from,
@@ -102,31 +130,16 @@ export const auth = betterAuth({
 		}),
 		organization({
 			async sendInvitationEmail(data) {
-				const res = await resend.emails.send({
+				await resend.emails.send({
 					from: mailConfig.from,
 					to: data.email,
 					subject: "You've been invited to join an organization",
 					html: `You've been invited to join an organization:`,
-					// react: reactInvitationEmail({
-					// 	username: data.email,
-					// 	invitedByUsername: data.inviter.user.name,
-					// 	invitedByEmail: data.inviter.user.email,
-					// 	teamName: data.organization.name,
-					// 	inviteLink:
-					// 		process.env.NODE_ENV === "development"
-					// 			? `http://localhost:3000/accept-invitation/${data.id}`
-					// 			: `${
-					// 					process.env.BETTER_AUTH_URL ||
-					// 					"https://demo.better-auth.com"
-					// 				}/accept-invitation/${data.id}`,
-					// }),
 				});
 			},
 			allowUserToCreateOrganization: async (user) => {
-				// const subscription = await getSubscription(user.id)
-				// return subscription.plan === "pro"
-				return true
-			}
+				return true;
+			},
 		}),
 		admin(),
 		twoFactor({
@@ -146,7 +159,9 @@ export const auth = betterAuth({
 	rateLimit: {
 		enabled: true,
 	},
-});
+}
+
+export const auth = betterAuth(config);
 
 export async function userCanAccessResource(user: User | null, resource: URL) {
 	// Check if the user has access to the resource

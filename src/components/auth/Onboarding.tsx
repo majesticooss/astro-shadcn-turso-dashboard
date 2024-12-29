@@ -1,9 +1,11 @@
 import { navigate } from "astro:transitions/client";
 import { OnboardingForm } from "@/components/shadcn/onboarding-form";
+import { organization } from "@/lib/authClient";
+import { createOrganizationDatabase } from "@/lib/db";
+import { slugify } from "@/lib/utils";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-
 export const description =
 	"A multi-step onboarding form that allows users to either create a new company or join an existing one. Uses Astro's View Transitions API for navigation.";
 
@@ -16,6 +18,19 @@ export function Onboarding() {
 	const [companyCode, setCompanyCode] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+
+	const handleCompanyNameChange = (value: string) => {
+		setCompanyName(value);
+		if (companyChoice === "new") {
+			setCompanyCode(slugify(value));
+		}
+	};
+
+	const handleCompanyCodeChange = (value: string) => {
+		if (companyChoice === "existing") {
+			setCompanyCode(value);
+		}
+	};
 
 	const handleNext = () => {
 		if (step === 1 && companyChoice) {
@@ -42,13 +57,20 @@ export function Onboarding() {
 		setErrorMessage("");
 
 		try {
-			// Add your API call here
-			console.log("Form submitted:", {
-				companyChoice,
-				companyName,
-				companyCode,
-			});
-			await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+			if (companyChoice === "new") {
+				await organization.create({
+					name: companyName,
+					slug: companyCode,
+				});
+
+				const db = await createOrganizationDatabase({
+					slug: companyCode,
+					name: companyName,
+				});
+			} else {
+				// TODO: Join organization
+			}
+
 			await navigate("/dashboard");
 		} catch (error) {
 			console.error("Onboarding error:", error);
@@ -75,8 +97,9 @@ export function Onboarding() {
 					companyName={companyName}
 					companyCode={companyCode}
 					onCompanyChoiceChange={setCompanyChoice}
-					onCompanyNameChange={setCompanyName}
-					onCompanyCodeChange={setCompanyCode}
+					onCompanyNameChange={handleCompanyNameChange}
+					onCompanyCodeChange={handleCompanyCodeChange}
+					isCompanyCodeReadOnly={companyChoice === "new"}
 					onNext={handleNext}
 					onBack={handleBack}
 					onSubmit={handleSubmit}

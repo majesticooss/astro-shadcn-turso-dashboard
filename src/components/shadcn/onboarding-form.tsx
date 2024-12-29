@@ -24,6 +24,7 @@ interface OnboardingFormProps extends React.ComponentPropsWithoutRef<"div"> {
 	onSubmit: (e: React.FormEvent) => void;
 	isLoading?: boolean;
 	errorMessage?: string;
+	isCompanyCodeReadOnly?: boolean;
 }
 
 export function OnboardingForm({
@@ -40,6 +41,7 @@ export function OnboardingForm({
 	onSubmit,
 	isLoading,
 	errorMessage,
+	isCompanyCodeReadOnly,
 	...props
 }: OnboardingFormProps) {
 	return (
@@ -50,7 +52,16 @@ export function OnboardingForm({
 					<CardDescription>Step {step} of 3</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form onSubmit={onSubmit} className="grid gap-6">
+					<form
+						onSubmit={(e) => {
+							if (step !== 3) {
+								e.preventDefault();
+								return;
+							}
+							onSubmit(e);
+						}}
+						className="grid gap-6"
+					>
 						{step === 1 && (
 							<div className="grid grid-cols-2 gap-4">
 								<Button
@@ -107,6 +118,12 @@ export function OnboardingForm({
 									value={companyName}
 									onChange={(e) => onCompanyNameChange(e.target.value)}
 									placeholder="Enter company name"
+									onKeyDown={(e) => {
+										if (e.key === "Enter") {
+											e.preventDefault();
+											onNext();
+										}
+									}}
 								/>
 							</div>
 						)}
@@ -118,6 +135,13 @@ export function OnboardingForm({
 									value={companyCode}
 									onChange={(e) => onCompanyCodeChange(e.target.value)}
 									placeholder="Enter company code"
+									readOnly={isCompanyCodeReadOnly}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") {
+											e.preventDefault();
+											onNext();
+										}
+									}}
 								/>
 							</div>
 						)}
@@ -136,10 +160,15 @@ export function OnboardingForm({
 											{companyChoice === "new" ? "create" : "join"} a company
 										</p>
 										{companyChoice === "new" && (
-											<p className="font-medium">{companyName}</p>
+											<div>
+												<p className="font-medium">{companyName}</p>
+												<p className="text-sm text-muted-foreground">
+													{companyCode}
+												</p>
+											</div>
 										)}
 										{companyChoice === "existing" && (
-											<p className="font-medium">Code: {companyCode}</p>
+											<p className="font-medium">{companyCode}</p>
 										)}
 									</div>
 								</div>
@@ -161,7 +190,10 @@ export function OnboardingForm({
 							{step < 3 ? (
 								<Button
 									type="button"
-									onClick={onNext}
+									onClick={(e) => {
+										e.preventDefault();
+										onNext();
+									}}
 									disabled={
 										!companyChoice ||
 										(step === 2 && !companyName && !companyCode)
