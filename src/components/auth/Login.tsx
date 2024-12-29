@@ -45,8 +45,6 @@ export function Login() {
 
 			if (result.data?.user) {
 				await navigate("/");
-			} else {
-				setErrorMessage("Login failed. Please check your credentials.");
 			}
 		} catch (error) {
 			console.error("Login error:", error);

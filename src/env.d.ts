@@ -5,11 +5,12 @@ import type { Icons } from "@/components/ui/icons";
 
 declare global {
 	type User = import("better-auth").User;
+	type Session = import("better-auth").Session;
 
 	namespace App {
 		interface Locals {
-			user: import("better-auth").User | null;
-			session: import("better-auth").Session | null;
+			user: User | null;
+			session: Session | null;
 		}
 	}
 

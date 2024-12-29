@@ -1,8 +1,15 @@
 ---
 import { EmailVerification } from "@/components/auth/EmailVerification";
 import PublicLayout from "@/layouts/PublicLayout.astro";
+
+const user = Astro.locals.user;
+
+// If user is verified and there's no token in URL, redirect to dashboard
+if (user?.emailVerified && !Astro.url.searchParams.get("token")) {
+	return Astro.redirect("/dashboard");
+}
 ---
 
 <PublicLayout>
-	<EmailVerification client:load />
+	<EmailVerification client:load user={user} />
 </PublicLayout>

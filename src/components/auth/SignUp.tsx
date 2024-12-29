@@ -25,6 +25,7 @@ export function Signup() {
 					name: `${firstName} ${lastName}`,
 					email,
 					password,
+					callbackURL: "/verify-email",
 				},
 				{
 					onError: (ctx) => {
@@ -36,8 +37,6 @@ export function Signup() {
 
 			if (!result.error) {
 				await navigate("/verify-email");
-			} else {
-				setErrorMessage("Sign up failed. Please try again.");
 			}
 		} catch (error) {
 			console.error("Sign up error:", error);

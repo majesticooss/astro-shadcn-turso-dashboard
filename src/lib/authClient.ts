@@ -1,11 +1,11 @@
 import {
 	adminClient,
+	magicLinkClient,
 	multiSessionClient,
 	organizationClient,
 	passkeyClient,
-	twoFactorClient,
-	magicLinkClient,
-	phoneNumberClient
+	phoneNumberClient,
+	twoFactorClient
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { toast } from "sonner";
@@ -37,4 +37,5 @@ export const {
 	organization,
 	useListOrganizations,
 	useActiveOrganization,
+	sendVerificationEmail,
 } = client;
