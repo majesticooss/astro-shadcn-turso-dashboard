@@ -35,7 +35,7 @@ export function Signup() {
 			);
 
 			if (!result.error) {
-				await navigate("/check-email");
+				await navigate("/verify-email");
 			} else {
 				setErrorMessage("Sign up failed. Please try again.");
 			}
