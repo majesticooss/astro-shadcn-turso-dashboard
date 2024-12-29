@@ -63,6 +63,10 @@ interface ImportMetaEnv {
 	readonly ASTRO_DB_APP_TOKEN: string;
 	readonly BETTER_AUTH_SECRET: string;
 	readonly BETTER_AUTH_URL: string;
+	readonly APP_NAME: string;
+	readonly APP_ORGANIZATION: string;
+	readonly APP_PRIMARY_LOCATION: string;
+	readonly APP_GROUP: string;
 }
 
 interface ImportMeta {

@@ -7,21 +7,19 @@ const EXCLUDED_PAGES = ["/api"];
 
 // All other pages require authentication
 export const onRequest = defineMiddleware(async (context, next) => {
-	const isAuthed = await auth.api
+	const session = await auth.api
 		.getSession({
 			headers: context.request.headers,
 		})
 		.catch(() => null);
 
-	if (isAuthed) {
-		context.locals.user = isAuthed.user;
-		context.locals.session = isAuthed.session;
+	if (session) {
+		context.locals.user = session.user;
+		context.locals.session = session.session;
 	} else {
 		context.locals.user = null;
 		context.locals.session = null;
 	}
-
-	const currentPath = context.url.pathname;
 
 	return next();
 });
