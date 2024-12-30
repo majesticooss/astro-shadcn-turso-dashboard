@@ -68,6 +68,7 @@ interface ImportMetaEnv {
 	readonly APP_ORGANIZATION: string;
 	readonly APP_PRIMARY_LOCATION: string;
 	readonly APP_GROUP: string;
+	readonly RESEND_API_KEY: string;
 }
 
 interface ImportMeta {

@@ -1,11 +1,12 @@
+import { actions } from "astro:actions";
 import { navigate } from "astro:transitions/client";
 import { OnboardingForm } from "@/components/shadcn/onboarding-form";
 import { organization } from "@/lib/authClient";
-import { createOrganizationDatabase } from "@/lib/db";
 import { slugify } from "@/lib/utils";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+
 export const description =
 	"A multi-step onboarding form that allows users to either create a new company or join an existing one. Uses Astro's View Transitions API for navigation.";
 
@@ -63,10 +64,16 @@ export function Onboarding() {
 					slug: companyCode,
 				});
 
-				const db = await createOrganizationDatabase({
+				const { data, error } = await actions.createOrganization({
 					slug: companyCode,
 					name: companyName,
 				});
+
+				if (error) {
+					throw new Error(
+						error.message || "Failed to create organization database",
+					);
+				}
 			} else {
 				// TODO: Join organization
 			}

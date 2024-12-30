@@ -34,34 +34,6 @@ const config: BetterAuthOptions = {
 		// 	},
 		// },
 	},
-	hooks: {
-		after: createAuthMiddleware(async (ctx) => {
-			// if (ctx.path.startsWith("/sign-up")) {
-			// 	const newSession = ctx.context.newSession;
-			// 	if (newSession) {
-			// 	}
-			// }
-		}),
-		// organization: {
-		// 	create: {
-		// 		before: async (organization) => {
-		// 			// Create new database for organization
-		// 			const { url: dbUrl, authToken } = await createOrganizationDatabase(organization);
-
-		// 			// Add database info to organization metadata
-		// 			return {
-		// 				data: {
-		// 					...organization,
-		// 					metadata: JSON.stringify({
-		// 						dbUrl,
-		// 						dbAuthToken: authToken
-		// 					})
-		// 				}
-		// 			};
-		// 		}
-		// 	}
-		// }
-	},
 	account: {
 		accountLinking: {
 			enabled: true,
