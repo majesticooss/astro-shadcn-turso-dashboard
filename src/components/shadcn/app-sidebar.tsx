@@ -15,7 +15,7 @@ import type * as React from "react";
 import { NavMain } from "@/components/shadcn/nav-main";
 import { NavProjects } from "@/components/shadcn/nav-projects";
 import { NavUser } from "@/components/shadcn/nav-user";
-import { TeamSwitcher } from "@/components/shadcn/team-switcher";
+import { OrganizationSwitcher } from "@/components/shadcn/organization-switcher";
 import {
 	Sidebar,
 	SidebarContent,
@@ -31,7 +31,7 @@ const data = {
 		email: "m@example.com",
 		avatar: "/avatars/shadcn.jpg",
 	},
-	teams: [
+	organizations: [
 		{
 			name: "Acme Inc",
 			logo: GalleryVerticalEnd,
@@ -144,7 +144,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
-				<TeamSwitcher teams={data.teams} />
+				<OrganizationSwitcher />
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain items={data.navMain} />

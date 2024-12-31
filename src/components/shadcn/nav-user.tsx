@@ -19,7 +19,10 @@ import {
 } from "@/components/ui/sidebar";
 import { signOut } from "@/lib/authClient";
 import { CaretSortIcon, ComponentPlaceholderIcon } from "@radix-ui/react-icons";
-import { BadgeCheck, Bell, LogOut, Sparkles } from "lucide-react";
+import { BadgeCheck, Bell, LogOut, Moon, Sparkles, Sun } from "lucide-react";
+import * as React from "react";
+
+type Theme = "light" | "dark" | "system";
 
 export function NavUser({
 	user,
@@ -31,6 +34,31 @@ export function NavUser({
 	};
 }) {
 	const { isMobile } = useSidebar();
+
+	const [theme, setTheme] = React.useState<Theme>(() => {
+		if (typeof window !== "undefined") {
+			return window.getThemePreference();
+		}
+		return "light";
+	});
+
+	React.useEffect(() => {
+		const handleStorageChange = () => {
+			if (typeof window !== "undefined") {
+				setTheme(window.getThemePreference());
+			}
+		};
+
+		window.addEventListener("storage", handleStorageChange);
+		return () => window.removeEventListener("storage", handleStorageChange);
+	}, []);
+
+	const handleSetTheme = (newTheme: Theme) => {
+		if (typeof window !== "undefined") {
+			window.setThemePreference(newTheme);
+			setTheme(newTheme);
+		}
+	};
 
 	const handleLogout = async () => {
 		try {
@@ -101,6 +129,18 @@ export function NavUser({
 								Notifications
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
+						<DropdownMenuItem
+							onSelect={() =>
+								handleSetTheme(theme === "dark" ? "light" : "dark")
+							}
+						>
+							{theme === "dark" ? (
+								<Sun className="mr-2 h-4 w-4" />
+							) : (
+								<Moon className="mr-2 h-4 w-4" />
+							)}
+							{theme === "dark" ? "Light mode" : "Dark mode"}
+						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onSelect={handleLogout}>
 							<LogOut />

@@ -1,11 +1,5 @@
 ---
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
-
-const session = Astro.locals.session;
-
-if (!session) {
-	return Astro.redirect("/login");
-}
 ---
 
 <AuthenticatedLayout>

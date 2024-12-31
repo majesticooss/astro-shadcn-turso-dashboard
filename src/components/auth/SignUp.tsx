@@ -14,6 +14,7 @@ export function Signup() {
 	const [isVerificationSent, setIsVerificationSent] = useState(false);
 	const [isResending, setIsResending] = useState(false);
 	const [countdown, setCountdown] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		let timer: NodeJS.Timeout;
@@ -46,6 +47,7 @@ export function Signup() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setErrorMessage("");
+		setIsLoading(true);
 
 		try {
 			const result = await signUp.email(
@@ -69,6 +71,8 @@ export function Signup() {
 		} catch (error) {
 			console.error("Sign up error:", error);
 			setErrorMessage("An error occurred during sign up. Please try again.");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -96,6 +100,7 @@ export function Signup() {
 					onResendVerification={handleResendVerification}
 					isResending={isResending}
 					countdown={countdown}
+					isLoading={isLoading}
 				/>
 			</div>
 		</div>

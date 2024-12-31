@@ -12,6 +12,7 @@ export function Login() {
 	const [needsVerification, setNeedsVerification] = useState(false);
 	const [isResending, setIsResending] = useState(false);
 	const [countdown, setCountdown] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		let timer: NodeJS.Timeout;
@@ -23,15 +24,17 @@ export function Login() {
 		return () => clearInterval(timer);
 	}, [countdown]);
 
-	const handleResendVerification = async () => {
+	const handleResendVerification = async (sendVerification: boolean) => {
 		try {
 			setIsResending(true);
 			setErrorMessage("");
 
-			await sendVerificationEmail({
-				email,
-				callbackURL: "/verify-email",
-			});
+			if (sendVerification) {
+				await sendVerificationEmail({
+					email,
+					callbackURL: "/dashboard",
+				});
+			}
 
 			setCountdown(60);
 		} catch (err) {
@@ -45,20 +48,21 @@ export function Login() {
 		e.preventDefault();
 		setErrorMessage("");
 		setNeedsVerification(false);
+		setIsLoading(true);
 
 		try {
 			const result = await signIn.email(
 				{
 					email,
 					password,
-					callbackURL: "/",
+					callbackURL: "/dashboard",
 				},
 				{
 					onError: (ctx) => {
 						console.error("Sign in error:", ctx.error);
 						if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
 							setNeedsVerification(true);
-							handleResendVerification();
+							handleResendVerification(false);
 						} else {
 							setErrorMessage(ctx.error.message);
 						}
@@ -72,6 +76,8 @@ export function Login() {
 		} catch (error) {
 			console.error("Login error:", error);
 			setErrorMessage("An error occurred during login. Please try again.");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -95,6 +101,7 @@ export function Login() {
 					onResendVerification={handleResendVerification}
 					isResending={isResending}
 					countdown={countdown}
+					isLoading={isLoading}
 				/>
 			</div>
 		</div>
