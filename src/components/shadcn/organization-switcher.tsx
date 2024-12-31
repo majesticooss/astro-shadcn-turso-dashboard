@@ -38,6 +38,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 import { useForm } from "react-hook-form";
+import { GoOrganization } from "react-icons/go";
 import * as z from "zod";
 
 // Add proper type for organization
@@ -117,7 +118,7 @@ export function OrganizationSwitcher() {
 	}, [organizations, activeOrganization]);
 
 	const renderLogo = (logo: string | any) => {
-		if (!logo) return <PlusIcon className="size-4" />;
+		if (!logo) return <GoOrganization className="size-4" />;
 		if (typeof logo === "string") {
 			return (
 				<img
