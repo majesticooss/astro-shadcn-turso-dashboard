@@ -120,7 +120,8 @@ export function LoginForm({
 							{needsVerification && (
 								<div className="text-center text-sm">
 									<p className="text-muted-foreground">
-										Please verify your email address. A verification email has been sent.
+										Please verify your email address. A verification email has
+										been sent.
 									</p>
 									<Button
 										type="button"
@@ -132,8 +133,8 @@ export function LoginForm({
 										{isResending
 											? "Sending..."
 											: countdown > 0
-											? `Resend available in ${countdown}s`
-											: "Resend verification email"}
+												? `Resend available in ${countdown}s`
+												: "Resend verification email"}
 									</Button>
 								</div>
 							)}

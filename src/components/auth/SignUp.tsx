@@ -1,9 +1,9 @@
 import { navigate } from "astro:transitions/client";
 import { SignupForm } from "@/components/shadcn/signup-form";
-import { signUp, sendVerificationEmail } from "@/lib/authClient";
+import { sendVerificationEmail, signUp } from "@/lib/authClient";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function Signup() {
 	const [firstName, setFirstName] = useState("");

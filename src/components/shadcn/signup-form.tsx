@@ -134,23 +134,28 @@ export function SignupForm({
 										required
 									/>
 								</div>
-								<Button 
+								<Button
 									type={isVerificationSent ? "button" : "submit"}
 									className="w-full"
-									onClick={isVerificationSent ? onResendVerification : undefined}
-									disabled={isVerificationSent && (isResending || countdown > 0)}
+									onClick={
+										isVerificationSent ? onResendVerification : undefined
+									}
+									disabled={
+										isVerificationSent && (isResending || countdown > 0)
+									}
 								>
-									{isVerificationSent 
+									{isVerificationSent
 										? isResending
 											? "Sending..."
 											: countdown > 0
-											? `Resend available in ${countdown}s`
-											: "Resend verification email"
+												? `Resend available in ${countdown}s`
+												: "Resend verification email"
 										: "Create account"}
 								</Button>
 								{isVerificationSent && (
 									<p className="text-center text-sm text-muted-foreground">
-										Please verify your email address. A verification email has been sent.
+										Please verify your email address. A verification email has
+										been sent.
 									</p>
 								)}
 								{errorMessage && (

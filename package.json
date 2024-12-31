@@ -12,6 +12,7 @@
 		"astro": "astro"
 	},
 	"dependencies": {
+		"@astrojs/check": "0.9.4",
 		"@astrojs/cloudflare": "12.1.0",
 		"@astrojs/db": "0.14.5",
 		"@astrojs/react": "4.1.2",
@@ -64,7 +65,7 @@
 		"react-icons": "5.4.0",
 		"recharts": "2.15.0",
 		"resend": "4.0.1",
-		"sonner": "1.7.1",
+		"sonner": "^1.7.1",
 		"vaul": "1.1.2",
 		"zod": "3.24.1"
 	},
