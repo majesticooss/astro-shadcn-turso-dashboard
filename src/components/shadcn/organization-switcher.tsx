@@ -34,15 +34,21 @@ import {
 } from "@/components/ui/sidebar";
 import { organization, useListOrganizations } from "@/lib/authClient";
 import { slugify } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
+import {
+	CaretSortIcon,
+	ImageIcon,
+	PlusIcon,
+	UploadIcon,
+} from "@radix-ui/react-icons";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { GoOrganization } from "react-icons/go";
 import * as z from "zod";
 
-// Add proper type for organization
-type Organization = any;
+// Add a constant for max file size
+const MAX_FILE_SIZE = 200 * 1024; // 200KB in bytes
 
 const formSchema = z.object({
 	name: z
@@ -53,7 +59,17 @@ const formSchema = z.object({
 				"Organization name can only contain letters, numbers, spaces, and hyphens.",
 		}),
 	slug: z.string().min(2),
-	logo: z.string().optional(),
+	logo: z
+		.instanceof(File)
+		.optional()
+		.or(z.string().optional())
+		.refine((file) => {
+			if (!file) return true;
+			if (file instanceof File) {
+				return file.size <= MAX_FILE_SIZE;
+			}
+			return true;
+		}, "File size should be less than 200KB"),
 });
 
 export function OrganizationSwitcher() {
@@ -65,6 +81,7 @@ export function OrganizationSwitcher() {
 	const [open, setOpen] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [error, setError] = React.useState<string | null>(null);
+	const [preview, setPreview] = React.useState<string | null>(null);
 
 	const handleOrganizationSwitch = async (org: any) => {
 		try {
@@ -99,7 +116,23 @@ export function OrganizationSwitcher() {
 		setError(null);
 		try {
 			setIsLoading(true);
-			const newOrg = await organization.create(values);
+
+			// Handle file upload if exists
+			let logoUrl = values.logo as string;
+			if (values.logo instanceof File) {
+				// You'll need to implement this function to handle file uploads
+				// This could be to your own server or a service like AWS S3
+				// logoUrl = await uploadFile(values.logo);
+
+				// For now, we'll create an object URL as a placeholder
+				logoUrl = URL.createObjectURL(values.logo);
+			}
+
+			const newOrg = await organization.create({
+				...values,
+				logo: logoUrl,
+			});
+
 			await handleOrganizationSwitch(newOrg);
 			setOpen(false);
 			form.reset();
@@ -116,6 +149,30 @@ export function OrganizationSwitcher() {
 			setActiveOrganization(organizations[0]);
 		}
 	}, [organizations, activeOrganization]);
+
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			if (file.size > MAX_FILE_SIZE) {
+				form.setError("logo", {
+					message: "File size should be less than 200KB",
+				});
+				return;
+			}
+			const url = URL.createObjectURL(file);
+			setPreview(url);
+			form.setValue("logo", file);
+			form.clearErrors("logo");
+		}
+	};
+
+	React.useEffect(() => {
+		return () => {
+			if (preview) {
+				URL.revokeObjectURL(preview);
+			}
+		};
+	}, [preview]);
 
 	const renderLogo = (logo: string | any) => {
 		if (!logo) return <GoOrganization className="size-4" />;
@@ -247,6 +304,60 @@ export function OrganizationSwitcher() {
 													</FormControl>
 													<FormDescription>
 														The URL-friendly version of your organization name.
+													</FormDescription>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+										<FormField
+											control={form.control}
+											name="logo"
+											render={({ field: { value, onChange, ...field } }) => (
+												<FormItem>
+													<FormLabel>Logo</FormLabel>
+													<FormControl>
+														<div className="grid gap-4">
+															<div className="flex items-center gap-4">
+																<div className="flex size-16 items-center justify-center rounded-lg border bg-muted">
+																	{preview ? (
+																		<img
+																			src={preview}
+																			alt="Preview"
+																			className="size-14 rounded object-cover"
+																		/>
+																	) : (
+																		<ImageIcon className="size-8 text-muted-foreground" />
+																	)}
+																</div>
+																<div className="grid gap-1.5">
+																	<label
+																		htmlFor="logo-upload"
+																		className={cn(
+																			"group relative flex size-9 cursor-pointer items-center justify-center rounded-md border border-input bg-transparent text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+																			"dark:hover:bg-accent/50",
+																		)}
+																	>
+																		<UploadIcon className="size-4" />
+																		<span className="sr-only">Upload logo</span>
+																	</label>
+																	<p className="text-xs text-muted-foreground">
+																		Upload your organization logo
+																	</p>
+																</div>
+															</div>
+															<Input
+																id="logo-upload"
+																type="file"
+																accept="image/*"
+																className="hidden"
+																onChange={handleFileChange}
+																{...field}
+															/>
+														</div>
+													</FormControl>
+													<FormDescription>
+														Accepted formats: .jpg, .jpeg, .png, .gif. Max size
+														200KB.
 													</FormDescription>
 													<FormMessage />
 												</FormItem>
