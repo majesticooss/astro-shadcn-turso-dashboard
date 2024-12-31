@@ -34,6 +34,7 @@ const UserRole = {
 };
 
 const userRoleSchema = z.object({
+	userId: z.string(),
 	role: z.enum(Object.values(UserRole) as [string, ...string[]]),
 });
 

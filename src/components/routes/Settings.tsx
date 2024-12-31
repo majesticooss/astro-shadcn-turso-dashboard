@@ -5,9 +5,10 @@ import { UserRoleForm } from "@/components/routes/settings/UserRoleForm";
 
 interface SettingsPageProps {
 	user: User | null;
+	member: Member | null;
 }
 
-export default function SettingsPage({ user }: SettingsPageProps) {
+export default function SettingsPage({ user, member }: SettingsPageProps) {
 	if (!user) {
 		return <div>Loading...</div>; // Or some other placeholder/error state
 	}
@@ -19,8 +20,8 @@ export default function SettingsPage({ user }: SettingsPageProps) {
 				text="Manage account and website settings."
 			/>
 			<div className="divide-y divide-muted pb-10">
-				<UserNameForm user={{ id: user.id, name: user.name }} />
-				<UserRoleForm user={{ id: user.id, role: null }} />
+				<UserNameForm user={user} />
+				{member && <UserRoleForm member={member} />}
 				<DeleteAccountSection
 					user={{ id: user.id, name: user.name, image: user?.image }}
 				/>

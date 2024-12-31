@@ -24,11 +24,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 
-// Assuming these are imported from a shared location
 const UserRole = {
-	ADMIN: "ADMIN",
-	USER: "USER",
-	// Add other roles as needed
+	ADMIN: "admin",
+	USER: "user",
 };
 
 const userRoleSchema = z.object({
@@ -38,37 +36,34 @@ const userRoleSchema = z.object({
 type FormData = z.infer<typeof userRoleSchema>;
 
 interface UserRoleFormProps {
-	user: {
-		id: string;
-		role?: string | null;
-	};
+	member: Member;
 }
 
-export function UserRoleForm({ user }: UserRoleFormProps) {
+export function UserRoleForm({ member }: UserRoleFormProps) {
 	const [updated, setUpdated] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const roles = Object.values(UserRole);
-	const [role, setRole] = useState(user.role);
+	const [role, setRole] = useState(member.role);
 
 	const form = useForm<FormData>({
 		resolver: zodResolver(userRoleSchema),
 		defaultValues: {
-			role: user.role as UserRole,
+			role: member.role as UserRole,
 		},
 	});
 
-	const onSubmit = (data: FormData) => {
+	const onSubmit = (formData: FormData) => {
 		startTransition(() => {
 			(async () => {
-				const { status, error } = await actions.updateUserRole({
-					userId: user.id,
-					...data,
+				const { data, error } = await actions.updateUserRole({
+					userId: member.userId,
+					role: formData?.role,
 				});
 
 				if (status !== "success") {
 					toast.error("Something went wrong.", {
 						description:
-							error || "Your role was not updated. Please try again.",
+							error?.message || "Your role was not updated. Please try again.",
 					});
 				} else {
 					setUpdated(false);
@@ -94,11 +89,11 @@ export function UserRoleForm({ user }: UserRoleFormProps) {
 									<FormLabel className="sr-only">Role</FormLabel>
 									<Select
 										onValueChange={(value: UserRole) => {
-											setUpdated(user.role !== value);
+											setUpdated(member.role !== value);
 											setRole(value);
 											field.onChange(value);
 										}}
-										defaultValue={user.role}
+										defaultValue={member.role}
 									>
 										<FormControl>
 											<SelectTrigger className="w-full">

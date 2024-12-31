@@ -9,6 +9,7 @@ declare global {
 	type Session = AuthSession;
 
 	type Member = {
+		user?: User;
 		id: string;
 		organizationId: string;
 		userId: string;

@@ -18,10 +18,7 @@ const userNameSchema = z.object({
 type FormData = z.infer<typeof userNameSchema>;
 
 interface UserNameFormProps {
-	user: {
-		id: string;
-		name?: string | null;
-	};
+	user: User;
 }
 
 export function UserNameForm({ user }: UserNameFormProps) {

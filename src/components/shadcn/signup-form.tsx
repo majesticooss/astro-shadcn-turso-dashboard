@@ -141,13 +141,13 @@ export function SignupForm({
 										isVerificationSent ? onResendVerification : undefined
 									}
 									disabled={
-										isVerificationSent && (isResending || countdown > 0)
+										isVerificationSent && (isResending || (countdown ?? 0) > 0)
 									}
 								>
 									{isVerificationSent
 										? isResending
 											? "Sending..."
-											: countdown > 0
+											: (countdown ?? 0) > 0
 												? `Resend available in ${countdown}s`
 												: "Resend verification email"
 										: "Create account"}

@@ -1,11 +1,14 @@
 ---
 import SettingsPage from "@/components/routes/Settings";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { organization } from "@/lib/authClient";
 
 // Get session from locals
 const { session, user } = Astro.locals;
+
+const { data: member, error } = await organization.getActiveMember();
 ---
 
 <AuthenticatedLayout>
-	<SettingsPage client:load user={user ?? null} />
+	<SettingsPage client:load user={user} member={member as Member} />
 </AuthenticatedLayout>

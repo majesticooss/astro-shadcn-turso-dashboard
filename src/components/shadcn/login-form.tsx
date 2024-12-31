@@ -128,11 +128,11 @@ export function LoginForm({
 										variant="outline"
 										className="mt-2"
 										onClick={onResendVerification}
-										disabled={isResending || countdown > 0}
+										disabled={isResending || (countdown ?? 0) > 0}
 									>
 										{isResending
 											? "Sending..."
-											: countdown > 0
+											: (countdown ?? 0) > 0
 												? `Resend available in ${countdown}s`
 												: "Resend verification email"}
 									</Button>
