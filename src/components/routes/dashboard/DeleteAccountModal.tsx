@@ -123,8 +123,8 @@ function DeleteAccountModal({
 interface DeleteAccountModalProps {
 	user: {
 		id: string;
-		name: string;
-		image: string;
+		name?: string | null;
+		image?: string | null;
 	};
 }
 
@@ -136,7 +136,7 @@ export function useDeleteAccountModal({ user }: DeleteAccountModalProps) {
 			<DeleteAccountModal
 				showDeleteAccountModal={showDeleteAccountModal}
 				setShowDeleteAccountModal={setShowDeleteAccountModal}
-				user={{ name: user?.name, image: user?.image }}
+				user={{ name: user?.name || "", image: user?.image || "" }}
 			/>
 		);
 	}, [showDeleteAccountModal, user]);

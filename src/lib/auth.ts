@@ -26,13 +26,6 @@ const config: BetterAuthOptions = {
 			),
 		}),
 		type: "sqlite",
-		// schema: {
-		// 	usersTable: "users",
-		// 	sessionsTable: "sessions",
-		// 	userColumns: {
-		// 		role: "text",
-		// 	},
-		// },
 	},
 	account: {
 		accountLinking: {

@@ -9,8 +9,8 @@ import { siteConfig } from "config";
 interface DeleteAccountSectionProps {
 	user: {
 		id: string;
-		name: string;
-		image: string;
+		name?: string | null;
+		image?: string | null;
 	};
 }
 

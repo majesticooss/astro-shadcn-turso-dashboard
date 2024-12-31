@@ -16,10 +16,10 @@ import {
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface UserAccountNavProps {
-	user: User | null;
+	member: Member | null;
 }
 
-export function UserAccountNav({ user }: UserAccountNavProps) {
+export function UserAccountNav({ member }: UserAccountNavProps) {
 	const [open, setOpen] = useState(false);
 	const closeDrawer = () => {
 		setOpen(false);
@@ -39,7 +39,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
 		}
 	};
 
-	if (!user)
+	if (!member)
 		return (
 			<div className="size-8 animate-pulse rounded-full border bg-muted" />
 		);
@@ -49,7 +49,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
 			<Drawer.Root open={open} onClose={closeDrawer}>
 				<Drawer.Trigger onClick={() => setOpen(true)}>
 					<UserAvatar
-						user={{ name: user.name, image: user.image }}
+						user={{ name: member.name, image: member.image }}
 						className="size-9 border"
 					/>
 				</Drawer.Trigger>
@@ -65,10 +65,10 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
 
 						<div className="flex items-center justify-start gap-2 p-2">
 							<div className="flex flex-col">
-								{user.name && <p className="font-medium">{user.name}</p>}
-								{user.email && (
+								{member.name && <p className="font-medium">{member.name}</p>}
+								{member.email && (
 									<p className="w-[200px] truncate text-muted-foreground">
-										{user.email}
+										{member.email}
 									</p>
 								)}
 							</div>

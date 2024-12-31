@@ -9,8 +9,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/ui/icons";
 
+type Theme = "light" | "dark" | "system";
+
 export function ModeToggle() {
-	const [theme, setTheme] = React.useState(() => {
+	const [theme, setTheme] = React.useState<Theme>(() => {
 		if (typeof window !== "undefined") {
 			return window.getThemePreference();
 		}
@@ -28,7 +30,7 @@ export function ModeToggle() {
 		return () => window.removeEventListener("storage", handleStorageChange);
 	}, []);
 
-	const handleSetTheme = (newTheme) => {
+	const handleSetTheme = (newTheme: Theme) => {
 		if (typeof window !== "undefined") {
 			window.setThemePreference(newTheme);
 			setTheme(newTheme);

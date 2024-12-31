@@ -2,6 +2,7 @@ import { defineAction } from "astro:actions";
 import { z } from "astro/zod";
 
 const updateUsernameSchema = z.object({
+	id: z.string(),
 	name: z.string().min(2).max(32),
 });
 

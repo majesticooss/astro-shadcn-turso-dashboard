@@ -2,10 +2,19 @@
 /// <reference types="astro/client" />
 
 import type { Icons } from "@/components/ui/icons";
+import type { Session as AuthSession, User as AuthUser } from "better-auth";
 
 declare global {
-	type User = import("better-auth").User;
-	type Session = import("better-auth").Session;
+	type User = AuthUser;
+	type Session = AuthSession;
+
+	type Member = {
+		id: string;
+		organizationId: string;
+		userId: string;
+		role: UserRole;
+		createdAt: Date;
+	};
 
 	namespace App {
 		interface Locals {
@@ -57,9 +66,15 @@ declare global {
 	};
 
 	type UserRole = "admin" | "user";
+
+	interface Window {
+		getThemePreference: () => "light" | "dark" | "system";
+		setThemePreference: (theme: "light" | "dark" | "system") => void;
+	}
+
 }
 
-interface ImportMetaEnv {
+export interface ImportMetaEnv {
 	readonly ASTRO_DB_REMOTE_URL: string;
 	readonly ASTRO_DB_APP_TOKEN: string;
 	readonly BETTER_AUTH_SECRET: string;
@@ -71,6 +86,6 @@ interface ImportMetaEnv {
 	readonly RESEND_API_KEY: string;
 }
 
-interface ImportMeta {
+export interface ImportMeta {
 	readonly env: ImportMetaEnv;
 }

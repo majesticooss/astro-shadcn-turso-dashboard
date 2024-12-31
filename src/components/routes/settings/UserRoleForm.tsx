@@ -40,7 +40,7 @@ type FormData = z.infer<typeof userRoleSchema>;
 interface UserRoleFormProps {
 	user: {
 		id: string;
-		role: string;
+		role?: string | null;
 	};
 }
 

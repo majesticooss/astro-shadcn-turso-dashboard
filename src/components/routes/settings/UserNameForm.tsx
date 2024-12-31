@@ -20,7 +20,7 @@ type FormData = z.infer<typeof userNameSchema>;
 interface UserNameFormProps {
 	user: {
 		id: string;
-		name: string;
+		name?: string | null;
 	};
 }
 
@@ -48,11 +48,11 @@ export function UserNameForm({ user }: UserNameFormProps) {
 			(async () => {
 				try {
 					const result = await actions.updateUsername({ id: user.id, ...data });
-					if (result.success) {
+					if (!result.error) {
 						setUpdated(false);
 						toast.success("Your name has been updated.");
 					} else {
-						throw new Error(result.error || "Failed to update name");
+						throw new Error(result.error.message || "Failed to update name");
 					}
 				} catch (error) {
 					toast.error("Something went wrong.", {
@@ -86,7 +86,7 @@ export function UserNameForm({ user }: UserNameFormProps) {
 					/>
 					<Button
 						type="submit"
-						variant={updated ? "default" : "disable"}
+						variant={updated ? "default" : "ghost"}
 						disabled={isPending || !updated}
 						className="w-[67px] shrink-0 px-0 sm:w-[130px]"
 					>
