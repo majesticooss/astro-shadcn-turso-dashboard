@@ -1,3 +1,4 @@
+import { navigate } from "astro:transitions/client";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -28,6 +29,10 @@ export function ForgotPasswordForm({
 	isSubmitted = false,
 	...props
 }: ForgotPasswordFormProps) {
+	const handleNavigateToLogin = () => {
+		navigate("/login");
+	};
+
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card>
@@ -45,8 +50,12 @@ export function ForgotPasswordForm({
 								If an account exists for {email}, you will receive a password
 								reset email shortly.
 							</p>
-							<Button variant="outline" className="w-full" asChild>
-								<a href="/login">Return to login</a>
+							<Button
+								variant="outline"
+								className="w-full"
+								onClick={handleNavigateToLogin}
+							>
+								Return to login
 							</Button>
 						</div>
 					) : (
@@ -69,8 +78,12 @@ export function ForgotPasswordForm({
 								<Button type="submit" className="w-full">
 									Send reset link
 								</Button>
-								<Button variant="outline" className="w-full" asChild>
-									<a href="/login">Back to login</a>
+								<Button
+									variant="outline"
+									className="w-full"
+									onClick={handleNavigateToLogin}
+								>
+									Back to login
 								</Button>
 							</div>
 						</form>
