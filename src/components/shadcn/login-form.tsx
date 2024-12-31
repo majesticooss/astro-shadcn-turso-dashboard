@@ -17,6 +17,10 @@ interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
 	onEmailChange?: (value: string) => void;
 	onPasswordChange?: (value: string) => void;
 	errorMessage?: string;
+	needsVerification?: boolean;
+	onResendVerification?: () => void;
+	isResending?: boolean;
+	countdown?: number;
 }
 
 export function LoginForm({
@@ -27,6 +31,10 @@ export function LoginForm({
 	onEmailChange,
 	onPasswordChange,
 	errorMessage,
+	needsVerification,
+	onResendVerification,
+	isResending,
+	countdown,
 	...props
 }: LoginFormProps) {
 	return (
@@ -109,6 +117,26 @@ export function LoginForm({
 									Sign up
 								</a>
 							</div>
+							{needsVerification && (
+								<div className="text-center text-sm">
+									<p className="text-muted-foreground">
+										Please verify your email address. A verification email has been sent.
+									</p>
+									<Button
+										type="button"
+										variant="outline"
+										className="mt-2"
+										onClick={onResendVerification}
+										disabled={isResending || countdown > 0}
+									>
+										{isResending
+											? "Sending..."
+											: countdown > 0
+											? `Resend available in ${countdown}s`
+											: "Resend verification email"}
+									</Button>
+								</div>
+							)}
 						</div>
 					</form>
 				</CardContent>

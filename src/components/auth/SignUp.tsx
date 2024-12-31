@@ -1,12 +1,9 @@
 import { navigate } from "astro:transitions/client";
 import { SignupForm } from "@/components/shadcn/signup-form";
-import { signUp } from "@/lib/authClient";
+import { signUp, sendVerificationEmail } from "@/lib/authClient";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
-
-export const description =
-	"A signup form with name, email and password, submitting with client-side handling. There's an option to sign up with social providers and a link to login if you already have an account. Uses Astro's View Transitions API for navigation.";
+import { useState, useEffect } from "react";
 
 export function Signup() {
 	const [firstName, setFirstName] = useState("");
@@ -14,6 +11,37 @@ export function Signup() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
+	const [isVerificationSent, setIsVerificationSent] = useState(false);
+	const [isResending, setIsResending] = useState(false);
+	const [countdown, setCountdown] = useState(0);
+
+	useEffect(() => {
+		let timer: NodeJS.Timeout;
+		if (countdown > 0) {
+			timer = setInterval(() => {
+				setCountdown((prev) => prev - 1);
+			}, 1000);
+		}
+		return () => clearInterval(timer);
+	}, [countdown]);
+
+	const handleResendVerification = async () => {
+		try {
+			setIsResending(true);
+			setErrorMessage("");
+
+			await sendVerificationEmail({
+				email,
+				callbackURL: "/verify-email",
+			});
+
+			setCountdown(60);
+		} catch (err) {
+			setErrorMessage("Failed to resend verification email. Please try again.");
+		} finally {
+			setIsResending(false);
+		}
+	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -36,7 +64,7 @@ export function Signup() {
 			);
 
 			if (!result.error) {
-				await navigate("/verify-email");
+				setIsVerificationSent(true);
 			}
 		} catch (error) {
 			console.error("Sign up error:", error);
@@ -64,6 +92,10 @@ export function Signup() {
 					password={password}
 					setPassword={setPassword}
 					errorMessage={errorMessage}
+					isVerificationSent={isVerificationSent}
+					onResendVerification={handleResendVerification}
+					isResending={isResending}
+					countdown={countdown}
 				/>
 			</div>
 		</div>

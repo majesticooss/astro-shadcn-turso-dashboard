@@ -7,7 +7,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { sendVerificationEmail } from "@/lib/authClient";
-import type { Session, User } from "better-auth";
+import type { User } from "better-auth";
 import { GalleryVerticalEnd } from "lucide-react";
 import { useEffect, useState } from "react";
 

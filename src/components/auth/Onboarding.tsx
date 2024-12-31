@@ -63,17 +63,6 @@ export function Onboarding() {
 					name: companyName,
 					slug: companyCode,
 				});
-
-				const { data, error } = await actions.createOrganization({
-					slug: companyCode,
-					name: companyName,
-				});
-
-				if (error) {
-					throw new Error(
-						error.message || "Failed to create organization database",
-					);
-				}
 			} else {
 				// TODO: Join organization
 			}

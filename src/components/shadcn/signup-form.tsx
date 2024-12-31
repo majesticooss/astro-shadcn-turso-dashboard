@@ -21,6 +21,10 @@ interface SignupFormProps extends React.ComponentPropsWithoutRef<"div"> {
 	password: string;
 	setPassword: (value: string) => void;
 	errorMessage?: string;
+	isVerificationSent?: boolean;
+	onResendVerification?: () => void;
+	isResending?: boolean;
+	countdown?: number;
 }
 
 export function SignupForm({
@@ -35,6 +39,10 @@ export function SignupForm({
 	password,
 	setPassword,
 	errorMessage,
+	isVerificationSent,
+	onResendVerification,
+	isResending,
+	countdown,
 	...props
 }: SignupFormProps) {
 	return (
@@ -126,9 +134,25 @@ export function SignupForm({
 										required
 									/>
 								</div>
-								<Button type="submit" className="w-full">
-									Create account
+								<Button 
+									type={isVerificationSent ? "button" : "submit"}
+									className="w-full"
+									onClick={isVerificationSent ? onResendVerification : undefined}
+									disabled={isVerificationSent && (isResending || countdown > 0)}
+								>
+									{isVerificationSent 
+										? isResending
+											? "Sending..."
+											: countdown > 0
+											? `Resend available in ${countdown}s`
+											: "Resend verification email"
+										: "Create account"}
 								</Button>
+								{isVerificationSent && (
+									<p className="text-center text-sm text-muted-foreground">
+										Please verify your email address. A verification email has been sent.
+									</p>
+								)}
 								{errorMessage && (
 									<p className="text-sm text-destructive text-center">
 										{errorMessage}
