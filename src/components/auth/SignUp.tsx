@@ -32,7 +32,7 @@ export function Signup() {
 
 			await sendVerificationEmail({
 				email,
-				callbackURL: "/verify-email",
+				callbackURL: "/dashboard",
 			});
 
 			setCountdown(60);
@@ -53,7 +53,7 @@ export function Signup() {
 					name: `${firstName} ${lastName}`,
 					email,
 					password,
-					callbackURL: "/verify-email",
+					callbackURL: "/dashboard",
 				},
 				{
 					onError: (ctx) => {

@@ -4,7 +4,7 @@ import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 const session = Astro.locals.session;
 
 if (!session) {
-	Astro.redirect("/login");
+	return Astro.redirect("/login");
 }
 ---
 
