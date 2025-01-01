@@ -95,7 +95,7 @@ export function OrganizationSwitcher() {
 	const { isMobile } = useSidebar();
 	const { data: organizations = [] } = useListOrganizations();
 	const [open, setOpen] = React.useState(false);
-	const [isLoading, setIsLoading] = React.useState(true);
+	const [isLoading, setIsLoading] = React.useState(false);
 	const [error, setError] = React.useState<string | null>(null);
 	const [preview, setPreview] = React.useState<string | null>(null);
 

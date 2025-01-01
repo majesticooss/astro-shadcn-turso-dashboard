@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 interface OrganizationState {
 	activeOrganization: Organization | null
@@ -12,12 +12,29 @@ interface OrganizationState {
 	setHasHydrated: (state: boolean) => void;
 }
 
+const storageKey = 'organization-storage';
+
+// Function to get initial state from localStorage
+const getInitialState = () => {
+	if (typeof window === 'undefined') return null
+
+	const stored = localStorage.getItem(storageKey)
+	if (!stored) return null
+
+	try {
+		const data = JSON.parse(stored)
+		return data.state
+	} catch {
+		return null
+	}
+}
+
 export const useOrganizationStore = create<OrganizationState>()(
 	persist(
-		(set, get) => ({
-			activeOrganization: null,
-			organizations: [],
-			lastFetched: 0,
+		(set) => ({
+			activeOrganization: getInitialState()?.activeOrganization || null,
+			organizations: getInitialState()?.organizations || [],
+			lastFetched: getInitialState()?.lastFetched || 0,
 			setActiveOrganization: (org) => set({ activeOrganization: org }),
 			setOrganizations: (orgs) => set({ organizations: orgs }),
 			setLastFetched: () => set({ lastFetched: Date.now() }),
@@ -25,11 +42,10 @@ export const useOrganizationStore = create<OrganizationState>()(
 			setHasHydrated: (state) => set({ hasHydrated: state }),
 		}),
 		{
-			name: 'organization-storage',
-			storage: createJSONStorage(() => localStorage),
+			name: storageKey,
 			onRehydrateStorage: () => (state) => {
 				state?.setHasHydrated(true);
 			},
-		},
-	),
+		}
+	)
 )
