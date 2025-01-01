@@ -2,9 +2,16 @@
 import SettingsPage from "@/components/routes/Settings";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { organization } from "@/lib/authClient";
+import { checkPageRedirect } from "@/lib/authUtils";
 
 // Get session from locals
 const { session, user } = Astro.locals;
+
+const redirect = await checkPageRedirect(Astro.url, user, session);
+
+if (redirect) {
+	return Astro.redirect(redirect);
+}
 
 const { data: member, error } = await organization.getActiveMember();
 ---

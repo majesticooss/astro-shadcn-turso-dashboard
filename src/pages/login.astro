@@ -1,6 +1,17 @@
 ---
 import { Login as LoginForm } from "@/components/auth/Login";
 import PublicLayout from "@/layouts/PublicLayout.astro";
+import { checkPageRedirect } from "@/lib/authUtils";
+
+const redirect = await checkPageRedirect(
+	Astro.url,
+	Astro.locals.user,
+	Astro.locals.session,
+);
+
+if (redirect) {
+	return Astro.redirect(redirect);
+}
 ---
 
 <PublicLayout>

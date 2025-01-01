@@ -166,8 +166,8 @@ export function OrganizationSwitcher() {
 	React.useEffect(() => {
 		if (!activeOrganization && organizations?.length > 0) {
 			setActiveOrganization(organizations[0]);
-			setIsLoading(false);
 		}
+		setIsLoading(false);
 	}, [organizations, activeOrganization]);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

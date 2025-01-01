@@ -1,6 +1,11 @@
 import { navigate } from "astro:transitions/client";
 import { LoginForm } from "@/components/shadcn/login-form";
-import { sendVerificationEmail, signIn } from "@/lib/authClient";
+import {
+	organization,
+	sendVerificationEmail,
+	signIn,
+	useListOrganizations,
+} from "@/lib/authClient";
 import { authConfig } from "config";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
