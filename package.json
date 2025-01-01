@@ -17,7 +17,7 @@
 		"@astrojs/db": "0.14.5",
 		"@astrojs/react": "4.1.2",
 		"@astrojs/tailwind": "5.1.4",
-		"@aws-sdk/client-s3": "^3.717.0",
+		"@aws-sdk/client-s3": "3.717.0",
 		"@fontsource/geist-mono": "5.1.1",
 		"@fontsource/geist-sans": "5.1.0",
 		"@fullcalendar/core": "6.1.15",
@@ -66,9 +66,10 @@
 		"react-icons": "5.4.0",
 		"recharts": "2.15.0",
 		"resend": "4.0.1",
-		"sonner": "^1.7.1",
+		"sonner": "1.7.1",
 		"vaul": "1.1.2",
-		"zod": "3.24.1"
+		"zod": "3.24.1",
+		"zustand": "5.0.2"
 	},
 	"devDependencies": {
 		"@tailwindcss/typography": "0.5.15",
