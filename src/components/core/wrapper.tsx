@@ -12,6 +12,7 @@ interface DashboardWrapperProps {
 	currentPath?: string;
 	currentOrganization?: OrganizationAndMember | null;
 	currentUser?: User | null;
+	title?: string;
 	children: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ export function DashboardWrapper({
 	currentOrganization,
 	currentUser,
 	children,
+	title,
 }: DashboardWrapperProps) {
 	return (
 		<SidebarProvider>
@@ -28,7 +30,7 @@ export function DashboardWrapper({
 				currentUser={currentUser}
 			/>
 			<SidebarInset>
-				<DashboardHeader />
+				<DashboardHeader title={title} />
 				<div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
 			</SidebarInset>
 		</SidebarProvider>

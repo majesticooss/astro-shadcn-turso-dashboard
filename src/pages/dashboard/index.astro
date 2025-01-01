@@ -1,4 +1,6 @@
 ---
+import { DashboardHeader } from "@/components/core/header";
+import { Dashboard } from "@/components/routes/dashboard/dashboard-page";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { checkPageRedirect } from "@/lib/authUtils";
 import { getPageData } from "@/lib/authUtils";
@@ -8,13 +10,10 @@ const pageData = await getPageData(Astro);
 if (pageData.redirect) {
 	return Astro.redirect(pageData.redirect);
 }
+
+const title = "Dashboard";
 ---
 
-<AuthenticatedLayout {...pageData}>
-	<div class="grid auto-rows-min gap-4 md:grid-cols-3">
-		<div class="aspect-video rounded-xl bg-muted/50"></div>
-		<div class="aspect-video rounded-xl bg-muted/50"></div>
-		<div class="aspect-video rounded-xl bg-muted/50"></div>
-	</div>
-	<div class="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
+<AuthenticatedLayout {...pageData} title={title}>
+	<Dashboard client:load />
 </AuthenticatedLayout>

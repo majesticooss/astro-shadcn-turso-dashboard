@@ -7,9 +7,10 @@ interface Props {
 	currentPath?: string;
 	currentOrganization?: OrganizationAndMember | null;
 	user?: User | null;
+	title?: string;
 }
 
-const { currentPath, currentOrganization, user } = Astro.props;
+const { currentPath, currentOrganization, user, title } = Astro.props;
 ---
 
 <BaseLayout>
@@ -17,6 +18,7 @@ const { currentPath, currentOrganization, user } = Astro.props;
 		currentPath={currentPath}
 		currentOrganization={currentOrganization}
 		currentUser={user}
+		title={title}
 		client:load
 	>
 		<slot />
