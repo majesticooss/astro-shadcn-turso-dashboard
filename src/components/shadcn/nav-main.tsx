@@ -1,7 +1,5 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
-
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -22,16 +20,7 @@ import { ChevronRightIcon } from "@radix-ui/react-icons";
 export function NavMain({
 	items,
 }: {
-	items: {
-		title: string;
-		url: string;
-		icon?: LucideIcon;
-		isActive?: boolean;
-		items?: {
-			title: string;
-			url: string;
-		}[];
-	}[];
+	items: NavItemWithSubItems[];
 }) {
 	return (
 		<SidebarGroup>
@@ -42,7 +31,7 @@ export function NavMain({
 						return (
 							<SidebarMenuItem key={item.title}>
 								<SidebarMenuButton asChild tooltip={item.title}>
-									<a href={item.url}>
+									<a href={item.href}>
 										{item.icon && <item.icon />}
 										<span>{item.title}</span>
 									</a>
@@ -71,7 +60,7 @@ export function NavMain({
 										{item.items?.map((subItem) => (
 											<SidebarMenuSubItem key={subItem.title}>
 												<SidebarMenuSubButton asChild>
-													<a href={subItem.url}>
+													<a href={subItem.href}>
 														<span>{subItem.title}</span>
 													</a>
 												</SidebarMenuSubButton>

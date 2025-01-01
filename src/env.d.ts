@@ -1,8 +1,8 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
-import type { Icons } from "@/components/ui/icons";
 import type { Session as AuthSession, User as AuthUser } from "better-auth";
+import type { LucideIcon } from "lucide-react";
 
 declare global {
 	type User = AuthUser;
@@ -36,7 +36,7 @@ declare global {
 		}
 	}
 
-	type SiteConfig = {
+	interface SiteConfig {
 		name: string;
 		description: string;
 		url: string;
@@ -48,45 +48,47 @@ declare global {
 			twitter: string;
 			github: string;
 		};
-	};
+	}
 
-	type NavItem = {
+	interface NavItem {
 		title: string;
-		href: string;
+		href?: string;
 		badge?: number;
 		disabled?: boolean;
 		external?: boolean;
 		authorizeOnly?: UserRole;
-		icon?: keyof typeof Icons;
-	};
+		icon?: LucideIcon;
+	}
 
-	type MainNavItem = NavItem;
+	interface MainNavItem extends NavItem { }
 
-	type MarketingConfig = {
+	interface MarketingConfig {
 		mainNav: MainNavItem[];
-	};
-
-	type SidebarNavItem = {
-		title: string;
-		items: NavItem[];
-		authorizeOnly?: UserRole;
-		icon?: keyof typeof Icons;
-	};
-
-	type DocsConfig = {
-		mainNav: MainNavItem[];
-		sidebarNav: SidebarNavItem[];
-	};
+	}
 
 	type UserRole = "admin" | "user";
 
-	type AuthConfig = {
+	interface AuthConfig {
 		callbackURL: string;
-	};
+	}
 
 	interface Window {
 		getThemePreference: () => "light" | "dark" | "system";
 		setThemePreference: (theme: "light" | "dark" | "system") => void;
+	}
+
+	interface NavItemWithSubItems extends NavItem {
+		items?: NavItem[];
+		isActive?: boolean;
+	}
+
+	interface DashboardConfig {
+		mainNav: NavItemWithSubItems[];
+		projects: {
+			name: string;
+			href: string;
+			icon: LucideIcon;
+		}[];
 	}
 
 }

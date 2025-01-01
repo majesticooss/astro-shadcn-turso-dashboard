@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchCommand } from "@/components/core/SearchCommand";
+import { SearchCommand } from "@/components/core/search-command";
 import {
 	Breadcrumb,
 	BreadcrumbItem,

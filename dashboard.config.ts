@@ -1,3 +1,13 @@
+import {
+	Book,
+	Bot,
+	Frame,
+	Map as MapIcon,
+	PieChart,
+	Settings,
+	Terminal
+} from "lucide-react";
+
 export const siteDomain = "admin.novafy.app";
 export const siteUrl = `https://${siteDomain}`;
 
@@ -24,29 +34,94 @@ export const siteConfig: SiteConfig = {
 	themeColor: "#ffffff",
 };
 
-export const sidebarLinks: SidebarNavItem[] = [
-	{
-		title: "MENU",
-		items: [
-			{ href: "/dashboard", icon: "dashboard", title: "Dashboard" },
-			{
-				href: "/orders",
-				icon: "package",
-				title: "Orders",
-				badge: 2,
-			},
-		],
-	},
-	{
-		title: "PAGES",
-		items: [
-			{ href: "/settings", icon: "settings", title: "Settings" },
-			{
-				href: "#",
-				icon: "messages",
-				title: "Support",
-				disabled: true,
-			},
-		],
-	},
-];
+export const dashboardConfig: DashboardConfig = {
+	mainNav: [
+		{
+			title: "Dashboard",
+			href: "/dashboard",
+			icon: Terminal,
+			isActive: true,
+		},
+		{
+			title: "Models",
+			href: "#",
+			icon: Bot,
+			items: [
+				{
+					title: "Genesis",
+					href: "#",
+				},
+				{
+					title: "Explorer",
+					href: "#",
+				},
+				{
+					title: "Quantum",
+					href: "#",
+				},
+			],
+		},
+		{
+			title: "Documentation",
+			href: "#",
+			icon: Book,
+			items: [
+				{
+					title: "Introduction",
+					href: "#",
+				},
+				{
+					title: "Get Started",
+					href: "#",
+				},
+				{
+					title: "Tutorials",
+					href: "#",
+				},
+				{
+					title: "Changelog",
+					href: "#",
+				},
+			],
+		},
+		{
+			title: "Settings",
+			icon: Settings,
+			items: [
+				{
+					title: "General",
+					href: "/settings",
+				},
+				{
+					title: "Team",
+					href: "#",
+				},
+				{
+					title: "Billing",
+					href: "#",
+				},
+				{
+					title: "Limits",
+					href: "#",
+				},
+			],
+		},
+	],
+	projects: [
+		{
+			name: "Design Engineering",
+			href: "#",
+			icon: Frame,
+		},
+		{
+			name: "Sales & Marketing",
+			href: "#",
+			icon: PieChart,
+		},
+		{
+			name: "Travel",
+			href: "#",
+			icon: MapIcon,
+		},
+	],
+};

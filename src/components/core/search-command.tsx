@@ -13,7 +13,7 @@ import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
 interface SearchCommandProps {
-	links?: SidebarNavItem[];
+	links?: NavItemWithSubItems[];
 	onNavigate?: (href: string) => void;
 }
 
