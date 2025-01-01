@@ -6,19 +6,10 @@ import { sidebarLinks } from "config";
 
 const currentPath = Astro.url.pathname;
 const { session, user } = Astro.locals;
-
-const filteredLinks = sidebarLinks.map((section) => ({
-	...section,
-	items: section.items.filter(({ authorizeOnly }) => !authorizeOnly),
-}));
 ---
 
 <BaseLayout>
-	<DashboardWrapper
-		links={filteredLinks}
-		currentPath={currentPath}
-		client:load
-	>
+	<DashboardWrapper currentPath={currentPath} client:load>
 		<slot />
 	</DashboardWrapper>
 </BaseLayout>

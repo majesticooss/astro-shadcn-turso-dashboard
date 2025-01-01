@@ -21,11 +21,9 @@ export async function checkPageRedirect(url: URL, user: User | null, session: Se
 
 	const isPublicPath = PUBLIC_PATHS.some(path => url.pathname.startsWith(path));
 
-	// Check if user has an active organization using the session
-
-
 	if (session) {
-		const hasOrganization = (session as any)?.activeOrganizationId;
+		// Check if user has an active organization using the session
+		let hasOrganization = (session as any)?.activeOrganizationId;
 
 		// If there is no active organization
 		// Check if the user has at least one organization
@@ -42,6 +40,8 @@ export async function checkPageRedirect(url: URL, user: User | null, session: Se
 			await db.update(Session).set({
 				activeOrganizationId: organizations[0].organizationId,
 			}).where(eq(Session.id, session.id));
+
+			hasOrganization = true;
 		}
 
 		// If user has an organization and tries to access login page or onboarding page,

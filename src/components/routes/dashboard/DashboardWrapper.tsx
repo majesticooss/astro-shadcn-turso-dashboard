@@ -9,13 +9,11 @@ import {
 } from "@/components/ui/sidebar";
 
 interface DashboardWrapperProps {
-	links: SidebarNavItem[];
 	currentPath?: string;
 	children: React.ReactNode;
 }
 
 export function DashboardWrapper({
-	links,
 	currentPath,
 	children,
 }: DashboardWrapperProps) {
