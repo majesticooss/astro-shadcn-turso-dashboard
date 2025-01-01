@@ -14,31 +14,31 @@ const PUBLIC_PATHS = [
 	"/forgot-password",
 ];
 
-// Add this type definition near the top of the file with other imports
-type MemberWithOrganization = Member & {
-	Organization: Organization | null;
-};
-
 export async function getPageData(ctx: AstroGlobal) {
 	const { session, user } = ctx.locals;
 
 	let currentOrganization = null;
 
-	let userOrganizations: MemberWithOrganization[] = [];
+	let userOrganizations: OrganizationAndMember[] = [];
 
 	if (session) {
-		userOrganizations = await db.select()
+		const results = await db.select()
 			.from(Member)
 			.leftJoin(Organization, eq(Member.organizationId, Organization.id))
 			.where(eq(Member.userId, session.userId));
 
+		userOrganizations = results.map(r => ({
+			...r.Organization,
+			Member: r.Member
+		})) as OrganizationAndMember[];
+
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		if ((session as any).activeOrganizationId && userOrganizations.length > 0) {
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			currentOrganization = userOrganizations.find(org => org?.Organization?.id === (session as any).activeOrganizationId);
+			currentOrganization = userOrganizations.find(org => org?.id === (session as any).activeOrganizationId);
 
 			if (!currentOrganization) {
-				currentOrganization = userOrganizations[0].Organization;
+				currentOrganization = userOrganizations[0].id;
 			}
 		}
 	}
@@ -61,7 +61,7 @@ export async function checkPageRedirect(
 	url: URL,
 	user: User | null,
 	session: Session | null,
-	userOrganizations: MemberWithOrganization[]
+	userOrganizations: OrganizationAndMember[]
 ): Promise<string | null> {
 	// If user is not authenticated and isn't on a public page,
 	// redirect them to login
@@ -86,7 +86,7 @@ export async function checkPageRedirect(
 
 			// Set the session activeOrganizationId to the first organization
 			await db.update(Session).set({
-				activeOrganizationId: userOrganizations[0].organizationId,
+				activeOrganizationId: userOrganizations[0].id,
 			}).where(eq(Session.id, session.id));
 
 			hasOrganization = true;

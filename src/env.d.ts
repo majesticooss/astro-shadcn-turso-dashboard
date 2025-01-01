@@ -25,6 +25,10 @@ declare global {
 		createdAt: Date;
 	};
 
+	interface OrganizationAndMember extends Organization {
+		Member: Member | null;
+	}
+
 	namespace App {
 		interface Locals {
 			user: User | null;

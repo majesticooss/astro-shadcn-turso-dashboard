@@ -170,6 +170,7 @@ const Sidebar = React.forwardRef<
 		variant?: "sidebar" | "floating" | "inset";
 		collapsible?: "offcanvas" | "icon" | "none";
 		currentOrganization?: Organization;
+		currentUser?: User;
 	}
 >(
 	(
@@ -178,6 +179,7 @@ const Sidebar = React.forwardRef<
 			variant = "sidebar",
 			collapsible = "offcanvas",
 			currentOrganization,
+			currentUser,
 			className,
 			children,
 			...props

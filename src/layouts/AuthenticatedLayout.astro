@@ -2,20 +2,21 @@
 import { fade } from "astro:transitions";
 import { DashboardWrapper } from "@/components/routes/dashboard/DashboardWrapper";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { sidebarLinks } from "config";
 
 interface Props {
 	currentPath?: string;
-	organization?: Organization;
+	currentOrganization?: OrganizationAndMember;
+	user?: User;
 }
 
-const { currentPath, organization } = Astro.props;
+const { currentPath, currentOrganization, user } = Astro.props;
 ---
 
 <BaseLayout>
 	<DashboardWrapper
 		currentPath={currentPath}
-		currentOrganization={organization}
+		currentOrganization={currentOrganization}
+		currentUser={user}
 		client:load
 	>
 		<slot />
