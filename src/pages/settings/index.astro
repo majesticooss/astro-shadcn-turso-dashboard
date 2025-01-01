@@ -10,9 +10,11 @@ const pageData = await getPageData(Astro);
 if (pageData.redirect) {
 	return Astro.redirect(pageData.redirect);
 }
+
+const title = "Settings";
 ---
 
-<AuthenticatedLayout {...pageData}>
+<AuthenticatedLayout {...pageData} title={title}>
 	<SettingsPage
 		client:load
 		user={pageData.user}

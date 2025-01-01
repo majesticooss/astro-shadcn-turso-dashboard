@@ -91,12 +91,12 @@
 	}
 
 	:root {
-		@apply overflow-x-hidden;
+		@apply overflow-x-hidden w-full;
 		scrollbar-gutter: stable;
 	}
 
 	body {
-		@apply bg-background text-foreground h-full min-h-screen font-sans antialiased overflow-x-hidden;
+		@apply w-full bg-background text-foreground h-full min-h-screen font-sans antialiased overflow-x-hidden;
 		font-feature-settings: "rlig" 1, "calt" 1;
 	}
 
