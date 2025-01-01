@@ -1,3 +1,4 @@
+import { actions } from "astro:actions";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -73,35 +74,32 @@ const formSchema = z.object({
 });
 
 async function uploadToR2(file: File): Promise<string> {
+	// Create a FormData and append the file
 	const formData = new FormData();
 	formData.append("file", file);
 
-	const response = await fetch("/api/upload", {
-		method: "POST",
-		body: formData,
-	});
+	const result = await actions.uploadOrganizationLogo(formData);
 
-	if (!response.ok) {
-		const error = await response.json();
-		throw new Error(error.message || "Failed to upload file");
+	if (result.error) {
+		throw new Error(result.error.message || "Failed to upload file");
 	}
 
-	const data = await response.json();
-	return data.url;
+	return result.data.url;
 }
 
 export function OrganizationSwitcher() {
 	const { isMobile } = useSidebar();
 	const { data: organizations = [] } = useListOrganizations();
-	const [activeOrganization, setActiveOrganization] = React.useState<any>(
-		organizations?.length > 0 ? organizations[0] : null,
-	);
+	const [activeOrganization, setActiveOrganization] =
+		React.useState<Organization | null>(
+			organizations?.length > 0 ? organizations[0] : null,
+		);
 	const [open, setOpen] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [error, setError] = React.useState<string | null>(null);
 	const [preview, setPreview] = React.useState<string | null>(null);
 
-	const handleOrganizationSwitch = async (org: any) => {
+	const handleOrganizationSwitch = async (org: Organization) => {
 		try {
 			await organization.setActive({
 				organizationId: org.id,
@@ -193,19 +191,15 @@ export function OrganizationSwitcher() {
 		};
 	}, [preview]);
 
-	const renderLogo = (logo: string | any) => {
+	const renderLogo = (logo: string | null) => {
 		if (!logo) return <GoOrganization className="size-4" />;
-		if (typeof logo === "string") {
-			return (
-				<img
-					src={logo}
-					alt="Organization logo"
-					className="size-full object-cover"
-				/>
-			);
-		}
-		const LogoComponent = logo;
-		return <LogoComponent className="size-4" />;
+		return (
+			<img
+				src={logo}
+				alt="Organization logo"
+				className="size-full object-cover"
+			/>
+		);
 	};
 
 	return (
@@ -242,19 +236,21 @@ export function OrganizationSwitcher() {
 								<DropdownMenuLabel className="text-xs text-muted-foreground">
 									Organizations
 								</DropdownMenuLabel>
-								{organizations?.map((organization: any, index: number) => (
-									<DropdownMenuItem
-										key={organization.name}
-										onClick={() => handleOrganizationSwitch(organization)}
-										className="gap-2 p-2"
-									>
-										<div className="flex size-6 items-center justify-center rounded-sm border overflow-hidden">
-											{renderLogo(organization.logo)}
-										</div>
-										{organization.name}
-										<DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
-									</DropdownMenuItem>
-								))}
+								{organizations?.map(
+									(organization: Organization, index: number) => (
+										<DropdownMenuItem
+											key={organization.name}
+											onClick={() => handleOrganizationSwitch(organization)}
+											className="gap-2 p-2"
+										>
+											<div className="flex size-6 items-center justify-center rounded-sm border overflow-hidden">
+												{renderLogo(organization.logo)}
+											</div>
+											{organization.name}
+											<DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+										</DropdownMenuItem>
+									),
+								)}
 								<DropdownMenuSeparator />
 							</>
 						)}

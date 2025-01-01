@@ -7,6 +7,13 @@ import type { Session as AuthSession, User as AuthUser } from "better-auth";
 declare global {
 	type User = AuthUser;
 	type Session = AuthSession;
+	interface Organization {
+		id: string;
+		name: string;
+		slug: string;
+		logo?: string | null;
+		plan?: string;
+	}
 
 	type Member = {
 		user?: User;
