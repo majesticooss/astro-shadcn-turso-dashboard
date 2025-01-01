@@ -73,10 +73,11 @@ const formSchema = z.object({
 		}, "File size should be less than 200KB"),
 });
 
-async function uploadToR2(file: File): Promise<string> {
+async function uploadToR2(file: File, name: string): Promise<string> {
 	// Create a FormData and append the file
 	const formData = new FormData();
 	formData.append("file", file);
+	formData.append("name", name);
 
 	const result = await actions.uploadOrganizationLogo(formData);
 
@@ -95,7 +96,7 @@ export function OrganizationSwitcher() {
 			organizations?.length > 0 ? organizations[0] : null,
 		);
 	const [open, setOpen] = React.useState(false);
-	const [isLoading, setIsLoading] = React.useState(false);
+	const [isLoading, setIsLoading] = React.useState(true);
 	const [error, setError] = React.useState<string | null>(null);
 	const [preview, setPreview] = React.useState<string | null>(null);
 
@@ -137,7 +138,7 @@ export function OrganizationSwitcher() {
 			let logoUrl = values.logo as string;
 			if (values.logo instanceof File) {
 				try {
-					logoUrl = await uploadToR2(values.logo);
+					logoUrl = await uploadToR2(values.logo, values.slug);
 				} catch (error) {
 					console.error("Failed to upload logo:", error);
 					setError("Failed to upload logo. Please try again.");
@@ -165,6 +166,7 @@ export function OrganizationSwitcher() {
 	React.useEffect(() => {
 		if (!activeOrganization && organizations?.length > 0) {
 			setActiveOrganization(organizations[0]);
+			setIsLoading(false);
 		}
 	}, [organizations, activeOrganization]);
 
@@ -217,7 +219,9 @@ export function OrganizationSwitcher() {
 							</div>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">
-									{activeOrganization?.name ?? "Create Organization"}
+									{isLoading
+										? "Loading..."
+										: (activeOrganization?.name ?? "Create Organization")}
 								</span>
 								<span className="truncate text-xs">
 									{activeOrganization?.plan ?? "Get started"}

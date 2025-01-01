@@ -11,16 +11,17 @@ const uploadSchema = z.object({
 		.refine(
 			file => file.size <= 200 * 1024,
 			"File size must be less than 200KB"
-		)
+		),
+	name: z.string(),
 });
 
 export const uploadOrganizationLogo = defineAction({
 	input: uploadSchema,
 	accept: 'form',
-	async handler({ file }) {
+	async handler({ file, name }) {
 		const url = await uploadFile({
 			file,
-			folder: 'organizations',
+			folder: `organizations/${name}`,
 			allowedTypes: ['image/*'],
 			maxSize: 200 * 1024,
 		});
