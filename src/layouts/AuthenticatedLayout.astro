@@ -4,12 +4,20 @@ import { DashboardWrapper } from "@/components/routes/dashboard/DashboardWrapper
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { sidebarLinks } from "config";
 
-const currentPath = Astro.url.pathname;
-const { session, user } = Astro.locals;
+interface Props {
+	currentPath?: string;
+	organization?: Organization;
+}
+
+const { currentPath, organization } = Astro.props;
 ---
 
 <BaseLayout>
-	<DashboardWrapper currentPath={currentPath} client:load>
+	<DashboardWrapper
+		currentPath={currentPath}
+		currentOrganization={organization}
+		client:load
+	>
 		<slot />
 	</DashboardWrapper>
 </BaseLayout>

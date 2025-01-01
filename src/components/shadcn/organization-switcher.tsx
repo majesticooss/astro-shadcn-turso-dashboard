@@ -91,7 +91,13 @@ async function uploadToR2(file: File, name: string): Promise<string> {
 	return result.data.url;
 }
 
-export function OrganizationSwitcher() {
+interface OrganizationSwitcherProps {
+	currentOrganization?: Organization | null;
+}
+
+export function OrganizationSwitcher({
+	currentOrganization,
+}: OrganizationSwitcherProps) {
 	const { isMobile } = useSidebar();
 	const { data: organizations = [] } = useListOrganizations();
 	const [open, setOpen] = React.useState(false);
@@ -99,13 +105,15 @@ export function OrganizationSwitcher() {
 	const [error, setError] = React.useState<string | null>(null);
 	const [preview, setPreview] = React.useState<string | null>(null);
 
-	const {
+	let {
 		activeOrganization,
 		setActiveOrganization,
 		setOrganizations,
 		setLastFetched,
 		hasHydrated,
 	} = useOrganizationStore();
+
+	activeOrganization = activeOrganization ?? currentOrganization ?? null;
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	React.useEffect(() => {

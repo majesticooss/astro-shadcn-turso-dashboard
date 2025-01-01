@@ -10,16 +10,18 @@ import {
 
 interface DashboardWrapperProps {
 	currentPath?: string;
+	currentOrganization?: Organization;
 	children: React.ReactNode;
 }
 
 export function DashboardWrapper({
 	currentPath,
+	currentOrganization,
 	children,
 }: DashboardWrapperProps) {
 	return (
 		<SidebarProvider>
-			<AppSidebar />
+			<AppSidebar currentOrganization={currentOrganization} />
 			<SidebarInset>
 				<DashboardHeader />
 				<div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

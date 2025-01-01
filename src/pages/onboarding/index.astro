@@ -1,19 +1,15 @@
 ---
 import { Onboarding } from "@/components/auth/Onboarding";
 import PublicLayout from "@/layouts/PublicLayout.astro";
-import { checkPageRedirect } from "@/lib/authUtils";
+import { getPageData } from "@/lib/authUtils";
 
-const redirect = await checkPageRedirect(
-	Astro.url,
-	Astro.locals.user,
-	Astro.locals.session,
-);
+const pageData = await getPageData(Astro);
 
-if (redirect) {
-	return Astro.redirect(redirect);
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
 }
 ---
 
-<PublicLayout>
+<PublicLayout {...pageData}>
 	<Onboarding client:load />
 </PublicLayout>

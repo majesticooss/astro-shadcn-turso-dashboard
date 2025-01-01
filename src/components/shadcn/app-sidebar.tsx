@@ -5,7 +5,7 @@ import {
 	Command,
 	Frame,
 	GalleryVerticalEnd,
-	Map,
+	Map as MapIcon,
 	PieChart,
 	Settings2,
 	SquareTerminal,
@@ -135,7 +135,7 @@ const data = {
 		{
 			name: "Travel",
 			url: "#",
-			icon: Map,
+			icon: MapIcon,
 		},
 	],
 };
@@ -144,7 +144,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
-				<OrganizationSwitcher />
+				<OrganizationSwitcher currentOrganization={props.currentOrganization} />
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain items={data.navMain} />
