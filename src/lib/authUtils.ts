@@ -1,4 +1,4 @@
-import { Member, Session, db, eq } from 'astro:db';
+import { Member, Organization, Session, db, eq } from 'astro:db';
 import { auth } from "@/lib/auth";
 import { organization } from "@/lib/authClient";
 import type { AstroGlobal } from "astro";
@@ -14,23 +14,31 @@ const PUBLIC_PATHS = [
 	"/forgot-password",
 ];
 
+// Add this type definition near the top of the file with other imports
+type MemberWithOrganization = Member & {
+	Organization: Organization | null;
+};
 
 export async function getPageData(ctx: AstroGlobal) {
 	const { session, user } = ctx.locals;
 
 	let currentOrganization = null;
 
-	let userOrganizations: { id: string; organizationId: string; userId: string; role: UserRole; createdAt: Date }[] = [];
+	let userOrganizations: MemberWithOrganization[] = [];
 
 	if (session) {
-		userOrganizations = await db.select().from(Member).where(eq(Member.userId, session.userId)) as typeof userOrganizations;
+		userOrganizations = await db.select()
+			.from(Member)
+			.leftJoin(Organization, eq(Member.organizationId, Organization.id))
+			.where(eq(Member.userId, session.userId));
+
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		if ((session as any).activeOrganizationId) {
+		if ((session as any).activeOrganizationId && userOrganizations.length > 0) {
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			currentOrganization = userOrganizations.find(organization => organization.id === (session as any).activeOrganizationId);
+			currentOrganization = userOrganizations.find(org => org?.Organization?.id === (session as any).activeOrganizationId);
 
 			if (!currentOrganization) {
-				currentOrganization = userOrganizations[0];
+				currentOrganization = userOrganizations[0].Organization;
 			}
 		}
 	}
@@ -53,7 +61,7 @@ export async function checkPageRedirect(
 	url: URL,
 	user: User | null,
 	session: Session | null,
-	userOrganizations: { id: string; organizationId: string; userId: string; role: UserRole; createdAt: Date }[]
+	userOrganizations: MemberWithOrganization[]
 ): Promise<string | null> {
 	// If user is not authenticated and isn't on a public page,
 	// redirect them to login

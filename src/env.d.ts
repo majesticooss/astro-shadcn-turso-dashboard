@@ -16,7 +16,7 @@ declare global {
 		plan?: string;
 	}
 
-	type Member = {
+	interface Member {
 		user?: User;
 		id: string;
 		organizationId: string;
