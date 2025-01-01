@@ -1,5 +1,16 @@
 ---
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { checkPrivatePageRedirect } from "@/lib/auth";
+
+const redirect = await checkPrivatePageRedirect(
+	Astro.url,
+	Astro.locals.user,
+	Astro.locals.session,
+);
+
+if (redirect) {
+	Astro.redirect(redirect);
+}
 ---
 
 <AuthenticatedLayout>

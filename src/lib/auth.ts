@@ -132,3 +132,19 @@ export async function userCanAccessResource(user: User | null, resource: URL) {
 	// Check if the user has access to the resource
 	return true;
 }
+
+const DASHBOARD_PATH = "/dashboard";
+const LOGIN_PATH = "/login";
+
+export async function checkPrivatePageRedirect(url: URL, user: User | null, session: Session | null): Promise<string | null> {
+	if (!session) {
+		return LOGIN_PATH;
+	}
+	// If user is authenticated and the route is login go to dashboard
+	if (session) {
+		return DASHBOARD_PATH;
+	}
+
+
+	return null;
+}
