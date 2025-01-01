@@ -10,8 +10,8 @@ import {
 
 interface DashboardWrapperProps {
 	currentPath?: string;
-	currentOrganization?: OrganizationAndMember;
-	currentUser?: User;
+	currentOrganization?: OrganizationAndMember | null;
+	currentUser?: User | null;
 	children: React.ReactNode;
 }
 

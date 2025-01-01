@@ -34,12 +34,7 @@ export async function getPageData(ctx: AstroGlobal) {
 
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		if ((session as any).activeOrganizationId && userOrganizations.length > 0) {
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			currentOrganization = userOrganizations.find(org => org?.id === (session as any).activeOrganizationId);
-
-			if (!currentOrganization) {
-				currentOrganization = userOrganizations[0].id;
-			}
+			currentOrganization = userOrganizations.find(org => org?.id === (session as any).activeOrganizationId) || userOrganizations[0];
 		}
 	}
 

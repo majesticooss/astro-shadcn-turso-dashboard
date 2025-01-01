@@ -169,8 +169,8 @@ const Sidebar = React.forwardRef<
 		side?: "left" | "right";
 		variant?: "sidebar" | "floating" | "inset";
 		collapsible?: "offcanvas" | "icon" | "none";
-		currentOrganization?: Organization;
-		currentUser?: User;
+		currentOrganization?: OrganizationAndMember | null;
+		currentUser?: User | null;
 	}
 >(
 	(
