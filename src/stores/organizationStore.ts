@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface OrganizationState {
 	activeOrganization: Organization | null
@@ -8,20 +8,28 @@ interface OrganizationState {
 	setActiveOrganization: (org: Organization | null) => void
 	setOrganizations: (orgs: Organization[]) => void
 	setLastFetched: () => void
+	hasHydrated: boolean;
+	setHasHydrated: (state: boolean) => void;
 }
 
 export const useOrganizationStore = create<OrganizationState>()(
 	persist(
 		(set, get) => ({
-			activeOrganization: get()?.activeOrganization,
-			organizations: get()?.organizations,
-			lastFetched: get()?.lastFetched,
+			activeOrganization: null,
+			organizations: [],
+			lastFetched: 0,
 			setActiveOrganization: (org) => set({ activeOrganization: org }),
 			setOrganizations: (orgs) => set({ organizations: orgs }),
 			setLastFetched: () => set({ lastFetched: Date.now() }),
+			hasHydrated: false,
+			setHasHydrated: (state) => set({ hasHydrated: state }),
 		}),
 		{
-			name: 'organization-storage', // name of the item in the storage (must be unique)
+			name: 'organization-storage',
+			storage: createJSONStorage(() => localStorage),
+			onRehydrateStorage: () => (state) => {
+				state?.setHasHydrated(true);
+			},
 		},
 	),
 )

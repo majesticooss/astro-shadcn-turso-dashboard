@@ -9,7 +9,11 @@ const { session, user } = Astro.locals;
 ---
 
 <BaseLayout>
-	<DashboardWrapper currentPath={currentPath} client:load>
+	<DashboardWrapper
+		currentPath={currentPath}
+		client:only="react"
+		transition:persist
+	>
 		<slot />
 	</DashboardWrapper>
 </BaseLayout>

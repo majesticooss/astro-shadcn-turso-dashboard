@@ -1,3 +1,5 @@
+"use client";
+
 import { actions } from "astro:actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -102,10 +104,12 @@ export function OrganizationSwitcher() {
 		setActiveOrganization,
 		setOrganizations,
 		setLastFetched,
+		hasHydrated,
 	} = useOrganizationStore();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	React.useEffect(() => {
+		if (!hasHydrated) return;
 		const initializeOrganizations = () => {
 			if (organizations?.length > 0) {
 				setOrganizations(organizations);
@@ -116,9 +120,8 @@ export function OrganizationSwitcher() {
 				setIsLoading(false);
 			}
 		};
-
 		initializeOrganizations();
-	}, [organizations]);
+	}, [hasHydrated, organizations]);
 
 	const handleOrganizationSwitch = async (org: Organization) => {
 		try {
