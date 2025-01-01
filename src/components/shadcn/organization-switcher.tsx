@@ -200,7 +200,7 @@ export function OrganizationSwitcher() {
 				<img
 					src={logo}
 					alt="Organization logo"
-					className="size-4 object-contain"
+					className="size-full object-cover"
 				/>
 			);
 		}
@@ -217,7 +217,7 @@ export function OrganizationSwitcher() {
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
-							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
 								{renderLogo(activeOrganization?.logo)}
 							</div>
 							<div className="grid flex-1 text-left text-sm leading-tight">
@@ -248,7 +248,7 @@ export function OrganizationSwitcher() {
 										onClick={() => handleOrganizationSwitch(organization)}
 										className="gap-2 p-2"
 									>
-										<div className="flex size-6 items-center justify-center rounded-sm border">
+										<div className="flex size-6 items-center justify-center rounded-sm border overflow-hidden">
 											{renderLogo(organization.logo)}
 										</div>
 										{organization.name}
@@ -337,12 +337,12 @@ export function OrganizationSwitcher() {
 													<FormControl>
 														<div className="grid gap-4">
 															<div className="flex items-center gap-4">
-																<div className="flex size-16 items-center justify-center rounded-lg border bg-muted">
+																<div className="flex size-16 items-center justify-center rounded-lg border bg-muted overflow-hidden">
 																	{preview ? (
 																		<img
 																			src={preview}
 																			alt="Preview"
-																			className="size-14 rounded object-cover"
+																			className="size-full object-cover"
 																		/>
 																	) : (
 																		<ImageIcon className="size-8 text-muted-foreground" />
