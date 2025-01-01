@@ -36,6 +36,7 @@ import {
 import { organization, useListOrganizations } from "@/lib/authClient";
 import { slugify } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { useOrganizationStore } from "@/stores/organizationStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	CaretSortIcon,
@@ -91,14 +92,33 @@ async function uploadToR2(file: File, name: string): Promise<string> {
 export function OrganizationSwitcher() {
 	const { isMobile } = useSidebar();
 	const { data: organizations = [] } = useListOrganizations();
-	const [activeOrganization, setActiveOrganization] =
-		React.useState<Organization | null>(
-			organizations?.length > 0 ? organizations[0] : null,
-		);
 	const [open, setOpen] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [error, setError] = React.useState<string | null>(null);
 	const [preview, setPreview] = React.useState<string | null>(null);
+
+	const {
+		activeOrganization,
+		setActiveOrganization,
+		setOrganizations,
+		setLastFetched,
+	} = useOrganizationStore();
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	React.useEffect(() => {
+		const initializeOrganizations = () => {
+			if (organizations?.length > 0) {
+				setOrganizations(organizations);
+				setLastFetched();
+				if (!activeOrganization) {
+					setActiveOrganization(organizations[0]);
+				}
+				setIsLoading(false);
+			}
+		};
+
+		initializeOrganizations();
+	}, [organizations]);
 
 	const handleOrganizationSwitch = async (org: Organization) => {
 		try {
@@ -108,7 +128,6 @@ export function OrganizationSwitcher() {
 			setActiveOrganization(org);
 		} catch (error) {
 			console.error("Failed to switch organization:", error);
-			// Show error in UI
 			setError("Failed to switch organization. Please try again.");
 		}
 	};
@@ -162,13 +181,6 @@ export function OrganizationSwitcher() {
 			setIsLoading(false);
 		}
 	}
-
-	React.useEffect(() => {
-		if (!activeOrganization && organizations?.length > 0) {
-			setActiveOrganization(organizations[0]);
-		}
-		setIsLoading(false);
-	}, [organizations, activeOrganization]);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
