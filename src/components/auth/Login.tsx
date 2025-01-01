@@ -1,10 +1,10 @@
 import { navigate } from "astro:transitions/client";
 import { LoginForm } from "@/components/shadcn/login-form";
 import { sendVerificationEmail, signIn } from "@/lib/authClient";
+import { authConfig } from "config";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-
 export function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -32,7 +32,7 @@ export function Login() {
 			if (sendVerification) {
 				await sendVerificationEmail({
 					email,
-					callbackURL: "/dashboard",
+					callbackURL: authConfig.callbackURL,
 				});
 			}
 
@@ -55,7 +55,7 @@ export function Login() {
 				{
 					email,
 					password,
-					callbackURL: "/dashboard",
+					callbackURL: authConfig.callbackURL,
 				},
 				{
 					onError: (ctx) => {

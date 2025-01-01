@@ -5,6 +5,10 @@ export const mailConfig = {
 	from: "noreply@mail.majestico.co",
 }
 
+export const authConfig: AuthConfig = {
+	callbackURL: "/dashboard",
+}
+
 export const siteConfig: SiteConfig = {
 	name: "Next Starter",
 	description:

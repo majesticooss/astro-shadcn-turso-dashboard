@@ -1,6 +1,7 @@
 import { navigate } from "astro:transitions/client";
 import { SignupForm } from "@/components/shadcn/signup-form";
 import { sendVerificationEmail, signUp } from "@/lib/authClient";
+import { authConfig } from "config";
 import { GalleryVerticalEnd } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -33,7 +34,7 @@ export function Signup() {
 
 			await sendVerificationEmail({
 				email,
-				callbackURL: "/dashboard",
+				callbackURL: authConfig.callbackURL,
 			});
 
 			setCountdown(60);
@@ -55,7 +56,7 @@ export function Signup() {
 					name: `${firstName} ${lastName}`,
 					email,
 					password,
-					callbackURL: "/dashboard",
+					callbackURL: authConfig.callbackURL,
 				},
 				{
 					onError: (ctx) => {

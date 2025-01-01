@@ -72,6 +72,24 @@ const formSchema = z.object({
 		}, "File size should be less than 200KB"),
 });
 
+async function uploadToR2(file: File): Promise<string> {
+	const formData = new FormData();
+	formData.append("file", file);
+
+	const response = await fetch("/api/upload", {
+		method: "POST",
+		body: formData,
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.message || "Failed to upload file");
+	}
+
+	const data = await response.json();
+	return data.url;
+}
+
 export function OrganizationSwitcher() {
 	const { isMobile } = useSidebar();
 	const { data: organizations = [] } = useListOrganizations();
@@ -120,12 +138,13 @@ export function OrganizationSwitcher() {
 			// Handle file upload if exists
 			let logoUrl = values.logo as string;
 			if (values.logo instanceof File) {
-				// You'll need to implement this function to handle file uploads
-				// This could be to your own server or a service like AWS S3
-				// logoUrl = await uploadFile(values.logo);
-
-				// For now, we'll create an object URL as a placeholder
-				logoUrl = URL.createObjectURL(values.logo);
+				try {
+					logoUrl = await uploadToR2(values.logo);
+				} catch (error) {
+					console.error("Failed to upload logo:", error);
+					setError("Failed to upload logo. Please try again.");
+					return;
+				}
 			}
 
 			const newOrg = await organization.create({
@@ -223,7 +242,7 @@ export function OrganizationSwitcher() {
 								<DropdownMenuLabel className="text-xs text-muted-foreground">
 									Organizations
 								</DropdownMenuLabel>
-								{organizations?.map((organization, index) => (
+								{organizations?.map((organization: any, index: number) => (
 									<DropdownMenuItem
 										key={organization.name}
 										onClick={() => handleOrganizationSwitch(organization)}

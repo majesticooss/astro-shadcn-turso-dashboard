@@ -68,6 +68,10 @@ declare global {
 
 	type UserRole = "admin" | "user";
 
+	type AuthConfig = {
+		callbackURL: string;
+	};
+
 	interface Window {
 		getThemePreference: () => "light" | "dark" | "system";
 		setThemePreference: (theme: "light" | "dark" | "system") => void;

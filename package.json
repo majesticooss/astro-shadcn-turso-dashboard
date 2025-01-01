@@ -17,6 +17,7 @@
 		"@astrojs/db": "0.14.5",
 		"@astrojs/react": "4.1.2",
 		"@astrojs/tailwind": "5.1.4",
+		"@aws-sdk/client-s3": "^3.717.0",
 		"@fontsource/geist-mono": "5.1.1",
 		"@fontsource/geist-sans": "5.1.0",
 		"@fullcalendar/core": "6.1.15",
