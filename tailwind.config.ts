@@ -161,7 +161,10 @@ const config: Config = {
 				'fade-down': 'fade-down 0.5s',
 				'fade-in': 'fade-in 0.4s',
 				'fade-out': 'fade-out 0.4s'
-			}
+			},
+			boxShadow: {
+				'xs': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+			},
 		}
 	},
 	plugins: [
