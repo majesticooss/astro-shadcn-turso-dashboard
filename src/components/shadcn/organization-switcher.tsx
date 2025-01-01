@@ -153,6 +153,7 @@ export function OrganizationSwitcher() {
 			await handleOrganizationSwitch(newOrg);
 			setOpen(false);
 			form.reset();
+			setPreview(null);
 		} catch (error) {
 			console.error("Failed to create organization:", error);
 			setError("Failed to create organization. Please try again.");
@@ -254,7 +255,17 @@ export function OrganizationSwitcher() {
 								<DropdownMenuSeparator />
 							</>
 						)}
-						<Dialog open={open} onOpenChange={setOpen}>
+						<Dialog
+							open={open}
+							onOpenChange={(isOpen) => {
+								setOpen(isOpen);
+								if (!isOpen) {
+									form.reset();
+									setPreview(null);
+									setError(null);
+								}
+							}}
+						>
 							<DialogTrigger asChild>
 								<DropdownMenuItem
 									className="gap-2 p-2"
