@@ -12,16 +12,16 @@ interface OrganizationState {
 
 export const useOrganizationStore = create<OrganizationState>()(
 	persist(
-		(set) => ({
-			activeOrganization: null,
-			organizations: [],
-			lastFetched: 0,
+		(set, get) => ({
+			activeOrganization: get()?.activeOrganization,
+			organizations: get()?.organizations,
+			lastFetched: get()?.lastFetched,
 			setActiveOrganization: (org) => set({ activeOrganization: org }),
 			setOrganizations: (orgs) => set({ organizations: orgs }),
 			setLastFetched: () => set({ lastFetched: Date.now() }),
 		}),
 		{
-			name: 'organization-storage',
-		}
-	)
+			name: 'organization-storage', // name of the item in the storage (must be unique)
+		},
+	),
 )
