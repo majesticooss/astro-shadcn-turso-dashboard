@@ -1,3 +1,4 @@
+import { Member, Session, db, eq } from 'astro:db';
 import { auth } from "@/lib/auth";
 
 const DASHBOARD_PATH = "/dashboard";
@@ -21,18 +22,33 @@ export async function checkPageRedirect(url: URL, user: User | null, session: Se
 	const isPublicPath = PUBLIC_PATHS.some(path => url.pathname.startsWith(path));
 
 	// Check if user has an active organization using the session
-	const hasOrganization = (session as any)?.activeOrganizationId;
 
-	// If user has no organization and isn't on a public page,
-	// redirect them to onboarding
-	if (!isPublicPath && !hasOrganization && !url.pathname.startsWith(ONBOARDING_PATH)) {
-		return ONBOARDING_PATH;
-	}
 
-	// If user has an organization and tries to access login page,
-	// redirect to dashboard
-	if (hasOrganization && url.pathname === LOGIN_PATH) {
-		return DASHBOARD_PATH;
+	if (session) {
+		const hasOrganization = (session as any)?.activeOrganizationId;
+
+		// If there is no active organization
+		// Check if the user has at least one organization
+		if (!isPublicPath && !hasOrganization && !url.pathname.startsWith(ONBOARDING_PATH)) {
+			const organizations = await db.select().from(Member).where(eq(Member.userId, session.userId));
+
+			// If user has no organization and isn't on a public page,
+			// redirect them to onboarding
+			if (organizations.length === 0) {
+				return ONBOARDING_PATH;
+			}
+
+			// Set the session activeOrganizationId to the first organization
+			await db.update(Session).set({
+				activeOrganizationId: organizations[0].organizationId,
+			}).where(eq(Session.id, session.id));
+		}
+
+		// If user has an organization and tries to access login page or onboarding page,
+		// redirect to dashboard
+		if (hasOrganization && (url.pathname === LOGIN_PATH || url.pathname === ONBOARDING_PATH)) {
+			return DASHBOARD_PATH;
+		}
 	}
 
 	return null;
