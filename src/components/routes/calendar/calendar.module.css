@@ -1,0 +1,58 @@
+.calendarWrapper {
+    --fc-small-font-size: 0.875em;
+    --fc-page-bg-color: hsl(var(--background));
+    --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+    --fc-neutral-text-color: #808080;
+    --fc-border-color: #ddd;
+
+    --fc-button-text-color: #fff;
+    --fc-button-bg-color: hsl(var(--primary));
+    --fc-button-border-color: hsl(var(--primary));
+    --fc-button-hover-bg-color: hsl(var(--primary) / 0.9);
+    --fc-button-hover-border-color: hsl(var(--primary) / 0.9);
+    --fc-button-active-bg-color: hsl(var(--primary) / 0.9);
+    --fc-button-active-border-color: hsl(var(--primary) / 0.9);
+
+    --fc-event-bg-color: hsl(var(--primary));
+    --fc-event-border-color: hsl(var(--primary));
+    --fc-event-text-color: rgb(248, 250, 252);
+    --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+    --fc-more-link-bg-color: #d0d0d0;
+    --fc-more-link-text-color: inherit;
+
+    --fc-event-resizer-thickness: 8px;
+    --fc-event-resizer-dot-total-width: 8px;
+    --fc-event-resizer-dot-border-width: 1px;
+
+    --fc-non-business-color: rgba(215, 215, 215, 0.3);
+    --fc-bg-event-color: rgb(143, 223, 130);
+    --fc-bg-event-opacity: 0.3;
+    --fc-highlight-color: rgba(188, 232, 241, 0.3);
+    --fc-today-bg-color: rgba(255, 255, 255, 0.15);
+    --fc-now-indicator-color: red;
+}
+
+.calendarWrapper :global(.fc),
+.calendarWrapper :global(.fc table) {
+    font-size: 0.875rem;
+}
+
+.calendarWrapper :global(.fc .fc-button:focus),
+.calendarWrapper :global(.fc .fc-button:hover) {
+    box-shadow: none !important;
+}
+
+.calendarWrapper :global(.fc-timegrid-event.fc-event-past) {
+    background-color: hsl(var(--primary) / 0.7);
+    border-color: hsl(var(--primary) / 0.7);
+    color: rgb(162, 162, 162);
+}
+
+.calendarWrapper :global(.fc-list-event.fc-event-past) {
+    color: rgb(162, 162, 162);
+}
+
+.calendarWrapper :global(.fc-toolbar-title) {
+    font-size: 1.25rem;
+}
