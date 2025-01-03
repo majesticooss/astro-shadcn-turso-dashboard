@@ -78,17 +78,8 @@ declare global {
 	}
 
 	interface NavItemWithSubItems extends NavItem {
-		items?: NavItem[];
+		items?: NavItemWithSubItems[];
 		isActive?: boolean;
-	}
-
-	interface DashboardConfig {
-		mainNav: NavItemWithSubItems[];
-		projects: {
-			name: string;
-			href: string;
-			icon: LucideIcon;
-		}[];
 	}
 
 }

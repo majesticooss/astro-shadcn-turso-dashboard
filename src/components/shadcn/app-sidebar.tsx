@@ -1,9 +1,9 @@
 import type * as React from "react";
 
 import { NavMain } from "@/components/shadcn/nav-main";
-import { NavProjects } from "@/components/shadcn/nav-projects";
 import { NavUser } from "@/components/shadcn/nav-user";
 import { OrganizationSwitcher } from "@/components/shadcn/organization-switcher";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,7 +11,7 @@ import {
 	SidebarHeader,
 	SidebarRail,
 } from "@/components/ui/sidebar";
-import { dashboardConfig } from "config";
+import { dashboardNavigation } from "config";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
@@ -20,8 +20,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<OrganizationSwitcher currentOrganization={props.currentOrganization} />
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={dashboardConfig.mainNav} />
-				<NavProjects projects={dashboardConfig.projects} />
+				<ScrollArea className="h-full">
+					<NavMain items={dashboardNavigation} />
+				</ScrollArea>
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={props.currentUser} />
