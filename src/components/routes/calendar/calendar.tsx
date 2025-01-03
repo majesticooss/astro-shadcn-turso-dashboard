@@ -1,5 +1,4 @@
 import { useToast } from "@/hooks/use-toast";
-import esLocale from "@fullcalendar/core/locales/es";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import FullCalendar from "@fullcalendar/react";
@@ -59,7 +58,6 @@ export function Calendar({
 					center: "title",
 					right: "timeGridWeek,listMonth",
 				}}
-				locales={[esLocale]}
 				plugins={[timeGridPlugin, listPlugin, interactionPlugin]}
 				initialDate={initialDate}
 				datesSet={handleDatesSet}

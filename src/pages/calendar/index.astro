@@ -1,5 +1,5 @@
 ---
-import SettingsPage from "@/components/routes/settings/settings-page";
+import { Calendar } from "@/components/routes/calendar/calendar";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { organization } from "@/lib/authClient";
 import { checkPageRedirect } from "@/lib/authUtils";
@@ -15,9 +15,5 @@ const title = "Calendar";
 ---
 
 <AuthenticatedLayout {...pageData} title={title}>
-	<SettingsPage
-		client:load
-		user={pageData.user}
-		member={pageData.member as Member}
-	/>
+	<Calendar client:load />
 </AuthenticatedLayout>

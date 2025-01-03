@@ -13,6 +13,7 @@ import {
 	FileText,
 	Files,
 	Home,
+	LayoutDashboard,
 	LineChart,
 	List,
 	Mail,
@@ -26,7 +27,7 @@ import {
 	Store,
 	UserCog,
 	Users,
-	XSquareIcon,
+	XSquareIcon
 } from "lucide-react";
 import { LiaToothSolid } from "react-icons/lia";
 
@@ -61,6 +62,11 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 	{
 		title: "Daily Operations",
 		items: [
+			{
+				title: "Dashboard",
+				href: "/dashboard",
+				icon: LayoutDashboard,
+			},
 			{
 				title: "Calendar",
 				href: "/calendar",
