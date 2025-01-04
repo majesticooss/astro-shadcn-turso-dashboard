@@ -24,7 +24,19 @@ export type Patient = {
 	status: "active" | "inactive";
 };
 
-export const columns: ColumnDef<Patient>[] = [
+const PatientActions = ({ patient }: PatientActionsProps) => {
+	return (
+		<Button
+			variant="outline"
+			size="sm"
+			onClick={() => (window.location.href = `/patients/${patient.id}`)}
+		>
+			View
+		</Button>
+	);
+};
+
+export const columns = (): ColumnDef<Patient>[] => [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -106,28 +118,7 @@ export const columns: ColumnDef<Patient>[] = [
 		id: "actions",
 		cell: ({ row }) => {
 			const patient = row.original;
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem
-							onClick={() => navigator.clipboard.writeText(patient.id)}
-						>
-							Copy patient ID
-						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>View details</DropdownMenuItem>
-						<DropdownMenuItem>Edit patient</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
+			return <PatientActions patient={patient} />;
 		},
 	},
 ];

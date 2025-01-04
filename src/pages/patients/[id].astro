@@ -1,0 +1,41 @@
+---
+import { PatientDetail } from "@/components/routes/patients/patient-detail";
+import { Button } from "@/components/ui/button";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { getPageData } from "@/lib/authUtils";
+
+const pageData = await getPageData(Astro);
+
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
+}
+
+const { id } = Astro.params;
+const title = `Patient Details - ${id}`;
+
+// In a real app, you would fetch the patient data here
+const patient = {
+	id,
+	name: "Loading...",
+	email: "loading...",
+	phone: "loading...",
+	dateOfBirth: "loading...",
+	lastVisit: null,
+	nextAppointment: null,
+	status: "active" as const,
+};
+---
+
+<AuthenticatedLayout {...pageData} title={title}>
+	<div class="container mx-auto py-10">
+		<div class="flex items-center justify-between mb-6">
+			<h1 class="text-2xl font-bold">Patient Details</h1>
+			<a href="/patients" class="inline-flex">
+				<Button variant="outline">Back to List</Button>
+			</a>
+		</div>
+		<div class="rounded-md border p-6 bg-white">
+			<PatientDetail patient={patient} client:load />
+		</div>
+	</div>
+</AuthenticatedLayout>
