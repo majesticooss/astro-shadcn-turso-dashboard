@@ -413,7 +413,7 @@ export default function ChatPage() {
 	return (
 		<Card className="flex h-full overflow-hidden">
 			{/* Left sidebar */}
-			<div className="w-80 border-r flex flex-col bg-white">
+			<div className="w-80 min-w-[320px] border-r flex flex-col bg-white">
 				<div className="p-4 border-b">
 					<div className="flex items-center justify-between mb-4">
 						<h1 className="text-xl font-semibold">Chats</h1>
@@ -430,56 +430,54 @@ export default function ChatPage() {
 					</div>
 				</div>
 				<ScrollArea className="flex-1">
-					<div className="px-4">
-						{filteredChats.map((chat) => (
-							<div
-								key={chat.id}
-								onClick={() => setSelectedChat(chat)}
-								className={`py-4 cursor-pointer hover:bg-gray-50 ${
-									selectedChat?.id === chat.id ? "bg-gray-50" : ""
-								}`}
-							>
-								<div className="flex items-center space-x-4">
-									<div className="relative">
-										<Avatar>
-											<AvatarImage src={chat.avatar} />
-											<AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
-										</Avatar>
-										{chat.isOnline && (
-											<span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
-										)}
+					{filteredChats.map((chat) => (
+						<div
+							key={chat.id}
+							onClick={() => setSelectedChat(chat)}
+							className={`py-4 cursor-pointer hover:bg-gray-50 ${
+								selectedChat?.id === chat.id ? "bg-gray-50" : ""
+							}`}
+						>
+							<div className="flex items-center gap-3 px-4">
+								<div className="relative shrink-0">
+									<Avatar>
+										<AvatarImage src={chat.avatar} />
+										<AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
+									</Avatar>
+									{chat.isOnline && (
+										<span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+									)}
+								</div>
+								<div className="flex-1 min-w-0 w-[calc(100%-48px)]">
+									<div className="flex justify-between items-start">
+										<p className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+											{chat.name}
+										</p>
+										<p className="text-xs text-gray-500 shrink-0">
+											{chat.timestamp}
+										</p>
 									</div>
-									<div className="flex-1 min-w-0">
-										<div className="flex justify-between">
-											<p className="text-sm font-medium text-gray-900 truncate">
-												{chat.name}
-											</p>
-											<p className="text-xs text-gray-500">{chat.timestamp}</p>
-										</div>
-										<div className="flex justify-between items-center gap-2">
-											<p className="text-sm text-gray-500 truncate flex items-center flex-1 min-w-0">
-												{getChannelIcon(chat.channel)}
-												<span className="ml-1 truncate">
-													{chat.lastMessage}
-												</span>
-											</p>
-											{chat.unreadCount && (
-												<span className="shrink-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-green-500 rounded-full">
-													{chat.unreadCount}
-												</span>
-											)}
-										</div>
+									<div className="flex justify-between items-center gap-2">
+										<p className="text-sm text-gray-500 truncate flex items-center flex-1 min-w-0 max-w-[160px]">
+											{getChannelIcon(chat.channel)}
+											<span className="ml-1 truncate">{chat.lastMessage}</span>
+										</p>
+										{chat.unreadCount && (
+											<span className="shrink-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-green-500 rounded-full">
+												{chat.unreadCount}
+											</span>
+										)}
 									</div>
 								</div>
 							</div>
-						))}
-					</div>
+						</div>
+					))}
 				</ScrollArea>
 			</div>
 
 			{/* Main chat area */}
 			{selectedChat ? (
-				<div className="flex-1 flex flex-col bg-white">
+				<div className="flex-1 min-w-0 flex flex-col bg-white">
 					<div className="p-4 border-b flex items-center justify-between">
 						<div className="flex items-center space-x-4">
 							<Avatar>
@@ -507,7 +505,7 @@ export default function ChatPage() {
 					</div>
 
 					<ScrollArea className="flex-1">
-						<div className="p-4">
+						<div className="p-4 max-w-[calc(100%-2rem)]">
 							{selectedChat.messages.map((message) => (
 								<div
 									key={message.id}
