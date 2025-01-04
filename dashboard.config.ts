@@ -58,9 +58,9 @@ export const siteConfig: SiteConfig = {
 };
 
 export const dashboardNavigation: NavItemWithSubItems[] = [
-	// Daily Operations
+	// Operations
 	{
-		title: "Daily Operations",
+		title: "Operations",
 		items: [
 			{
 				title: "Dashboard",
@@ -80,7 +80,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 					{ title: "Patient List", href: "/patients" },
 					{ title: "New Patient", href: "/patients/new" },
 					{ title: "Patient Records", href: "/patients/records" },
-					{ title: "Treatment Plans", href: "/patients/treatment-plans" },
 				],
 			},
 			{
@@ -88,10 +87,10 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 				href: "/communications",
 				icon: MessageSquare,
 				items: [
-					{ title: "SMS Reminders", href: "/communications/sms" },
-					{ title: "Email Templates", href: "/communications/email" },
+					{ title: "Conversations", href: "/communications/conversations" },
+					{ title: "Edit Templates", href: "/communications/templates" },
 					{ title: "Patient Portal", href: "/communications/portal" },
-					{ title: "Recall System", href: "/communications/recall" },
+					{ title: "Automations", href: "/communications/automations" },
 				],
 			},
 			{

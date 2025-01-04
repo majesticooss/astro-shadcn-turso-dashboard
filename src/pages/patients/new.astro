@@ -1,0 +1,35 @@
+---
+import { PatientDetail } from "@/components/routes/patients/patient-detail";
+import { Button } from "@/components/ui/button";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { getPageData } from "@/lib/authUtils";
+
+const pageData = await getPageData(Astro);
+
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
+}
+
+const title = "New Patient";
+---
+
+<AuthenticatedLayout {...pageData} title={title}>
+	<div class="py-10">
+		<div class="flex items-center justify-between mb-6">
+			<a href="/patients" class="inline-flex">
+				<Button variant="outline">Back to List</Button>
+			</a>
+		</div>
+		<div class="rounded-md border p-6 bg-white">
+			<PatientDetail
+				isEditing={true}
+				client:load
+				onSubmit={(data) => {
+					// In a real app, you would save the data to your backend here
+					console.log("Saving patient:", data);
+					window.location.href = "/patients";
+				}}
+			/>
+		</div>
+	</div>
+</AuthenticatedLayout>

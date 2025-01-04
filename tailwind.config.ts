@@ -94,12 +94,9 @@ const config: Config = {
 						opacity: '0',
 						transform: 'translateY(10px)'
 					},
-					'80%': {
-						opacity: '0.7'
-					},
 					'100%': {
 						opacity: '1',
-						transform: 'translateY(0px)'
+						transform: 'translateY(0)'
 					}
 				},
 				'fade-down': {
@@ -157,7 +154,7 @@ const config: Config = {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-up': 'fade-up 0.5s',
+				'fade-up': 'fade-up 0.3s ease-out forwards',
 				'fade-down': 'fade-down 0.5s',
 				'fade-in': 'fade-in 0.4s',
 				'fade-out': 'fade-out 0.4s'
