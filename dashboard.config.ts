@@ -77,7 +77,7 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 				href: "/patients",
 				icon: Users,
 				items: [
-					{ title: "Patient List", href: "/patients/list" },
+					{ title: "Patient List", href: "/patients" },
 					{ title: "New Patient", href: "/patients/new" },
 					{ title: "Patient Records", href: "/patients/records" },
 					{ title: "Treatment Plans", href: "/patients/treatment-plans" },
