@@ -3,7 +3,6 @@
 import { PlusCircle, Search } from "lucide-react";
 import { useState } from "react";
 
-import { DataTable } from "@/components/routes/automations/automations-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/components/ui/link";
@@ -14,8 +13,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { DataTable } from "./automations-table";
 
-// Mock data for automations
+// Use the same mock data from before
 const automations = [
 	{
 		id: 1,
@@ -74,8 +74,8 @@ export function Automations() {
 	});
 
 	return (
-		<div className="w-full">
-			<div className="my-4 flex items-center gap-4">
+		<div className="w-full space-y-4">
+			<div className="flex items-center gap-4">
 				<div className="relative flex-1 max-w-sm">
 					<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 					<Input
@@ -96,7 +96,7 @@ export function Automations() {
 						<SelectItem value="draft">Draft</SelectItem>
 					</SelectContent>
 				</Select>
-				<Link className="ml-auto" href="/automations/new">
+				<Link href="/automations/new" className="ml-auto">
 					<Button>
 						<PlusCircle className="mr-2 h-4 w-4" /> New Automation
 					</Button>

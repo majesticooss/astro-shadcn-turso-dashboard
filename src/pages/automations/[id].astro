@@ -1,0 +1,79 @@
+---
+import AutomationBuilder from "@/components/routes/automations/automation-detail";
+import { Button } from "@/components/ui/button";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { getPageData } from "@/lib/authUtils";
+
+const pageData = await getPageData(Astro);
+
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
+}
+
+const { id } = Astro.params;
+const title = "Appointment Reminder Flow";
+
+// Mock automation data with initial nodes
+const automation = {
+	id,
+	name: title,
+	description: "Sends reminders to patients before their appointments",
+	trigger: "24h before appointment",
+	status: "active",
+	actions: ["Send SMS", "Send Email"],
+	nodes: [
+		{
+			id: "trigger-1",
+			type: "custom",
+			position: { x: 250, y: 100 },
+			data: {
+				label: "Appointment Trigger",
+				type: {
+					id: "trigger",
+					name: "Appointment Trigger",
+					description: "Triggers when an appointment is scheduled",
+					icon: "Calendar",
+				},
+				properties: {},
+			},
+		},
+		{
+			id: "condition-1",
+			type: "custom",
+			position: { x: 250, y: 250 },
+			data: {
+				label: "Check Contact Preference",
+				type: {
+					id: "condition",
+					name: "Condition",
+					description: "Checks patient contact preferences",
+					icon: "GitBranch",
+				},
+				properties: {},
+			},
+		},
+	],
+	edges: [
+		{
+			id: "e1-2",
+			source: "trigger-1",
+			target: "condition-1",
+			type: "smoothstep",
+		},
+	],
+};
+---
+
+<AuthenticatedLayout {...pageData} title={title}>
+	<div class="flex flex-col h-full">
+		<div class="flex items-center justify-between pb-3">
+			<a href="/automations" class="inline-flex">
+				<Button variant="outline">Back to List</Button>
+			</a>
+			<Button>Save Changes</Button>
+		</div>
+		<div class="flex-1 h-full min-h-0">
+			<AutomationBuilder initialData={automation} client:load />
+		</div>
+	</div>
+</AuthenticatedLayout>

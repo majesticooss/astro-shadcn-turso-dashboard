@@ -1,13 +1,16 @@
 "use client";
 
+import { Link } from "@/components/ui/link";
 import {
 	type ColumnDef,
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
+import { Pencil } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -66,6 +69,22 @@ const columns: ColumnDef<Automation>[] = [
 	{
 		accessorKey: "lastModified",
 		header: "Last Modified",
+	},
+	{
+		id: "actions",
+		cell: ({ row }) => {
+			return (
+				<Link href={`/automations/${row.original.id}`}>
+					<Button
+						variant="ghost"
+						size="icon"
+						className="h-8 w-8 hover:bg-muted hover:text-muted-foreground"
+					>
+						<Pencil className="h-4 w-4" />
+					</Button>
+				</Link>
+			);
+		},
 	},
 ];
 

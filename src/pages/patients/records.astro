@@ -13,7 +13,5 @@ const title = "Patient Records";
 ---
 
 <AuthenticatedLayout {...pageData} title={title}>
-	<div class="py-10">
-		<RecordsList client:load />
-	</div>
+	<RecordsList client:load />
 </AuthenticatedLayout>

@@ -20,7 +20,7 @@ export function Dashboard() {
 	});
 
 	return (
-		<div className="flex-1 space-y-4 md:px-8 md:py-2">
+		<div className="flex-1 space-y-4">
 			<Tabs defaultValue="overview" className="space-y-4">
 				<div className="flex justify-between items-center">
 					<TabsList>
