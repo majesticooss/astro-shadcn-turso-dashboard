@@ -3,13 +3,16 @@ import {
 	Bell,
 	Building2,
 	Calendar,
+	Calendar1,
 	CalendarCheck,
+	CalendarClock,
 	Clipboard,
 	ClipboardList,
 	Clock,
 	CreditCard,
 	Currency,
 	File,
+	FileSpreadsheet,
 	FileText,
 	Files,
 	Home,
@@ -18,6 +21,7 @@ import {
 	List,
 	Mail,
 	Megaphone,
+	MessageCircle,
 	MessageSquare,
 	Phone,
 	Settings,
@@ -25,8 +29,11 @@ import {
 	Star,
 	Stethoscope,
 	Store,
+	Target,
 	UserCog,
+	UserPlus,
 	Users,
+	Users2,
 	XSquareIcon,
 	Zap
 } from "lucide-react";
@@ -98,6 +105,28 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 					{ title: "Appointments", href: "/reception/appointments" },
 					{ title: "Quick Notes", href: "/reception/notes" },
 					{ title: "Tasks", href: "/reception/tasks" },
+				],
+			},
+		],
+	},
+
+	// Lead Management
+	{
+		title: "Lead Management",
+		items: [
+			{
+				title: "Today",
+				href: "/leads",
+				icon: CalendarClock,
+			},
+			{
+				title: "Leads",
+				icon: Users2,
+				items: [
+					{ title: "Lead List", href: "/leads/list" },
+					{ title: "Lead Pipeline", href: "/leads/pipeline" },
+					{ title: "Enquiries", href: "/leads/enquiries" },
+					{ title: "Referrals", href: "/leads/referrals" },
 				],
 			},
 		],

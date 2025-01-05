@@ -1,0 +1,17 @@
+---
+import { TodaysTasks } from "@/components/routes/leads/todays-tasks";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { getPageData } from "@/lib/authUtils";
+
+const pageData = await getPageData(Astro);
+
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
+}
+
+const title = "Today's Tasks";
+---
+
+<AuthenticatedLayout {...pageData} title={title}>
+	<TodaysTasks client:load />
+</AuthenticatedLayout>
