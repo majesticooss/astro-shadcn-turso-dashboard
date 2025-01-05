@@ -110,10 +110,16 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 				return;
 			}
 
-			const position = reactFlowInstance.screenToFlowPosition({
-				x: event.clientX - reactFlowBounds.left,
-				y: event.clientY - reactFlowBounds.top,
-			});
+			const {
+				x: viewportX,
+				y: viewportY,
+				zoom,
+			} = reactFlowInstance.getViewport();
+
+			const position = {
+				x: (event.clientX - reactFlowBounds.left - viewportX - 100) / zoom,
+				y: (event.clientY - reactFlowBounds.top - viewportY - 40) / zoom,
+			};
 
 			const newNode: Node = {
 				id: `${nodeData.id}-${nodes.length + 1}`,
