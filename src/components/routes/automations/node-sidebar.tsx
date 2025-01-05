@@ -7,10 +7,17 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import * as Icons from "lucide-react";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { nodeTypes } from "./node-types";
 import type { NodeTypeData } from "./node-types";
+
+const nodeTypeIcons = {
+	trigger: "Zap",
+	action: "Play",
+	condition: "GitBranch",
+} as const;
 
 interface NodeSidebarProps {
 	onDragStart: (
@@ -74,19 +81,29 @@ export function NodeSidebar({ onDragStart }: NodeSidebarProps) {
 			</div>
 			<ScrollArea className="flex-1 py-4">
 				<div className="px-4 space-y-2 h-0">
-					{filteredNodes.map((node) => (
-						<div
-							key={node.id}
-							className="p-3 rounded-md bg-background border shadow-sm cursor-move hover:border-primary/50 transition-colors"
-							draggable
-							onDragStart={(e) => handleDragStart(e, node)}
-						>
-							<div className="text-sm font-medium">{node.name}</div>
-							<div className="text-xs text-muted-foreground mt-1">
-								{node.description}
+					{filteredNodes.map((node) => {
+						const IconComponent = Icons[node.icon as keyof typeof Icons];
+						const TypeIconComponent = Icons[nodeTypeIcons[node.category]];
+						return (
+							<div
+								key={node.id}
+								className="p-3 rounded-md bg-background border shadow-sm cursor-move hover:border-primary/50 transition-colors"
+								draggable
+								onDragStart={(e) => handleDragStart(e, node)}
+							>
+								<div className="flex items-center gap-2">
+									{IconComponent && (
+										<IconComponent className="w-4 h-4 text-primary" />
+									)}
+									<span className="font-medium text-sm">{node.name}</span>
+									<TypeIconComponent className="w-3 h-3 ml-auto text-muted-foreground" />
+								</div>
+								<div className="text-xs text-muted-foreground mt-1">
+									{node.description}
+								</div>
 							</div>
-						</div>
-					))}
+						);
+					})}
 				</div>
 			</ScrollArea>
 		</div>

@@ -6,7 +6,6 @@ import {
 	Controls,
 	type Edge,
 	type Node,
-	Panel,
 	ReactFlow,
 	type ReactFlowInstance,
 	ReactFlowProvider,
@@ -21,7 +20,7 @@ import "@xyflow/react/dist/style.css";
 import "@/styles/react-flow.css";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { X, ZoomIn, ZoomOut } from "lucide-react";
+import { X } from "lucide-react";
 import CustomNode from "./custom-node";
 import { NodePropertiesDialog } from "./node-properties-dialog";
 import { NodeSidebar } from "./node-sidebar";
@@ -266,17 +265,6 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 				>
 					<Background gap={16} size={1} className="dark:bg-background" />
 					<Controls />
-					<Panel position="top-right" className="space-x-2">
-						<Button size="sm" variant="outline" onClick={() => zoomIn()}>
-							<ZoomIn className="h-4 w-4" />
-						</Button>
-						<Button size="sm" variant="outline" onClick={() => zoomOut()}>
-							<ZoomOut className="h-4 w-4" />
-						</Button>
-						<Button size="sm" variant="outline" onClick={() => fitView()}>
-							Fit View
-						</Button>
-					</Panel>
 				</ReactFlow>
 			</div>
 			<NodePropertiesDialog

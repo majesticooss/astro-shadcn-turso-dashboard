@@ -11,8 +11,16 @@ interface CustomNodeData {
 	properties: Record<string, any>;
 }
 
+const nodeTypeIcons = {
+	trigger: "Zap",
+	action: "Play",
+	condition: "GitBranch",
+} as const;
+
 const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 	const IconComponent = Icons[data.type.icon as keyof typeof Icons];
+	const TypeIconComponent =
+		Icons[nodeTypeIcons[data.type.category] as keyof typeof Icons];
 	const hasProperties = Object.keys(data.properties || {}).length > 0;
 
 	return (
@@ -26,11 +34,10 @@ const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 				<div className="flex items-center gap-2">
 					{IconComponent && <IconComponent className="w-4 h-4 text-primary" />}
 					<span className="font-medium text-sm">{data.type.name}</span>
-					{hasProperties && (
-						<Badge variant="secondary" className="ml-auto">
-							Configured
-						</Badge>
+					{TypeIconComponent && (
+						<TypeIconComponent className="w-3 h-3 ml-auto text-muted-foreground" />
 					)}
+					{hasProperties && <Badge variant="secondary">Configured</Badge>}
 				</div>
 				<p className="text-xs text-muted-foreground mt-1">
 					{data.type.description}
