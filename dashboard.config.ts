@@ -27,7 +27,8 @@ import {
 	Store,
 	UserCog,
 	Users,
-	XSquareIcon
+	XSquareIcon,
+	Zap
 } from "lucide-react";
 import { LiaToothSolid } from "react-icons/lia";
 
@@ -74,7 +75,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Patients",
-				href: "/patients",
 				icon: Users,
 				items: [
 					{ title: "Patient List", href: "/patients" },
@@ -84,18 +84,14 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Communications",
-				href: "/communications",
 				icon: MessageSquare,
 				items: [
 					{ title: "Conversations", href: "/communications/conversations" },
 					{ title: "Edit Templates", href: "/communications/templates" },
-					{ title: "Patient Portal", href: "/communications/portal" },
-					{ title: "Automations", href: "/communications/automations" },
 				],
 			},
 			{
 				title: "Reception",
-				href: "/reception",
 				icon: Phone,
 				items: [
 					{ title: "Check-in", href: "/reception/check-in" },
@@ -113,7 +109,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		items: [
 			{
 				title: "Patient Care",
-				href: "/clinical/patient-care",
 				icon: Stethoscope,
 				items: [
 					{ title: "Clinical Notes", href: "/clinical/notes" },
@@ -124,7 +119,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Imaging",
-				href: "/clinical/imaging",
 				icon: FileText,
 				items: [
 					{ title: "X-Rays", href: "/clinical/imaging/x-rays" },
@@ -135,7 +129,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Charts",
-				href: "/clinical/charts",
 				icon: ClipboardList,
 				items: [
 					{ title: "Perio Charts", href: "/clinical/charts/perio" },
@@ -152,7 +145,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		items: [
 			{
 				title: "Billing",
-				href: "/financial/billing",
 				icon: CreditCard,
 				items: [
 					{ title: "Invoices", href: "/financial/billing/invoices" },
@@ -163,7 +155,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Reports",
-				href: "/financial/reports",
 				icon: BarChart,
 				items: [
 					{ title: "Financial Summary", href: "/financial/reports/summary" },
@@ -174,7 +165,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Estimates",
-				href: "/financial/estimates",
 				icon: Files,
 				items: [
 					{ title: "Create Estimate", href: "/financial/estimates/new" },
@@ -191,7 +181,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		items: [
 			{
 				title: "Staff",
-				href: "/practice/staff",
 				icon: UserCog,
 				items: [
 					{ title: "Staff Directory", href: "/practice/staff/directory" },
@@ -202,7 +191,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Inventory",
-				href: "/practice/inventory",
 				icon: Store,
 				items: [
 					{ title: "Stock Control", href: "/practice/inventory/stock" },
@@ -212,8 +200,12 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 				],
 			},
 			{
+				title: "Automations",
+				icon: Zap,
+				href: "/automations",
+			},
+			{
 				title: "Settings",
-				href: "/practice/settings",
 				icon: Settings,
 				items: [
 					{ title: "Practice Details", href: "/practice/settings/details" },
@@ -224,7 +216,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			},
 			{
 				title: "Analytics",
-				href: "/practice/analytics",
 				icon: LineChart,
 				items: [
 					{ title: "Practice Overview", href: "/practice/analytics/overview" },

@@ -1,0 +1,17 @@
+---
+import { Templates as TemplatesComponent } from "@/components/routes/communications/templates";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { getPageData } from "@/lib/authUtils";
+
+const pageData = await getPageData(Astro);
+
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
+}
+
+const title = "Conversations";
+---
+
+<AuthenticatedLayout {...pageData} title={title}>
+	<TemplatesComponent client:load />
+</AuthenticatedLayout>
