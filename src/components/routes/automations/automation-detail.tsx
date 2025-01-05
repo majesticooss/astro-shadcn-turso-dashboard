@@ -5,11 +5,15 @@ import {
 	type Connection,
 	Controls,
 	type Edge,
+	type EdgeChange,
+	type EdgeProps,
 	type Node,
+	type NodeTypes,
 	ReactFlow,
 	type ReactFlowInstance,
 	ReactFlowProvider,
 	addEdge,
+	applyEdgeChanges,
 	useEdgesState,
 	useNodesState,
 	useReactFlow,
@@ -40,46 +44,15 @@ interface AutomationBuilderProps {
 }
 
 // Generate node types mapping automatically from node-types.ts
-const nodeTypes = Object.fromEntries(
-	availableNodeTypes.map((type) => [type.id, CustomNode]),
-) as Record<string, typeof CustomNode>;
+const nodeTypes: NodeTypes = Object.fromEntries(
+	availableNodeTypes.map((type) => [type.id, memo(CustomNode)]),
+) as NodeTypes;
 
-// Create a memoized edge component
-const CustomEdge = memo(({ data, path, id }: any) => (
-	<div className="relative">
-		{data?.showDelete && (
-			<div
-				className="absolute cursor-pointer"
-				style={{
-					left: "50%",
-					top: "50%",
-					transform: "translate(-50%, -50%)",
-				}}
-				onClick={() => data?.onDelete?.(id)}
-			>
-				<div className="bg-background dark:bg-muted rounded-full p-1 shadow-md">
-					<X className="h-4 w-4 text-red-500" />
-				</div>
-			</div>
-		)}
-		<path
-			className={`react-flow__edge-path ${
-				data?.showDelete
-					? "stroke-red-300 dark:stroke-red-400"
-					: "dark:stroke-muted-foreground"
-			}`}
-			d={path}
-			strokeWidth={2}
-		/>
-	</div>
-));
-
-CustomEdge.displayName = "CustomEdge";
-
-// Define edge types using the memoized component
-const edgeTypes = {
-	default: CustomEdge,
-};
+// Add this interface for node data
+interface NodeData {
+	label: string;
+	properties: Record<string, unknown>;
+}
 
 const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 	const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -121,59 +94,10 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		};
 	}, [reactFlowInstance]);
 
-	const onConnect = useCallback(
-		(params: Edge | Connection) => {
-			const sourceNode = nodes.find((n) => n.id === params.source);
-			const targetNode = nodes.find((n) => n.id === params.target);
-
-			const sourceType = availableNodeTypes.find(
-				(t) => t.id === sourceNode?.type,
-			);
-			const targetType = availableNodeTypes.find(
-				(t) => t.id === targetNode?.type,
-			);
-
-			// Validate that both nodes exist and have valid types
-			if (!sourceType || !targetType) {
-				return;
-			}
-
-			// Prevent connecting to triggers
-			if (targetType.category === "trigger") {
-				return;
-			}
-
-			// Prevent connecting to self
-			if (params.source === params.target) {
-				return;
-			}
-
-			// Prevent more than two connections from conditions
-			if (sourceType.category === "condition") {
-				const existingConnections = edges.filter(
-					(e) => e.source === params.source,
-				);
-				if (existingConnections.length >= 2) {
-					return;
-				}
-			}
-
-			// Add the edge with animation and styling
-			setEdges((eds) =>
-				addEdge(
-					{
-						...params,
-						type: "default",
-						animated: true,
-						style: { strokeWidth: 2 },
-						data: { showDelete: false },
-					},
-					eds,
-				),
-			);
-		},
-		[nodes, edges, setEdges],
-	);
+	const onConnect = useCallback((params: Connection) => {
+		if (!params.source || !params.target) return;
+		setEdges((eds) => addEdge(params, eds));
+	}, [setEdges]);
 
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
 		event.preventDefault();
@@ -236,22 +160,35 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		setSelectedNode(node);
 	}, []);
 
-	const onEdgeClick = useCallback(
-		(event: React.MouseEvent, edge: Edge) => {
-			setSelectedEdge(edge);
-			setEdges((eds) =>
-				eds.map((e) => ({
-					...e,
-					data: {
-						...e.data,
-						showDelete: e.id === edge.id,
-						onDelete: deleteEdge,
-					},
-				})),
-			);
+	const handleEdgesChange = useCallback(
+		(changes: EdgeChange[]) => {
+			setEdges((eds) => applyEdgeChanges(changes, eds));
 		},
 		[setEdges],
 	);
+
+	const deleteEdge = useCallback(
+		(edgeId: string) => {
+			setEdges((edges) =>
+				edges
+					.map((e) => ({
+						...e,
+						data: {
+							...e.data,
+							showDelete: false,
+						},
+						selected: false,
+					}))
+					.filter((e) => e.id !== edgeId),
+			);
+			setSelectedEdge(null);
+		},
+		[setEdges],
+	);
+
+	const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge) => {
+		setSelectedEdge(edge);
+	}, []);
 
 	const deleteNode = useCallback(() => {
 		if (selectedNode) {
@@ -266,7 +203,7 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 	}, [selectedNode, setNodes, setEdges]);
 
 	const updateNodeData = useCallback(
-		(newData: any) => {
+		(newData: NodeData) => {
 			setNodes((nodes) =>
 				nodes.map((node) =>
 					node.id === selectedNode?.id ? { ...node, data: newData } : node,
@@ -276,13 +213,19 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		[selectedNode, setNodes],
 	);
 
-	const deleteEdge = useCallback(
-		(edgeId: string) => {
-			setEdges((edges) => edges.filter((e) => e.id !== edgeId));
-			setSelectedEdge(null);
-		},
-		[setEdges],
-	);
+	const onPaneClick = useCallback(() => {
+		setSelectedEdge(null);
+		setEdges((eds) =>
+			eds.map((e) => ({
+				...e,
+				data: {
+					...e.data,
+					showDelete: false,
+				},
+				selected: false,
+			})),
+		);
+	}, [setEdges]);
 
 	return (
 		<div className="h-full flex rounded-lg border bg-background dark:bg-background overflow-hidden">
@@ -292,17 +235,17 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 					nodes={nodes}
 					edges={edges}
 					onNodesChange={onNodesChange}
-					onEdgesChange={onEdgesChange}
+					onEdgesChange={handleEdgesChange}
 					onConnect={onConnect}
 					onInit={setReactFlowInstance}
 					onDrop={onDrop}
 					onDragOver={onDragOver}
 					onNodeClick={onNodeClick}
 					onEdgeClick={onEdgeClick}
+					onPaneClick={onPaneClick}
 					nodeTypes={nodeTypes}
-					edgeTypes={edgeTypes}
 					defaultEdgeOptions={{
-						type: "default",
+						type: 'smoothstep',
 						animated: true,
 					}}
 					fitView

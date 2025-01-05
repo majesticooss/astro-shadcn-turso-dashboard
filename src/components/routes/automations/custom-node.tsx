@@ -8,7 +8,9 @@ import { nodeTypes } from "./node-types";
 
 interface CustomNodeData {
 	label: string;
-	properties: Record<string, any>;
+	properties: Record<string, unknown>;
+	nodeId?: string;
+	type?: string;
 }
 
 const nodeTypeIcons = {
@@ -17,7 +19,7 @@ const nodeTypeIcons = {
 	condition: "GitBranch",
 } as const;
 
-const CustomNode = ({ data, type }: NodeProps<CustomNodeData>) => {
+const CustomNode = ({ data, type, id }: NodeProps<CustomNodeData>) => {
 	const nodeType = nodeTypes.find((n) => n.id === type);
 	if (!nodeType) return null;
 
@@ -36,10 +38,13 @@ const CustomNode = ({ data, type }: NodeProps<CustomNodeData>) => {
 					.join(", ")
 			: null;
 
+	const isCondition = nodeType.category === "condition";
+
 	return (
 		<Card className="w-[200px] shadow-lg border-none dark:bg-background">
 			{nodeType.category !== "trigger" && (
 				<Handle
+					id={`${id}-target`}
 					type="target"
 					position={Position.Top}
 					className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
@@ -65,11 +70,31 @@ const CustomNode = ({ data, type }: NodeProps<CustomNodeData>) => {
 					</div>
 				)}
 			</div>
-			<Handle
-				type="source"
-				position={Position.Bottom}
-				className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
-			/>
+			{isCondition ? (
+				<>
+					<Handle
+						id={`${id}-source-true`}
+						type="source"
+						position={Position.Bottom}
+						className="!bg-green-500/50 w-3 h-3 !border-2 border-background dark:border-background"
+						style={{ left: "30%" }}
+					/>
+					<Handle
+						id={`${id}-source-false`}
+						type="source"
+						position={Position.Bottom}
+						className="!bg-red-500/50 w-3 h-3 !border-2 border-background dark:border-background"
+						style={{ left: "70%" }}
+					/>
+				</>
+			) : (
+				<Handle
+					id={`${id}-source`}
+					type="source"
+					position={Position.Bottom}
+					className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
+				/>
+			)}
 		</Card>
 	);
 };
