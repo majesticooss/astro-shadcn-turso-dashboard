@@ -15,7 +15,7 @@ import {
 	useReactFlow,
 } from "@xyflow/react";
 import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import "@xyflow/react/dist/style.css";
 import "@/styles/react-flow.css";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ import CustomNode from "./custom-node";
 import { NodePropertiesDialog } from "./node-properties-dialog";
 import { NodeSidebar } from "./node-sidebar";
 import type { NodeTypeData } from "./node-types";
+import { nodeTypes as availableNodeTypes } from "./node-types";
 
 interface AutomationData {
 	id: string | number;
@@ -37,6 +38,48 @@ interface AutomationData {
 interface AutomationBuilderProps {
 	initialData?: AutomationData;
 }
+
+// Generate node types mapping automatically from node-types.ts
+const nodeTypes = Object.fromEntries(
+	availableNodeTypes.map((type) => [type.id, CustomNode]),
+) as Record<string, typeof CustomNode>;
+
+// Create a memoized edge component
+const CustomEdge = memo(({ data, path, id }: any) => (
+	<div className="relative">
+		{data?.showDelete && (
+			<div
+				className="absolute cursor-pointer"
+				style={{
+					left: "50%",
+					top: "50%",
+					transform: "translate(-50%, -50%)",
+				}}
+				onClick={() => data?.onDelete?.(id)}
+			>
+				<div className="bg-background dark:bg-muted rounded-full p-1 shadow-md">
+					<X className="h-4 w-4 text-red-500" />
+				</div>
+			</div>
+		)}
+		<path
+			className={`react-flow__edge-path ${
+				data?.showDelete
+					? "stroke-red-300 dark:stroke-red-400"
+					: "dark:stroke-muted-foreground"
+			}`}
+			d={path}
+			strokeWidth={2}
+		/>
+	</div>
+));
+
+CustomEdge.displayName = "CustomEdge";
+
+// Define edge types using the memoized component
+const edgeTypes = {
+	default: CustomEdge,
+};
 
 const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 	const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -83,15 +126,53 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 			const sourceNode = nodes.find((n) => n.id === params.source);
 			const targetNode = nodes.find((n) => n.id === params.target);
 
-			if (targetNode?.data.type.category === "trigger") {
+			const sourceType = availableNodeTypes.find(
+				(t) => t.id === sourceNode?.type,
+			);
+			const targetType = availableNodeTypes.find(
+				(t) => t.id === targetNode?.type,
+			);
+
+			// Validate that both nodes exist and have valid types
+			if (!sourceType || !targetType) {
 				return;
 			}
 
+			// Prevent connecting to triggers
+			if (targetType.category === "trigger") {
+				return;
+			}
+
+			// Prevent connecting to self
+			if (params.source === params.target) {
+				return;
+			}
+
+			// Prevent more than two connections from conditions
+			if (sourceType.category === "condition") {
+				const existingConnections = edges.filter(
+					(e) => e.source === params.source,
+				);
+				if (existingConnections.length >= 2) {
+					return;
+				}
+			}
+
+			// Add the edge with animation and styling
 			setEdges((eds) =>
-				addEdge({ ...params, data: { showDelete: false } }, eds),
+				addEdge(
+					{
+						...params,
+						type: "default",
+						animated: true,
+						style: { strokeWidth: 2 },
+						data: { showDelete: false },
+					},
+					eds,
+				),
 			);
 		},
-		[nodes, setEdges],
+		[nodes, edges, setEdges],
 	);
 
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -130,11 +211,10 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 
 			const newNode: Node = {
 				id: `${nodeData.id}-${nodes.length + 1}`,
-				type: "custom",
+				type: nodeData.id,
 				position,
 				data: {
 					label: nodeData.name,
-					type: nodeData,
 					properties: {},
 				},
 			};
@@ -165,28 +245,12 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 					data: {
 						...e.data,
 						showDelete: e.id === edge.id,
+						onDelete: deleteEdge,
 					},
 				})),
 			);
 		},
 		[setEdges],
-	);
-
-	const onEdgeUpdate = useCallback(
-		(oldEdge: Edge, newConnection: Connection) => {
-			const targetNode = nodes.find((n) => n.id === newConnection.target);
-
-			if (targetNode?.data.type.category === "trigger") {
-				return;
-			}
-
-			setEdges((els) =>
-				els.map((el) =>
-					el.id === oldEdge.id ? { ...el, ...newConnection } : el,
-				),
-			);
-		},
-		[nodes, setEdges],
 	);
 
 	const deleteNode = useCallback(() => {
@@ -220,37 +284,6 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		[setEdges],
 	);
 
-	const edgeTypes = {
-		default: (props: any) => (
-			<div className="relative">
-				{props.data?.showDelete && (
-					<div
-						className="absolute cursor-pointer"
-						style={{
-							left: "50%",
-							top: "50%",
-							transform: "translate(-50%, -50%)",
-						}}
-						onClick={() => deleteEdge(props.id)}
-					>
-						<div className="bg-background dark:bg-muted rounded-full p-1 shadow-md">
-							<X className="h-4 w-4 text-red-500" />
-						</div>
-					</div>
-				)}
-				<path
-					className={`react-flow__edge-path ${
-						props.data?.showDelete
-							? "stroke-red-300 dark:stroke-red-400"
-							: "dark:stroke-muted-foreground"
-					}`}
-					d={props.path}
-					strokeWidth={2}
-				/>
-			</div>
-		),
-	};
-
 	return (
 		<div className="h-full flex rounded-lg border bg-background dark:bg-background overflow-hidden">
 			<NodeSidebar onDragStart={onDragStart} />
@@ -266,11 +299,10 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 					onDragOver={onDragOver}
 					onNodeClick={onNodeClick}
 					onEdgeClick={onEdgeClick}
-					onEdgeUpdate={onEdgeUpdate}
-					nodeTypes={{ custom: CustomNode }}
+					nodeTypes={nodeTypes}
 					edgeTypes={edgeTypes}
 					defaultEdgeOptions={{
-						type: "smoothstep",
+						type: "default",
 						animated: true,
 					}}
 					fitView

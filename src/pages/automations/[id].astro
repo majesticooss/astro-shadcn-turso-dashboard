@@ -13,52 +13,79 @@ if (pageData.redirect) {
 const { id } = Astro.params;
 const title = "Appointment Reminder Flow";
 
-// Mock automation data with initial nodes
-const automation = {
-	id,
-	name: title,
-	description: "Sends reminders to patients before their appointments",
-	trigger: "24h before appointment",
-	status: "active",
-	actions: ["Send SMS", "Send Email"],
+const mockData = {
+	id: "1",
+	name: "Appointment Reminder Flow",
+	description: "Automated reminder sequence for upcoming appointments",
 	nodes: [
 		{
-			id: "trigger-1",
-			type: "custom",
-			position: { x: 250, y: 100 },
+			id: "appointment-trigger-1",
+			type: "appointment-trigger",
+			position: { x: 100, y: 100 },
 			data: {
-				label: "Appointment Trigger",
-				type: {
-					id: "trigger",
-					name: "Appointment Trigger",
-					description: "Triggers when an appointment is scheduled",
-					icon: "Calendar",
+				label: "New Appointment",
+				properties: {
+					beforeTime: "24 hours",
+					appointmentType: "All",
 				},
-				properties: {},
 			},
 		},
 		{
-			id: "condition-1",
-			type: "custom",
-			position: { x: 250, y: 250 },
+			id: "check-preference-1",
+			type: "contact-preference",
+			position: { x: 100, y: 250 },
 			data: {
-				label: "Check Contact Preference",
-				type: {
-					id: "condition",
-					name: "Condition",
-					description: "Checks patient contact preferences",
-					icon: "GitBranch",
+				label: "Check Contact Method",
+				properties: {
+					channel: "SMS",
 				},
-				properties: {},
+			},
+		},
+		{
+			id: "send-sms-1",
+			type: "send-sms",
+			position: { x: 0, y: 400 },
+			data: {
+				label: "Send SMS Reminder",
+				properties: {
+					template: "Quick Reminder",
+					message: "Reminder: You have an appointment tomorrow",
+				},
+			},
+		},
+		{
+			id: "send-email-1",
+			type: "send-email",
+			position: { x: 200, y: 400 },
+			data: {
+				label: "Send Email Reminder",
+				properties: {
+					template: "Appointment Reminder",
+					subject: "Your Upcoming Appointment",
+					content:
+						"This is a reminder about your appointment tomorrow.",
+				},
 			},
 		},
 	],
 	edges: [
 		{
 			id: "e1-2",
-			source: "trigger-1",
-			target: "condition-1",
-			type: "smoothstep",
+			source: "appointment-trigger-1",
+			target: "check-preference-1",
+			type: "default",
+		},
+		{
+			id: "e2-3",
+			source: "check-preference-1",
+			target: "send-sms-1",
+			type: "default",
+		},
+		{
+			id: "e2-4",
+			source: "check-preference-1",
+			target: "send-email-1",
+			type: "default",
 		},
 	],
 };
@@ -73,7 +100,7 @@ const automation = {
 			<Button>Save Changes</Button>
 		</div>
 		<div class="flex-1 h-full min-h-0">
-			<AutomationBuilder initialData={automation} client:load />
+			<AutomationBuilder initialData={mockData} client:load />
 		</div>
 	</div>
 </AuthenticatedLayout>

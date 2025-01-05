@@ -18,6 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { Node } from "@xyflow/react";
 import { Trash } from "lucide-react";
+import { nodeTypes } from "./node-types";
 
 interface NodePropertiesDialogProps {
 	isOpen: boolean;
@@ -36,12 +37,15 @@ export function NodePropertiesDialog({
 }: NodePropertiesDialogProps) {
 	if (!node) return null;
 
+	const nodeType = nodeTypes.find((n) => n.id === node.type);
+	if (!nodeType) return null;
+
 	const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const properties: Record<string, any> = {};
 
-		node.data.type.properties?.forEach((prop) => {
+		nodeType.properties?.forEach((prop) => {
 			const value = formData.get(prop.name);
 			if (value) {
 				properties[prop.name] = value;
@@ -50,7 +54,6 @@ export function NodePropertiesDialog({
 
 		onUpdate({
 			...node.data,
-			label: formData.get("label"),
 			properties,
 		});
 		onClose();
@@ -60,31 +63,23 @@ export function NodePropertiesDialog({
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="max-w-2xl">
 				<DialogHeader>
-					<DialogTitle>{node.data.type.name}</DialogTitle>
+					<DialogTitle>{nodeType.name}</DialogTitle>
 					<p className="text-sm text-muted-foreground mt-1.5">
-						{node.data.type.description}
+						{nodeType.description}
 					</p>
 				</DialogHeader>
 				<form onSubmit={handleUpdate} className="space-y-4">
-					<div>
-						<Label htmlFor="label">Label</Label>
-						<Input
-							id="label"
-							name="label"
-							defaultValue={node.data.label}
-							className="mt-2"
-						/>
-					</div>
-					{node.data.type.properties?.map((property) => (
+					{nodeType.properties?.map((property) => (
 						<div key={property.name}>
 							<Label htmlFor={property.name}>{property.label}</Label>
 							{property.type === "select" ? (
 								<Select
 									name={property.name}
 									defaultValue={node.data.properties?.[property.name] || ""}
+									required={property.required}
 								>
 									<SelectTrigger className="mt-2">
-										<SelectValue placeholder="Select..." />
+										<SelectValue placeholder={property.placeholder} />
 									</SelectTrigger>
 									<SelectContent>
 										{property.options?.map((option) => (
