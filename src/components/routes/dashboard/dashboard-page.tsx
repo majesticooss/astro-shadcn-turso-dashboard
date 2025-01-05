@@ -35,10 +35,6 @@ export function Dashboard() {
 							onDateChange={setDate}
 							className="hidden md:flex"
 						/>
-						<Button>
-							<Download className="mr-2 h-4 w-4" />
-							Download
-						</Button>
 					</div>
 				</div>
 				<TabsContent value="overview" className="space-y-4">

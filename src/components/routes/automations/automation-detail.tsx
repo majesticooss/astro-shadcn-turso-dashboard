@@ -79,11 +79,19 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 	}, [reactFlowInstance]);
 
 	const onConnect = useCallback(
-		(params: Edge | Connection) =>
+		(params: Edge | Connection) => {
+			const sourceNode = nodes.find((n) => n.id === params.source);
+			const targetNode = nodes.find((n) => n.id === params.target);
+
+			if (targetNode?.data.type.category === "trigger") {
+				return;
+			}
+
 			setEdges((eds) =>
 				addEdge({ ...params, data: { showDelete: false } }, eds),
-			),
-		[setEdges],
+			);
+		},
+		[nodes, setEdges],
 	);
 
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -166,13 +174,19 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 
 	const onEdgeUpdate = useCallback(
 		(oldEdge: Edge, newConnection: Connection) => {
+			const targetNode = nodes.find((n) => n.id === newConnection.target);
+
+			if (targetNode?.data.type.category === "trigger") {
+				return;
+			}
+
 			setEdges((els) =>
 				els.map((el) =>
 					el.id === oldEdge.id ? { ...el, ...newConnection } : el,
 				),
 			);
 		},
-		[setEdges],
+		[nodes, setEdges],
 	);
 
 	const deleteNode = useCallback(() => {

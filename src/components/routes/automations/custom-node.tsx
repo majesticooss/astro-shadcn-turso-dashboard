@@ -34,11 +34,13 @@ const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 
 	return (
 		<Card className="w-[200px] shadow-lg border-none dark:bg-background">
-			<Handle
-				type="target"
-				position={Position.Top}
-				className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
-			/>
+			{data.type.category !== "trigger" && (
+				<Handle
+					type="target"
+					position={Position.Top}
+					className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
+				/>
+			)}
 			<div className="p-3">
 				<div className="flex items-center gap-2">
 					{IconComponent && <IconComponent className="w-4 h-4 text-primary" />}
