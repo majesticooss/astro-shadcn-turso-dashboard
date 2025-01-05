@@ -48,9 +48,9 @@ interface Chat {
 const mockChats: Chat[] = [
 	{
 		id: "1",
-		name: "Dr. Smith (Dentist)",
+		name: "James Wilson",
 		avatar: "https://i.pravatar.cc/150?img=1",
-		lastMessage: "Your appointment is confirmed...",
+		lastMessage: "Thank you for confirming...",
 		timestamp: "10 minutes",
 		unreadCount: 2,
 		isOnline: true,
@@ -59,7 +59,7 @@ const mockChats: Chat[] = [
 			{
 				id: "1",
 				content:
-					"Hello! Your dental check-up appointment is confirmed for tomorrow at 2 PM. Please arrive 10 minutes early to complete any necessary paperwork.",
+					"Hi James, your dental check-up appointment is confirmed for tomorrow at 2 PM. Please arrive 10 minutes early to complete any necessary paperwork.",
 				timestamp: "10:30 AM",
 				type: "text",
 				sender: "user",
@@ -94,16 +94,16 @@ const mockChats: Chat[] = [
 	},
 	{
 		id: "2",
-		name: "Dental Hygienist",
+		name: "Sofia Martinez",
 		avatar: "https://i.pravatar.cc/150?img=2",
-		lastMessage: "Here are some tips for better...",
+		lastMessage: "Thanks for the cleaning tips...",
 		timestamp: "1 hour",
 		channel: "sms",
 		messages: [
 			{
 				id: "1",
 				content:
-					"Hi there! Just following up on your recent cleaning. How are your gums feeling?",
+					"Hi Sofia! Just following up on your recent cleaning. How are your gums feeling?",
 				timestamp: "2:00 PM",
 				type: "text",
 				sender: "user",
@@ -134,9 +134,9 @@ const mockChats: Chat[] = [
 	},
 	{
 		id: "3",
-		name: "Orthodontist Office",
+		name: "Arun Patel",
 		avatar: "https://i.pravatar.cc/150?img=3",
-		lastMessage: "Your braces adjustment is due...",
+		lastMessage: "Can I reschedule my appointment...",
 		timestamp: "Yesterday",
 		unreadCount: 1,
 		channel: "whatsapp",
@@ -144,7 +144,7 @@ const mockChats: Chat[] = [
 			{
 				id: "1",
 				content:
-					"Hello! This is a reminder that your braces adjustment appointment is scheduled for next week, Tuesday at 3 PM.",
+					"Hello Arun, your braces adjustment appointment is scheduled for next week, Tuesday at 3 PM. We'll be checking your wire progression and possibly changing your elastic colors.",
 				timestamp: "11:00 AM",
 				type: "text",
 				sender: "user",
@@ -176,16 +176,16 @@ const mockChats: Chat[] = [
 	},
 	{
 		id: "4",
-		name: "Dental Insurance",
+		name: "Emma Thompson",
 		avatar: "https://i.pravatar.cc/150?img=4",
-		lastMessage: "Your claim for recent root...",
+		lastMessage: "Question about my insurance claim...",
 		timestamp: "2 days",
 		channel: "email",
 		messages: [
 			{
 				id: "1",
 				content:
-					"Dear valued member, your claim for the recent root canal procedure has been processed. Please find attached the detailed breakdown of coverage.",
+					"Hi Emma, your claim #DC-2024-0342 for the recent root canal procedure has been processed. Please find attached the detailed breakdown of coverage.",
 				timestamp: "9:00 AM",
 				type: "text",
 				sender: "user",
@@ -221,16 +221,16 @@ const mockChats: Chat[] = [
 	},
 	{
 		id: "5",
-		name: "Emergency Dental Care",
+		name: "David Chen",
 		avatar: "https://i.pravatar.cc/150?img=5",
-		lastMessage: "If you're still experiencing...",
+		lastMessage: "Follow-up on emergency visit...",
 		timestamp: "1 week",
 		channel: "sms",
 		messages: [
 			{
 				id: "1",
 				content:
-					"Hello, this is Dr. Johnson from Emergency Dental Care. How is your tooth feeling after the emergency procedure last week?",
+					"Hello David, how is your tooth feeling after the emergency procedure last week?",
 				timestamp: "3:00 PM",
 				type: "text",
 				sender: "user",
@@ -238,7 +238,7 @@ const mockChats: Chat[] = [
 			{
 				id: "2",
 				content:
-					"Hi Dr. Johnson, the pain has subsided significantly. Thank you for your follow-up.",
+					"Much better now, the pain has subsided significantly. Thank you for checking in.",
 				timestamp: "3:30 PM",
 				type: "text",
 				sender: "other",
