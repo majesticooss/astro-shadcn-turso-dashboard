@@ -1,0 +1,40 @@
+.dark {
+  --bg-color: hsl(var(--background));
+  --text-color: hsl(var(--foreground));
+  --node-border-color: hsl(var(--border));
+  --node-color: hsl(var(--background));
+  --edge-color: hsl(var(--muted-foreground));
+  --connection-color: hsl(var(--muted-foreground));
+}
+
+.react-flow__edge-path {
+  stroke: var(--edge-color);
+}
+
+.react-flow__connection-path {
+  stroke: var(--connection-color);
+}
+
+.react-flow__controls {
+  background: var(--bg-color);
+  border-color: var(--node-border-color);
+}
+
+.react-flow__controls-button {
+  background: var(--bg-color);
+  border-color: var(--node-border-color);
+  color: var(--text-color);
+}
+
+.react-flow__controls-button:hover {
+  background: hsl(var(--accent));
+}
+
+.react-flow__minimap {
+  background-color: var(--bg-color);
+}
+
+.react-flow__attribution {
+  background: transparent;
+  color: var(--text-color);
+}

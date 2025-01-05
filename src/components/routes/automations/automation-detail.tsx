@@ -18,6 +18,7 @@ import {
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "@xyflow/react/dist/style.css";
+import "@/styles/react-flow.css";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { X, ZoomIn, ZoomOut } from "lucide-react";
@@ -255,10 +256,10 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 					}}
 					fitView
 					proOptions={{ hideAttribution: true }}
-					className="bg-background dark:bg-background"
+					className="bg-background dark:bg-background [&_.react-flow__viewport]:dark:bg-background [&_.react-flow__handle]:dark:bg-background [&_.react-flow__edge]:dark:stroke-muted-foreground [&_.react-flow__connection-path]:dark:stroke-muted-foreground [&_.react-flow__controls]:bg-background [&_.react-flow__controls]:dark:bg-muted [&_.react-flow__controls-button]:border-border [&_.react-flow__controls-button]:dark:border-border [&_.react-flow__controls-button]:hover:bg-accent [&_.react-flow__controls-button]:dark:hover:bg-accent [&_.react-flow__controls-button]:text-foreground [&_.react-flow__controls-button]:dark:text-foreground [&_.react-flow__minimap]:bg-background [&_.react-flow__minimap]:dark:bg-muted [&_.react-flow__attribution]:text-muted-foreground [&_.react-flow__attribution]:dark:text-muted-foreground"
 				>
 					<Background gap={16} size={1} className="dark:bg-background" />
-					<Controls className="!bg-background dark:!bg-muted" />
+					<Controls />
 					<Panel position="top-right" className="space-x-2">
 						<Button size="sm" variant="outline" onClick={() => zoomIn()}>
 							<ZoomIn className="h-4 w-4" />
