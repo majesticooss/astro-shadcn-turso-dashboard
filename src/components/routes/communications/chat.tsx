@@ -274,6 +274,7 @@ export default function ChatPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	const filteredChats = chats.filter(
 		(chat) =>
@@ -402,6 +403,14 @@ export default function ChatPage() {
 			reader.readAsDataURL(file);
 		}
 	};
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+	};
+
+	useEffect(() => {
+		setTimeout(scrollToBottom, 100);
+	}, [selectedChat?.messages]);
 
 	useEffect(() => {
 		if (textareaRef.current) {
@@ -571,6 +580,7 @@ export default function ChatPage() {
 									</span>
 								</div>
 							))}
+							<div ref={messagesEndRef} />
 						</div>
 					</ScrollArea>
 
