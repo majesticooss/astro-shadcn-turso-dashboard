@@ -43,15 +43,18 @@ const columns: ColumnDef<Automation>[] = [
 	{
 		accessorKey: "actions",
 		header: "Actions",
-		cell: ({ row }) => (
-			<div className="flex gap-1">
-				{row.original.actions.map((action) => (
-					<Badge key={`${row.original.id}-${action}`} variant="secondary">
-						{action}
-					</Badge>
-				))}
-			</div>
-		),
+		cell: ({ row }) => {
+			const actions = row.getValue("actions") as string[];
+			return (
+				<div className="flex gap-1">
+					{actions.map((action, index) => (
+						<Badge key={`${row.id}_action_${index}`} variant="secondary">
+							{action}
+						</Badge>
+					))}
+				</div>
+			);
+		},
 	},
 	{
 		accessorKey: "status",
@@ -71,7 +74,7 @@ const columns: ColumnDef<Automation>[] = [
 		header: "Last Modified",
 	},
 	{
-		id: "actions",
+		id: "edit",
 		cell: ({ row }) => {
 			return (
 				<Link href={`/automations/${row.original.id}`}>
