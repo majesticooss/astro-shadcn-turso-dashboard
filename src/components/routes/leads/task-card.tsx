@@ -41,6 +41,7 @@ interface TaskCardProps {
 export default function TaskCard({ task }: TaskCardProps) {
 	const [expanded, setExpanded] = useState(false);
 	const [showLeadDetails, setShowLeadDetails] = useState(false);
+	const [outcome, setOutcome] = useState<string | null>(null);
 
 	const getIcon = (type: "call" | "lead" | "followup") => {
 		switch (type) {
@@ -59,6 +60,16 @@ export default function TaskCard({ task }: TaskCardProps) {
 		} else {
 			setExpanded(!expanded);
 		}
+	};
+
+	const handleLeadUpdate = (field: string, value: any) => {
+		console.log(`Updating ${field} to:`, value);
+		if (field === "contactOutcome") {
+			setOutcome(value);
+			// Here you would typically make an API call to update the lead status
+			// For now we'll just store it in local state
+		}
+		// ... handle other field updates ...
 	};
 
 	return (
@@ -102,10 +113,40 @@ export default function TaskCard({ task }: TaskCardProps) {
 					</div>
 				)}
 
+				{outcome && (
+					<div className="mt-2 text-sm text-gray-500">
+						<p>
+							<strong>Last outcome:</strong>{" "}
+							{typeof outcome === "string" ? (
+								outcome
+							) : (
+								<span className="block ml-4">
+									<span className="block">{outcome.outcome}</span>
+									<span className="block text-xs">
+										Reason: {outcome.reason}
+									</span>
+									<span className="block text-xs">
+										Via: {outcome.contactMethod}
+									</span>
+									{outcome.notes && (
+										<span className="block text-xs">
+											Notes: {outcome.notes}
+										</span>
+									)}
+								</span>
+							)}
+						</p>
+					</div>
+				)}
+
 				{showLeadDetails && task.leadDetails && (
 					<LeadDetails
-						lead={task.leadDetails}
+						lead={{
+							...task.leadDetails,
+							lastOutcome: outcome || undefined,
+						}}
 						onClose={() => setShowLeadDetails(false)}
+						onUpdate={handleLeadUpdate}
 					/>
 				)}
 			</CardContent>

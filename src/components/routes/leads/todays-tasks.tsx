@@ -48,6 +48,7 @@ const mockTasks = {
 				},
 				isExistingPatient: false,
 				paymentPlan: "Unspecified",
+				lastOutcome: "They're thinking about it",
 			},
 		},
 		{
@@ -67,7 +68,8 @@ const mockTasks = {
 					method: "Email",
 				},
 				isExistingPatient: true,
-				paymentPlan: "Standard",
+				paymentPlan: "NHS",
+				lastOutcome: "I booked a new appointment",
 			},
 		},
 	],
