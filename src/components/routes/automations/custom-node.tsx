@@ -16,11 +16,11 @@ const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 	const hasProperties = Object.keys(data.properties || {}).length > 0;
 
 	return (
-		<Card className="w-[200px] bg-white shadow-lg border-none">
+		<Card className="w-[200px] shadow-lg border-none dark:bg-background">
 			<Handle
 				type="target"
 				position={Position.Top}
-				className="!bg-primary/50 w-3 h-3 !border-2 border-background"
+				className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
 			/>
 			<div className="p-3">
 				<div className="flex items-center gap-2">
@@ -39,7 +39,7 @@ const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 			<Handle
 				type="source"
 				position={Position.Bottom}
-				className="!bg-primary/50 w-3 h-3 !border-2 border-background"
+				className="!bg-primary/50 w-3 h-3 !border-2 border-background dark:border-background"
 			/>
 		</Card>
 	);

@@ -213,13 +213,17 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 						}}
 						onClick={() => deleteEdge(props.id)}
 					>
-						<div className="bg-white rounded-full p-1 shadow-md">
+						<div className="bg-background dark:bg-muted rounded-full p-1 shadow-md">
 							<X className="h-4 w-4 text-red-500" />
 						</div>
 					</div>
 				)}
 				<path
-					className={`react-flow__edge-path ${props.data?.showDelete ? "stroke-red-300" : ""}`}
+					className={`react-flow__edge-path ${
+						props.data?.showDelete
+							? "stroke-red-300 dark:stroke-red-400"
+							: "dark:stroke-muted-foreground"
+					}`}
 					d={props.path}
 					strokeWidth={2}
 				/>
@@ -228,7 +232,7 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 	};
 
 	return (
-		<div className="h-full flex rounded-lg border bg-background overflow-hidden">
+		<div className="h-full flex rounded-lg border bg-background dark:bg-background overflow-hidden">
 			<NodeSidebar onDragStart={onDragStart} />
 			<div className="flex-grow relative border-l" ref={reactFlowWrapper}>
 				<ReactFlow
@@ -251,10 +255,10 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 					}}
 					fitView
 					proOptions={{ hideAttribution: true }}
-					className="bg-background"
+					className="bg-background dark:bg-background"
 				>
-					<Background gap={16} size={1} />
-					<Controls className="!bg-background" />
+					<Background gap={16} size={1} className="dark:bg-background" />
+					<Controls className="!bg-background dark:!bg-muted" />
 					<Panel position="top-right" className="space-x-2">
 						<Button size="sm" variant="outline" onClick={() => zoomIn()}>
 							<ZoomIn className="h-4 w-4" />
