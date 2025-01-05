@@ -23,6 +23,15 @@ const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 		Icons[nodeTypeIcons[data.type.category] as keyof typeof Icons];
 	const hasProperties = Object.keys(data.properties || {}).length > 0;
 
+	// Get a summary of configured properties
+	const propertySummary = hasProperties
+		? data.type.properties
+				?.filter((prop) => data.properties[prop.name])
+				?.map((prop) => `${prop.label}: ${data.properties[prop.name]}`)
+				?.slice(0, 2)
+				?.join(", ")
+		: null;
+
 	return (
 		<Card className="w-[200px] shadow-lg border-none dark:bg-background">
 			<Handle
@@ -37,11 +46,18 @@ const CustomNode = ({ data }: NodeProps<CustomNodeData>) => {
 					{TypeIconComponent && (
 						<TypeIconComponent className="w-3 h-3 ml-auto text-muted-foreground" />
 					)}
-					{hasProperties && <Badge variant="secondary">Configured</Badge>}
 				</div>
 				<p className="text-xs text-muted-foreground mt-1">
 					{data.type.description}
 				</p>
+				{hasProperties && (
+					<div className="mt-2">
+						<Badge variant="secondary" className="text-[10px] rounded-lg">
+							{propertySummary}
+							{data.type.properties!.length > 2 && "..."}
+						</Badge>
+					</div>
+				)}
 			</div>
 			<Handle
 				type="source"
