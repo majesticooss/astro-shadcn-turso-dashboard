@@ -1,9 +1,9 @@
 ---
 import AutomationBuilder from "@/components/routes/automations/automation-detail";
+import { AutomationHeader } from "@/components/routes/automations/automation-header";
 import { Button } from "@/components/ui/button";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { getPageData } from "@/lib/authUtils";
-import { AutomationHeader } from "@/components/routes/automations/automation-header";
 
 const pageData = await getPageData(Astro);
 
@@ -101,11 +101,14 @@ const mockData = {
 		<AutomationHeader
 			initialIsActive={mockData.isActive}
 			onToggleActive={(isActive) => {
-				console.log('Automation', isActive ? 'activated' : 'deactivated');
+				console.log(
+					"Automation",
+					isActive ? "activated" : "deactivated",
+				);
 				// Here you would typically update the backend
 			}}
 			onSave={() => {
-				console.log('Saving automation...');
+				console.log("Saving automation...");
 				// Here you would typically save the automation
 			}}
 			client:load
