@@ -3,6 +3,7 @@ import AutomationBuilder from "@/components/routes/automations/automation-detail
 import { Button } from "@/components/ui/button";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { getPageData } from "@/lib/authUtils";
+import { AutomationHeader } from "@/components/routes/automations/automation-header";
 
 const pageData = await getPageData(Astro);
 
@@ -17,6 +18,7 @@ const mockData = {
 	id: "1",
 	name: "Appointment Reminder Flow",
 	description: "Automated reminder sequence for upcoming appointments",
+	isActive: false,
 	nodes: [
 		{
 			id: "appointment-trigger-1",
@@ -73,19 +75,22 @@ const mockData = {
 			id: "e1-2",
 			source: "appointment-trigger-1",
 			target: "check-preference-1",
-			type: "default",
+			type: "smoothstep",
+			animated: true,
 		},
 		{
 			id: "e2-3",
 			source: "check-preference-1",
 			target: "send-sms-1",
-			type: "default",
+			type: "smoothstep",
+			animated: true,
 		},
 		{
 			id: "e2-4",
 			source: "check-preference-1",
 			target: "send-email-1",
-			type: "default",
+			type: "smoothstep",
+			animated: true,
 		},
 	],
 };
@@ -93,12 +98,18 @@ const mockData = {
 
 <AuthenticatedLayout {...pageData} title={title}>
 	<div class="flex flex-col h-full">
-		<div class="flex items-center justify-between pb-3">
-			<a href="/automations" class="inline-flex">
-				<Button variant="outline">Back to List</Button>
-			</a>
-			<Button>Save Changes</Button>
-		</div>
+		<AutomationHeader
+			initialIsActive={mockData.isActive}
+			onToggleActive={(isActive) => {
+				console.log('Automation', isActive ? 'activated' : 'deactivated');
+				// Here you would typically update the backend
+			}}
+			onSave={() => {
+				console.log('Saving automation...');
+				// Here you would typically save the automation
+			}}
+			client:load
+		/>
 		<div class="flex-1 h-full min-h-0">
 			<AutomationBuilder initialData={mockData} client:load />
 		</div>

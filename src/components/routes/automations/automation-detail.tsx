@@ -37,6 +37,7 @@ interface AutomationData {
 	description: string;
 	nodes: Node[];
 	edges: Edge[];
+	isActive?: boolean;
 }
 
 interface AutomationBuilderProps {
@@ -94,10 +95,17 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		};
 	}, [reactFlowInstance]);
 
-	const onConnect = useCallback((params: Connection) => {
-		if (!params.source || !params.target) return;
-		setEdges((eds) => addEdge(params, eds));
-	}, [setEdges]);
+	const onConnect = useCallback(
+		(params: Connection) => {
+			if (!params.source || !params.target) return;
+			const edge: Edge = {
+				...params,
+				type: "smoothstep",
+			};
+			setEdges((eds) => addEdge(edge, eds));
+		},
+		[setEdges],
+	);
 
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
 		event.preventDefault();
@@ -245,7 +253,7 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 					onPaneClick={onPaneClick}
 					nodeTypes={nodeTypes}
 					defaultEdgeOptions={{
-						type: 'smoothstep',
+						type: "smoothstep",
 						animated: true,
 					}}
 					fitView
