@@ -411,7 +411,7 @@ export default function ChatPage() {
 	}, [message]);
 
 	return (
-		<Card className="flex h-full overflow-hidden">
+		<Card className="flex h-[calc(100vh-6rem)] overflow-hidden">
 			{/* Left sidebar */}
 			<div className="w-80 min-w-[320px] border-r flex flex-col bg-white">
 				<div className="p-4 border-b">
@@ -478,7 +478,7 @@ export default function ChatPage() {
 			{/* Main chat area */}
 			{selectedChat ? (
 				<div className="flex-1 min-w-0 flex flex-col bg-white">
-					<div className="p-4 border-b flex items-center justify-between">
+					<div className="shrink-0 p-4 border-b flex items-center justify-between">
 						<div className="flex items-center space-x-4">
 							<Avatar>
 								<AvatarImage src={selectedChat.avatar} />
@@ -505,17 +505,19 @@ export default function ChatPage() {
 					</div>
 
 					<ScrollArea className="flex-1">
-						<div className="p-4 max-w-[calc(100%-2rem)]">
+						<div className="flex flex-col p-4 gap-4">
 							{selectedChat.messages.map((message) => (
 								<div
 									key={message.id}
-									className={`mb-4 ${message.sender === "user" ? "ml-auto" : ""} animate-fade-up`}
+									className={`flex flex-col ${
+										message.sender === "user" ? "items-end" : "items-start"
+									}`}
 								>
 									{message.type === "text" && (
 										<div
 											className={`max-w-md p-3 rounded-lg ${
 												message.sender === "user"
-													? "bg-blue-500 text-white ml-auto"
+													? "bg-blue-500 text-white"
 													: "bg-gray-100"
 											}`}
 										>
@@ -564,15 +566,15 @@ export default function ChatPage() {
 											</Button>
 										</div>
 									)}
-									<div className="text-xs text-gray-500 mt-1 text-right">
+									<span className="text-xs text-gray-500 mt-1">
 										{message.timestamp}
-									</div>
+									</span>
 								</div>
 							))}
 						</div>
 					</ScrollArea>
 
-					<div className="p-4 border-t">
+					<div className="shrink-0 p-4 border-t">
 						<form
 							onSubmit={(e) => {
 								e.preventDefault();
