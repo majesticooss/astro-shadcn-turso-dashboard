@@ -116,6 +116,7 @@ export function CalendarScheduler({
 				}}
 				initialDate={initialDate}
 				viewDidMount={() => calendarRef.current?.getApi().gotoDate(new Date())}
+				schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
 			/>
 		</div>
 	);

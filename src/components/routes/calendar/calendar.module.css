@@ -31,6 +31,20 @@
     --fc-highlight-color: rgba(188, 232, 241, 0.3);
     --fc-today-bg-color: rgba(255, 255, 255, 0.15);
     --fc-now-indicator-color: red;
+
+    height: calc(100vh - 8.5rem); /* Subtract header height */
+    display: flex;
+    flex-direction: column;
+}
+
+.calendarWrapper :global(.fc) {
+    flex: 1;
+    height: 100%;
+}
+
+/* Ensure the calendar fills the wrapper */
+.calendarWrapper :global(.fc-view-harness) {
+    height: 100% !important;
 }
 
 .calendarWrapper :global(.fc),
