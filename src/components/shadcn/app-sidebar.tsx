@@ -9,25 +9,30 @@ import {
 	SidebarContent,
 	SidebarFooter,
 	SidebarHeader,
+	SidebarProvider,
 	SidebarRail,
 } from "@/components/ui/sidebar";
 import { dashboardNavigation } from "config";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
-		<Sidebar collapsible="icon" {...props}>
-			<SidebarHeader>
-				<OrganizationSwitcher currentOrganization={props.currentOrganization} />
-			</SidebarHeader>
-			<SidebarContent>
-				<ScrollArea className="h-full">
-					<NavMain items={dashboardNavigation} />
-				</ScrollArea>
-			</SidebarContent>
-			<SidebarFooter>
-				<NavUser user={props.currentUser} />
-			</SidebarFooter>
-			<SidebarRail />
-		</Sidebar>
+		<SidebarProvider>
+			<Sidebar collapsible="icon" {...props}>
+				<SidebarHeader>
+					<OrganizationSwitcher
+						currentOrganization={props.currentOrganization}
+					/>
+				</SidebarHeader>
+				<SidebarContent>
+					<ScrollArea className="h-full">
+						<NavMain items={dashboardNavigation} />
+					</ScrollArea>
+				</SidebarContent>
+				<SidebarFooter>
+					<NavUser user={props.currentUser} />
+				</SidebarFooter>
+				<SidebarRail />
+			</Sidebar>
+		</SidebarProvider>
 	);
 }

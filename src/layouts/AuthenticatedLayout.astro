@@ -1,7 +1,11 @@
 ---
 import { DashboardHeader } from "@/components/core/header";
 import { AppSidebar } from "@/components/shadcn/app-sidebar";
-import { SidebarInset } from "@/components/ui/sidebar";
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Props {
@@ -15,15 +19,19 @@ const { currentPath, currentOrganization, user, title } = Astro.props;
 ---
 
 <BaseLayout>
-	<div class="contents" transition:persist>
-		<AppSidebar
-			currentOrganization={currentOrganization}
-			currentUser={user}
-			client:load
-		/>
+	<div
+		class="group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar"
+	>
+		<div class="contents" transition:persist>
+			<AppSidebar
+				currentOrganization={currentOrganization}
+				currentUser={user}
+				client:load
+			/>
+		</div>
+		<SidebarInset>
+			<DashboardHeader title={title} client:load />
+			<div class="flex flex-1 flex-col gap-4 p-4 pt-0"><slot /></div>
+		</SidebarInset>
 	</div>
-	<SidebarInset client:load>
-		<DashboardHeader title={title} client:load />
-		<div class="flex flex-1 flex-col gap-4 p-4 pt-0"><slot /></div>
-	</SidebarInset>
 </BaseLayout>
