@@ -1,6 +1,7 @@
 import {
 	BarChart,
 	Bell,
+	BookOpen,
 	Building2,
 	Calendar,
 	Calendar1,
@@ -15,6 +16,7 @@ import {
 	FileSpreadsheet,
 	FileText,
 	Files,
+	GraduationCap,
 	Home,
 	LayoutDashboard,
 	LineChart,
@@ -256,12 +258,12 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		items: [
 			{
 				title: "Platform",
-				icon: UserCog,
+				icon: GraduationCap,
 				href: "/academy/platform",
 			},
 			{
 				title: "Inserta",
-				icon: Store,
+				icon: LiaToothSolid,
 				href: "/academy/inserta",
 			},
 		],

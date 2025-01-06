@@ -50,6 +50,8 @@ declare global {
 		};
 	}
 
+	type NavIcon = LucideIcon | IconType;
+
 	interface NavItem {
 		title: string;
 		href?: string;
@@ -57,7 +59,7 @@ declare global {
 		disabled?: boolean;
 		external?: boolean;
 		authorizeOnly?: UserRole;
-		icon?: LucideIcon;
+		icon?: NavIcon;
 	}
 
 	interface MainNavItem extends NavItem { }
