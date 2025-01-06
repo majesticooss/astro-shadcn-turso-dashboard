@@ -64,6 +64,7 @@
 		"@xyflow/react": "12.3.6",
 		"astro": "5.1.1",
 		"better-auth": "1.1.8",
+		"canvas-confetti": "1.9.3",
 		"cmdk": "1.0.4",
 		"date-fns": "4.1.0",
 		"lucide-react": "0.469.0",
