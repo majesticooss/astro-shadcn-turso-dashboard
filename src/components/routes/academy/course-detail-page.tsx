@@ -6,6 +6,7 @@ import Link from "@/components/ui/link";
 import {
 	ChevronLeftIcon,
 	ChevronRightIcon,
+	HomeIcon,
 	StarFilledIcon,
 } from "@radix-ui/react-icons";
 import confetti from "canvas-confetti";
@@ -281,7 +282,10 @@ const categoryLabels: Record<string, string> = {
 function Congratulations({
 	onNext,
 	relatedCourses,
-}: { onNext: () => void; relatedCourses: Course[] }) {
+}: {
+	onNext: () => void;
+	relatedCourses: Course[];
+}) {
 	useEffect(() => {
 		const end = Date.now() + 3 * 1000;
 		const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
@@ -317,23 +321,25 @@ function Congratulations({
 			<h2 className="text-3xl font-bold">🎉 Congratulations!</h2>
 			<p className="text-xl">You've completed the course!</p>
 
-			<div className="space-y-4 mt-8">
-				<h3 className="text-xl font-semibold">Recommended Next Steps</h3>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{relatedCourses.map((course) => (
-						<Link key={course.id} href={`/courses/${course.id}`}>
-							<div className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-								<h4 className="font-semibold">{course.title}</h4>
-								<p className="text-sm text-gray-600">{course.description}</p>
-							</div>
-						</Link>
-					))}
+			{relatedCourses.length > 0 && (
+				<div className="space-y-4 mt-8">
+					<h3 className="text-xl font-semibold">Recommended Next Steps</h3>
+					<div className="flex justify-center items-center gap-4 max-w-2xl mx-auto">
+						{relatedCourses.map((course) => (
+							<Link key={course.id} href={`/courses/${course.id}`}>
+								<div className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+									<h4 className="font-semibold">{course.title}</h4>
+									<p className="text-sm text-gray-600">{course.description}</p>
+								</div>
+							</Link>
+						))}
+					</div>
 				</div>
-			</div>
+			)}
 
-			<Button onClick={onNext} className="mt-6">
-				Back to Courses
-			</Button>
+			<Link href="/courses/inserta">
+				<Button className="mt-6">Back to Courses</Button>
+			</Link>
 		</div>
 	);
 }
@@ -367,6 +373,11 @@ export default function CourseDetailPage({ courseId }: { courseId: string }) {
 	const [currentStep, setCurrentStep] = useState(0);
 	const course = coursesData[courseId];
 
+	const handleStepChange = (newStep: number) => {
+		setCurrentStep(newStep);
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
 	if (!course) {
 		return (
 			<div className="container mx-auto px-4 py-8">
@@ -385,15 +396,28 @@ export default function CourseDetailPage({ courseId }: { courseId: string }) {
 		<div className="container mx-auto px-4 py-8">
 			<div className="max-w-4xl mx-auto">
 				<div className="flex items-center justify-between mb-8">
-					<Link
-						href="/courses/inserta"
-						className="flex items-center text-gray-600 hover:text-gray-900"
-					>
-						<ChevronLeftIcon className="mr-1 h-4 w-4" />
-						Back to Courses
-					</Link>
+					<div className="flex items-center gap-2 text-sm text-gray-600">
+						<Link
+							href="/courses/inserta"
+							className="flex items-center hover:text-gray-900"
+						>
+							<HomeIcon className="h-4 w-4 mr-1" />
+							Courses
+						</Link>
+						<ChevronRightIcon className="h-4 w-4" />
+						<span className="font-medium text-gray-900">{course.title}</span>
+						{!isLastStep && (
+							<>
+								<ChevronRightIcon className="h-4 w-4" />
+								<span className="text-gray-900">
+									Step {currentStep + 1} of {course.steps.length}
+								</span>
+							</>
+						)}
+					</div>
 					<ProgressIndicator
 						progress={Math.round((currentStep / course.steps.length) * 100)}
+						className="h-4 w-20"
 					/>
 				</div>
 
@@ -435,13 +459,13 @@ export default function CourseDetailPage({ courseId }: { courseId: string }) {
 							<div className="flex justify-between pt-6">
 								<Button
 									variant="outline"
-									onClick={() => setCurrentStep((s) => Math.max(0, s - 1))}
+									onClick={() => handleStepChange(Math.max(0, currentStep - 1))}
 									disabled={currentStep === 0}
 								>
 									<ChevronLeftIcon className="mr-2 h-4 w-4" />
 									Previous
 								</Button>
-								<Button onClick={() => setCurrentStep((s) => s + 1)}>
+								<Button onClick={() => handleStepChange(currentStep + 1)}>
 									{currentStep === course.steps.length - 1
 										? "Complete Course"
 										: "Next"}
