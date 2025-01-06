@@ -6,7 +6,9 @@ import Link from "@/components/ui/link";
 import {
 	ChevronLeftIcon,
 	ChevronRightIcon,
+	FileTextIcon,
 	HomeIcon,
+	LinkedInLogoIcon,
 	StarFilledIcon,
 } from "@radix-ui/react-icons";
 import confetti from "canvas-confetti";
@@ -279,12 +281,28 @@ const categoryLabels: Record<string, string> = {
 	"soft-tissue": "Soft Tissue",
 };
 
+const certificateAnimation = {
+	"@keyframes float": {
+		"0%, 100%": { transform: "translateY(0)" },
+		"50%": { transform: "translateY(-10px)" },
+	},
+	animation: "float 3s ease-in-out infinite",
+};
+
+// Add this function to generate a certificate URL (mock for now)
+const generateCertificateUrl = (course: Course) => {
+	// This would typically call your backend to generate a PDF
+	return `#generate-certificate-${course.id}`;
+};
+
 function Congratulations({
 	onNext,
 	relatedCourses,
+	course,
 }: {
 	onNext: () => void;
 	relatedCourses: Course[];
+	course: Course;
 }) {
 	useEffect(() => {
 		const end = Date.now() + 3 * 1000;
@@ -316,10 +334,64 @@ function Congratulations({
 		frame();
 	}, []);
 
+	const handleShareToLinkedIn = () => {
+		// LinkedIn sharing URL
+		const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(
+			course.title,
+		)}&organizationName=Inserta&issueYear=${new Date().getFullYear()}&issueMonth=${
+			new Date().getMonth() + 1
+		}`;
+		window.open(linkedInUrl, "_blank");
+	};
+
+	const handleDownloadCertificate = () => {
+		// In a real app, this would download a PDF certificate
+		const certificateUrl = generateCertificateUrl(course);
+		window.open(certificateUrl, "_blank");
+	};
+
 	return (
 		<div className="text-center space-y-6 py-12">
-			<h2 className="text-3xl font-bold">🎉 Congratulations!</h2>
-			<p className="text-xl">You've completed the course!</p>
+			<div className="flex flex-col items-center gap-6">
+				<div
+					className="w-32 h-32 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden"
+					style={certificateAnimation as any}
+				>
+					<div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent rotate-45" />
+					<FileTextIcon className="w-16 h-16 text-emerald-600" />
+				</div>
+				<div>
+					<h2 className="text-3xl font-bold mb-2">🎉 Congratulations!</h2>
+					<p className="text-xl text-gray-600">
+						You've earned your certificate in
+					</p>
+					<p className="text-2xl font-semibold text-emerald-600 mt-1">
+						{course.title}
+					</p>
+				</div>
+			</div>
+
+			<div className="flex justify-center gap-4 mt-8">
+				<Button
+					variant="outline"
+					onClick={handleShareToLinkedIn}
+					className="flex items-center gap-2 hover:bg-[#0077b5]/10"
+				>
+					<LinkedInLogoIcon className="w-5 h-5 text-[#0077b5]" />
+					Add to LinkedIn
+				</Button>
+				<Button
+					variant="outline"
+					onClick={handleDownloadCertificate}
+					className="flex items-center gap-2"
+				>
+					<FileTextIcon className="w-5 h-5" />
+					Download Certificate
+				</Button>
+				<Link href="/courses/inserta">
+					<Button>Back to Courses</Button>
+				</Link>
+			</div>
 
 			{relatedCourses.length > 0 && (
 				<div className="space-y-4 mt-8">
@@ -336,10 +408,6 @@ function Congratulations({
 					</div>
 				</div>
 			)}
-
-			<Link href="/courses/inserta">
-				<Button className="mt-6">Back to Courses</Button>
-			</Link>
 		</div>
 	);
 }
@@ -425,6 +493,7 @@ export default function CourseDetailPage({ courseId }: { courseId: string }) {
 					<Congratulations
 						onNext={() => setCurrentStep(0)}
 						relatedCourses={relatedCourses}
+						course={course}
 					/>
 				) : (
 					<>
