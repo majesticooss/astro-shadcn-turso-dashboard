@@ -1,5 +1,5 @@
 ---
-import CourseDetailPage from "@/components/routes/academy/course-detail-page";
+import VideoDetailPage from "@/components/routes/academy/video-detail-page";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
 import { getPageData } from "@/lib/authUtils";
 
@@ -10,9 +10,9 @@ if (pageData.redirect) {
 }
 
 const { id } = Astro.params;
-const title = "Course";
+const title = "Video";
 ---
 
 <AuthenticatedLayout {...pageData} title={title}>
-	<CourseDetailPage courseId={id} client:load />
+	<VideoDetailPage videoId={id} client:load />
 </AuthenticatedLayout>

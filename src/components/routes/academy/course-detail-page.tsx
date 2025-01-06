@@ -1,86 +1,81 @@
 "use client";
 
-import ProgressIndicator from "@/components/routes/academy/progress-indicator";
-import SectionList from "@/components/routes/academy/section-list";
-import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { StarFilledIcon } from "@radix-ui/react-icons";
+import ProgressIndicator from "./progress-indicator";
 
-const courseData = {
-	id: "1",
-	title: "Introduction to React",
-	description:
-		"Learn the fundamentals of React, including components, state, props, and hooks. This course will give you a solid foundation to start building modern web applications with React.",
-	videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-	sections: [
-		{ id: "1", title: "Getting Started with React", completed: true },
-		{ id: "2", title: "Components and Props", completed: true },
-		{ id: "3", title: "State and Lifecycle", completed: false },
-		{ id: "4", title: "Handling Events", completed: false },
-		{ id: "5", title: "Hooks", completed: false },
-	],
+interface CourseDetailPageProps {
+	courseId: string;
+}
+
+// This would typically come from an API or database
+const courses = [
+	{
+		id: "digital-full-arch",
+		title: "Digital Full Arch Protocol",
+		description:
+			"Master the complete digital workflow for full arch implant restorations, from planning to final prosthesis.",
+		image:
+			"https://astro-shadcn-turso-dashboard.majestico.co/courses/inserta/digital-full-arch.jpg",
+		progress: 75,
+		category: "digital-workflow",
+		content: "Course content will be displayed here...",
+	},
+	// ... other courses
+];
+
+const categoryLabels: Record<string, string> = {
+	"digital-workflow": "Digital Workflow",
+	"guided-surgery": "Guided Surgery",
+	"immediate-loading": "Immediate Loading",
+	"soft-tissue": "Soft Tissue",
 };
 
-export default function CourseDetailPage({ courseId }: { courseId: string }) {
-	const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+export default function CourseDetailPage({ courseId }: CourseDetailPageProps) {
+	const course = courses.find((c) => c.id === courseId);
 
-	const handleNext = () => {
-		if (currentSectionIndex < courseData.sections.length - 1) {
-			setCurrentSectionIndex(currentSectionIndex + 1);
-		}
-	};
-
-	const handlePrevious = () => {
-		if (currentSectionIndex > 0) {
-			setCurrentSectionIndex(currentSectionIndex - 1);
-		}
-	};
-
-	const progress = Math.round(
-		(courseData.sections.filter((section) => section.completed).length /
-			courseData.sections.length) *
-			100,
-	);
+	if (!course) {
+		return (
+			<div className="container mx-auto px-4 py-8">
+				<div className="text-center text-gray-500">Course not found</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-4xl font-bold mb-6">{courseData.title}</h1>
-			<div className="aspect-video mb-6">
-				<iframe
-					src={courseData.videoUrl}
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-					allowFullScreen
-					className="w-full h-full"
-				></iframe>
-			</div>
-			<div className="mb-6">
-				<h2 className="text-2xl font-semibold mb-2">Course Description</h2>
-				<p className="text-gray-600">{courseData.description}</p>
-			</div>
-			<div className="mb-6">
-				<h2 className="text-2xl font-semibold mb-2">Course Progress</h2>
-				<ProgressIndicator progress={progress} />
-			</div>
-			<div className="mb-6">
-				<h2 className="text-2xl font-semibold mb-2">Course Sections</h2>
-				<SectionList
-					sections={courseData.sections}
-					currentIndex={currentSectionIndex}
-				/>
-			</div>
-			<div className="flex justify-between">
-				<button
-					onClick={handlePrevious}
-					disabled={currentSectionIndex === 0}
-					className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300"
-				>
-					Previous
-				</button>
-				<button
-					onClick={handleNext}
-					disabled={currentSectionIndex === courseData.sections.length - 1}
-					className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300"
-				>
-					Next
-				</button>
+			<div className="max-w-4xl mx-auto">
+				<div className="relative mb-6">
+					<img
+						src={course.image}
+						alt={course.title}
+						className="w-full aspect-video object-cover rounded-lg"
+					/>
+					<div className="absolute top-4 right-4 flex gap-2">
+						{course.progress === 100 && (
+							<Badge variant="default" className="bg-yellow-500/90 px-1.5">
+								<StarFilledIcon className="h-4 w-4 text-white" />
+							</Badge>
+						)}
+						<Badge variant="secondary" className="bg-white/90">
+							{categoryLabels[course.category]}
+						</Badge>
+					</div>
+				</div>
+				<div className="space-y-6">
+					<div>
+						<h1 className="text-3xl font-bold mb-2">{course.title}</h1>
+						<p className="text-gray-600">{course.description}</p>
+					</div>
+					<div className="bg-gray-50 p-4 rounded-lg">
+						<h2 className="text-lg font-semibold mb-2">Your Progress</h2>
+						<ProgressIndicator progress={course.progress} />
+					</div>
+					<div>
+						<h2 className="text-xl font-semibold mb-4">Course Content</h2>
+						<div className="prose max-w-none">{course.content}</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

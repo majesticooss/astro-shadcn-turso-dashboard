@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import Link from "@/components/ui/link";
+import { StarFilledIcon } from "@radix-ui/react-icons";
 import ProgressIndicator from "./progress-indicator";
 
 interface CourseCardProps {
@@ -32,7 +33,7 @@ export default function CourseCard({ course }: CourseCardProps) {
 						height={200}
 						className="w-full h-64 object-cover"
 					/>
-					<div className="absolute top-2 right-2">
+					<div className="absolute top-2 right-2 flex items-center gap-2">
 						<Badge variant="secondary" className="bg-white/90">
 							{categoryLabels[course.category]}
 						</Badge>

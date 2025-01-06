@@ -28,7 +28,7 @@ const courses = [
 			"Master the complete digital workflow for full arch implant restorations, from planning to final prosthesis.",
 		image:
 			"https://astro-shadcn-turso-dashboard.majestico.co/courses/inserta/digital-full-arch.jpg",
-		progress: 0,
+		progress: 75,
 		category: "digital-workflow",
 	},
 	{
@@ -38,7 +38,7 @@ const courses = [
 			"Learn the step-by-step ProFilo guided surgery system for precise implant placement.",
 		image:
 			"https://astro-shadcn-turso-dashboard.majestico.co/courses/inserta/profilo-workflow.jpg",
-		progress: 0,
+		progress: 100,
 		category: "guided-surgery",
 	},
 	{
@@ -48,7 +48,7 @@ const courses = [
 			"Comprehensive training on the innovative stackable guide system for complex implant cases.",
 		image:
 			"https://pub-69e42f518caa4ec18826134e5013efb7.r2.dev/courses/inserta/stackable-guide.jpg",
-		progress: 0,
+		progress: 30,
 		category: "guided-surgery",
 	},
 	{
@@ -68,7 +68,7 @@ const courses = [
 			"Perfect your digital impression techniques for implant cases using modern scanning technology.",
 		image:
 			"https://astro-shadcn-turso-dashboard.majestico.co/courses/inserta/digital-impression.jpg",
-		progress: 0,
+		progress: 45,
 		category: "digital-workflow",
 	},
 	{
