@@ -259,12 +259,12 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 			{
 				title: "Platform",
 				icon: GraduationCap,
-				href: "/academy/platform",
+				href: "/courses/platform",
 			},
 			{
 				title: "Inserta",
 				icon: LiaToothSolid,
-				href: "/academy/inserta",
+				href: "/courses/inserta",
 			},
 		],
 	},

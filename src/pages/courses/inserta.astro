@@ -1,0 +1,17 @@
+---
+import Courses from "@/components/routes/academy/courses";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
+import { getPageData } from "@/lib/authUtils";
+
+const pageData = await getPageData(Astro);
+
+if (pageData.redirect) {
+	return Astro.redirect(pageData.redirect);
+}
+
+const title = "Inserta";
+---
+
+<AuthenticatedLayout {...pageData} title={title}>
+	<Courses client:load />
+</AuthenticatedLayout>

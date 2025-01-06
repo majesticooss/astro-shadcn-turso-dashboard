@@ -31,7 +31,9 @@ const { currentPath, currentOrganization, user, title } = Astro.props;
 		</div>
 		<SidebarInset>
 			<DashboardHeader title={title} client:load />
-			<div class="flex flex-1 flex-col gap-4 p-4 pt-0"><slot /></div>
+			<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+				<slot />
+			</div>
 		</SidebarInset>
 	</div>
 </BaseLayout>
