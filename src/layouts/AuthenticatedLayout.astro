@@ -1,6 +1,7 @@
 ---
-import { fade } from "astro:transitions";
-import { DashboardWrapper } from "@/components/core/wrapper";
+import { DashboardHeader } from "@/components/core/header";
+import { AppSidebar } from "@/components/shadcn/app-sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Props {
@@ -14,13 +15,15 @@ const { currentPath, currentOrganization, user, title } = Astro.props;
 ---
 
 <BaseLayout>
-	<DashboardWrapper
-		currentPath={currentPath}
-		currentOrganization={currentOrganization}
-		currentUser={user}
-		title={title}
-		client:load
-	>
-		<slot />
-	</DashboardWrapper>
+	<div class="contents" transition:persist>
+		<AppSidebar
+			currentOrganization={currentOrganization}
+			currentUser={user}
+			client:load
+		/>
+	</div>
+	<SidebarInset client:load>
+		<DashboardHeader title={title} client:load />
+		<div class="flex flex-1 flex-col gap-4 p-4 pt-0"><slot /></div>
+	</SidebarInset>
 </BaseLayout>
