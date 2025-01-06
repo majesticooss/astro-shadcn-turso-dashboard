@@ -1,8 +1,6 @@
 ---
 import { ChairsCalendar } from "@/components/routes/calendar/chairs-calendar";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
-import { organization } from "@/lib/authClient";
-import { checkPageRedirect } from "@/lib/authUtils";
 import { getPageData } from "@/lib/authUtils";
 
 const pageData = await getPageData(Astro);

@@ -66,7 +66,6 @@ export const siteConfig: SiteConfig = {
 };
 
 export const dashboardNavigation: NavItemWithSubItems[] = [
-	// Operations
 	{
 		title: "Operations",
 		items: [
@@ -110,7 +109,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		],
 	},
 
-	// Lead Management
 	{
 		title: "Lead Management",
 		items: [
@@ -132,7 +130,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		],
 	},
 
-	// Clinical
 	{
 		title: "Clinical",
 		items: [
@@ -168,7 +165,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		],
 	},
 
-	// Financial
 	{
 		title: "Financial",
 		items: [
@@ -204,7 +200,6 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 		],
 	},
 
-	// Practice Management
 	{
 		title: "Practice Management",
 		items: [
@@ -252,6 +247,22 @@ export const dashboardNavigation: NavItemWithSubItems[] = [
 					{ title: "Performance KPIs", href: "/practice/analytics/kpis" },
 					{ title: "Custom Reports", href: "/practice/analytics/custom" },
 				],
+			},
+		],
+	},
+
+	{
+		title: "Academy",
+		items: [
+			{
+				title: "Platform",
+				icon: UserCog,
+				href: "/academy/platform",
+			},
+			{
+				title: "Inserta",
+				icon: Store,
+				href: "/academy/inserta",
 			},
 		],
 	},

@@ -1,8 +1,6 @@
 ---
-import { DashboardHeader } from "@/components/core/header";
 import { Dashboard } from "@/components/routes/dashboard/dashboard-page";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.astro";
-import { checkPageRedirect } from "@/lib/authUtils";
 import { getPageData } from "@/lib/authUtils";
 
 const pageData = await getPageData(Astro);
