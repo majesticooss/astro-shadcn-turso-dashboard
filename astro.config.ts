@@ -17,6 +17,14 @@ export default defineConfig({
 			exclude: ["astro:db"],
 		},
 		plugins: [tailwindcss()],
+		resolve: {
+			alias:
+				process.env.NODE_ENV === 'production'
+					? {
+						'react-dom/server': 'react-dom/server.edge',
+					}
+					: undefined,
+		},
 	},
 	integrations: [
 		react(),
