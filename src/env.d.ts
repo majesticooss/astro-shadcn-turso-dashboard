@@ -84,6 +84,16 @@ declare global {
 		isActive?: boolean;
 	}
 
+
+	interface PageData {
+		currentOrganization: OrganizationAndMember | null;
+		user: User | null;
+		session: Session | null;
+		currentPath: string;
+		redirect: string | null;
+		member: Member | null;
+	}
+
 }
 
 export interface ImportMetaEnv {

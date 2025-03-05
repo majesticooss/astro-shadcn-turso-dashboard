@@ -1,7 +1,7 @@
 import cloudflare from "@astrojs/cloudflare";
 import db from "@astrojs/db";
 import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from "astro/config";
 import { siteUrl } from "./dashboard.config";
 
@@ -16,12 +16,10 @@ export default defineConfig({
 		optimizeDeps: {
 			exclude: ["astro:db"],
 		},
+		plugins: [tailwindcss()],
 	},
 	integrations: [
 		react(),
-		tailwind({
-			applyBaseStyles: false,
-		}),
 		db(),
 	],
 });

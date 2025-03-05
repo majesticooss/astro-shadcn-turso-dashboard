@@ -14,7 +14,7 @@ const PUBLIC_PATHS = [
 	"/forgot-password",
 ];
 
-export async function getPageData(ctx: AstroGlobal) {
+export async function getPageData(ctx: AstroGlobal): Promise<PageData> {
 	const { session, user } = ctx.locals;
 
 	let currentOrganization = null;
