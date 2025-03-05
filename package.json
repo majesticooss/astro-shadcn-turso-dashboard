@@ -16,7 +16,6 @@
 		"@astrojs/cloudflare": "12.2.3",
 		"@astrojs/db": "0.14.8",
 		"@astrojs/react": "4.2.1",
-		"@astrojs/tailwind": "6.0.0",
 		"@aws-sdk/client-s3": "3.758.0",
 		"@fontsource/geist-mono": "5.2.5",
 		"@fontsource/geist-sans": "5.2.5",
