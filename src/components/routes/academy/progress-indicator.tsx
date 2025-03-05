@@ -1,12 +1,14 @@
 interface ProgressIndicatorProps {
 	progress: number;
+	className?: string;
 }
 
 export default function ProgressIndicator({
 	progress,
+	className = "",
 }: ProgressIndicatorProps) {
 	return (
-		<div className="relative pt-1">
+		<div className={`relative pt-1 ${className}`}>
 			<div className="flex gap-2 mb-2 items-center justify-between">
 				<div>
 					<span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">

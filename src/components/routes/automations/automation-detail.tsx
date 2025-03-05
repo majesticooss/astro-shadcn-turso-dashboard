@@ -215,9 +215,9 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		(newData: NodeData) => {
 			setNodes((nodes) =>
 				nodes.map((node) =>
-					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					node.id === selectedNode?.id
-						? { ...node, data: newData as any }
+						? // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+							{ ...node, data: newData as any }
 						: node,
 				),
 			);
@@ -273,7 +273,7 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 				onClose={() => setSelectedNode(null)}
 				node={selectedNode}
 				onDelete={deleteNode}
-				onUpdate={updateNodeData}
+				onUpdate={(data) => updateNodeData(data as unknown as NodeData)}
 			/>
 		</div>
 	);

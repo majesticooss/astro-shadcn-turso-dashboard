@@ -30,9 +30,9 @@ interface NodeData {
 interface NodePropertiesDialogProps {
 	isOpen: boolean;
 	onClose: () => void;
-	node: Node<NodeData> | null;
+	node: Node | null;
 	onDelete: () => void;
-	onUpdate: (data: NodeData) => void;
+	onUpdate: (data: Record<string, unknown>) => void;
 }
 
 export function NodePropertiesDialog({
@@ -67,6 +67,9 @@ export function NodePropertiesDialog({
 		onClose();
 	};
 
+	// Add type assertion for node.data.properties
+	const nodeProperties = (node.data.properties || {}) as Record<string, string>;
+
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="max-w-2xl">
@@ -83,7 +86,7 @@ export function NodePropertiesDialog({
 							{property.type === "select" ? (
 								<Select
 									name={property.name}
-									defaultValue={node.data.properties?.[property.name] || ""}
+									defaultValue={nodeProperties[property.name] || ""}
 									required={property.required}
 								>
 									<SelectTrigger className="mt-2">
@@ -101,7 +104,7 @@ export function NodePropertiesDialog({
 								<Textarea
 									id={property.name}
 									name={property.name}
-									defaultValue={node.data.properties?.[property.name] || ""}
+									defaultValue={nodeProperties[property.name] || ""}
 									className="mt-2"
 									placeholder={property.placeholder}
 									required={property.required}
@@ -111,7 +114,7 @@ export function NodePropertiesDialog({
 									id={property.name}
 									name={property.name}
 									type={property.type}
-									defaultValue={node.data.properties?.[property.name] || ""}
+									defaultValue={nodeProperties[property.name] || ""}
 									className="mt-2"
 									placeholder={property.placeholder}
 									required={property.required}
