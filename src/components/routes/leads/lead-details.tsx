@@ -320,19 +320,23 @@ export default function LeadDetails({
 									<p>
 										{typeof selectedOutcome === "string"
 											? selectedOutcome
-											: selectedOutcome.outcome}
+											: (selectedOutcome as { outcome: string }).outcome}
 									</p>
 									{typeof selectedOutcome !== "string" && (
 										<>
 											<p className="text-sm text-gray-500">
-												Reason: {selectedOutcome.reason}
+												Reason: {(selectedOutcome as { reason: string }).reason}
 											</p>
 											<p className="text-sm text-gray-500">
-												Contact method: {selectedOutcome.contactMethod}
+												Contact method:{" "}
+												{
+													(selectedOutcome as { contactMethod: string })
+														.contactMethod
+												}
 											</p>
-											{selectedOutcome.notes && (
+											{(selectedOutcome as { notes?: string }).notes && (
 												<p className="text-sm text-gray-500">
-													Notes: {selectedOutcome.notes}
+													Notes: {(selectedOutcome as { notes: string }).notes}
 												</p>
 											)}
 										</>

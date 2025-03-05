@@ -119,7 +119,15 @@ const mockTasks = {
 	],
 };
 
-const DateNavigation = ({ selectedDate, onDateSelect, activityCounts }) => {
+const DateNavigation = ({
+	selectedDate,
+	onDateSelect,
+	activityCounts,
+}: {
+	selectedDate: Date;
+	onDateSelect: (date: Date) => void;
+	activityCounts: Record<string, number>;
+}) => {
 	const today = new Date();
 	const dates = Array.from({ length: 7 }, (_, i) => {
 		const date = new Date(today);
@@ -127,8 +135,12 @@ const DateNavigation = ({ selectedDate, onDateSelect, activityCounts }) => {
 		return date;
 	});
 
-	const formatDate = (date) => {
-		const options = { weekday: "short", day: "numeric", month: "short" };
+	const formatDate = (date: Date) => {
+		const options: Intl.DateTimeFormatOptions = {
+			weekday: "short",
+			day: "numeric",
+			month: "short",
+		};
 		return date.toLocaleDateString("en-US", options);
 	};
 
@@ -173,7 +185,8 @@ const DateNavigation = ({ selectedDate, onDateSelect, activityCounts }) => {
 	);
 };
 
-const TaskCategory = ({ title, tasks }) => {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const TaskCategory = ({ title, tasks }: { title: string; tasks: any[] }) => {
 	const [expanded, setExpanded] = useState(true);
 	const [visibleTasks, setVisibleTasks] = useState(3);
 
@@ -224,29 +237,48 @@ export function TodaysTasks() {
 		for (let i = 0; i < 7; i++) {
 			const date = new Date(today);
 			date.setDate(today.getDate() + i);
-			counts[date.toDateString()] = 0;
+			// Fix the TypeScript error by using type assertion or defining a proper interface
+			(counts as Record<string, number>)[date.toDateString()] = 0;
 		}
 
 		// Count activities for each day
-		Object.values(mockTasks).forEach((categoryTasks) => {
-			categoryTasks.forEach((task) => {
-				const taskDate = task.dueDate ? new Date(task.dueDate) : today;
-				if (counts.hasOwnProperty(taskDate.toDateString())) {
-					counts[taskDate.toDateString()]++;
+		for (const categoryTasks of Object.values(mockTasks)) {
+			for (const task of categoryTasks) {
+				const taskDate = task.timestamp ? new Date(task.timestamp) : today;
+				const dateString = taskDate.toDateString();
+				if (Object.prototype.hasOwnProperty.call(counts, dateString)) {
+					counts[dateString as keyof typeof counts]++;
 				}
-			});
-		});
+			}
+		}
 
 		return counts;
 	}, []);
 
-	const filterTasksByDate = (tasks, date) => {
-		return Object.entries(tasks).reduce((acc, [category, categoryTasks]) => {
+	const filterTasksByDate = (
+		tasks: Record<
+			string,
+			Array<{ id: string; dueDate?: string; timestamp?: string }>
+		>,
+		date: Date,
+	) => {
+		return Object.entries(tasks).reduce<
+			Record<
+				string,
+				Array<{ id: string; dueDate?: string; timestamp?: string }>
+			>
+		>((acc, [category, categoryTasks]) => {
 			const filteredTasks = categoryTasks.filter((task) => {
 				if (category === "Follow Up") {
-					return new Date(task.dueDate).toDateString() === date.toDateString();
+					return (
+						new Date(task.dueDate || new Date()).toDateString() ===
+						date.toDateString()
+					);
 				}
-				return new Date().toDateString() === date.toDateString();
+				return (
+					new Date(task.timestamp || new Date()).toDateString() ===
+					date.toDateString()
+				);
 			});
 			if (filteredTasks.length > 0) {
 				acc[category] = filteredTasks;
@@ -255,7 +287,25 @@ export function TodaysTasks() {
 		}, {});
 	};
 
-	const filteredTasks = filterTasksByDate(mockTasks, selectedDate);
+	// Convert mockTasks to match the expected type for filterTasksByDate
+	const typedMockTasks: Record<
+		string,
+		Array<{ id: string; dueDate?: string; timestamp?: string }>
+	> = Object.entries(mockTasks).reduce(
+		(acc, [category, tasks]) => {
+			acc[category] = tasks.map((task) => ({
+				...task,
+				id: String(task.id), // Convert number id to string
+			}));
+			return acc;
+		},
+		{} as Record<
+			string,
+			Array<{ id: string; dueDate?: string; timestamp?: string }>
+		>,
+	);
+
+	const filteredTasks = filterTasksByDate(typedMockTasks, selectedDate);
 
 	return (
 		<div className="max-w-4xl mx-auto pt-8">

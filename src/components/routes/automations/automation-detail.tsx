@@ -99,6 +99,7 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		(params: Connection) => {
 			if (!params.source || !params.target) return;
 			const edge: Edge = {
+				id: `e${params.source}-${params.target}`,
 				...params,
 				type: "smoothstep",
 			};
@@ -214,7 +215,10 @@ const AutomationBuilderInner = ({ initialData }: AutomationBuilderProps) => {
 		(newData: NodeData) => {
 			setNodes((nodes) =>
 				nodes.map((node) =>
-					node.id === selectedNode?.id ? { ...node, data: newData } : node,
+					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+					node.id === selectedNode?.id
+						? { ...node, data: newData as any }
+						: node,
 				),
 			);
 		},

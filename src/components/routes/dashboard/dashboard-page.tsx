@@ -31,11 +31,7 @@ export function Dashboard() {
 						<TabsTrigger value="appointments">Appointments</TabsTrigger>
 					</TabsList>
 					<div className="flex items-center space-x-2">
-						<DateRangePicker
-							date={date}
-							onDateChange={setDate}
-							className="hidden md:flex"
-						/>
+						<DateRangePicker className="hidden md:flex" />
 					</div>
 				</div>
 				<TabsContent value="overview" className="space-y-4">

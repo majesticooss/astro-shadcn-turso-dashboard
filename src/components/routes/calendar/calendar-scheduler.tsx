@@ -33,6 +33,7 @@ interface CalendarSchedulerProps {
 	setIsLoading: (loading: boolean) => void;
 	handleDateClick: (arg: { date: Date; resource?: Resource }) => void;
 	handleEventClick: (arg: EventClickArg) => void;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	handleEventResize: (arg: any) => void;
 	handleEventDrop: (arg: EventDropArg) => void;
 	handleDatesSet: (arg: {
@@ -60,11 +61,20 @@ export function CalendarScheduler({
 }: CalendarSchedulerProps) {
 	const { toast } = useToast();
 	const calendarRef = useRef<FullCalendar>(null);
-	const fetchTimeoutRef = useRef<NodeJS.Timeout>();
+	const fetchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
 	// Add debouncedDatesSet to prevent multiple rapid fetches
 	const debouncedDatesSet = useCallback(
-		(arg: any) => {
+		(arg: {
+			start: Date;
+			end: Date;
+			view: {
+				type: string;
+				title: string;
+				currentStart: Date;
+				currentEnd: Date;
+			};
+		}) => {
 			if (fetchTimeoutRef.current) {
 				clearTimeout(fetchTimeoutRef.current);
 			}

@@ -14,5 +14,5 @@ const title = "Course";
 ---
 
 <AuthenticatedLayout {...pageData} title={title}>
-	<CourseDetailPage courseId={id} client:load />
+	<CourseDetailPage courseId={id || ""} client:load />
 </AuthenticatedLayout>

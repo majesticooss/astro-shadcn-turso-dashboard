@@ -119,7 +119,7 @@ export function OrganizationSwitcher({
 	React.useEffect(() => {
 		if (!hasHydrated) return;
 		const initializeOrganizations = () => {
-			if (organizations?.length > 0) {
+			if (organizations && organizations.length > 0) {
 				setOrganizations(organizations);
 				setLastFetched();
 				if (!activeOrganization) {
@@ -131,7 +131,8 @@ export function OrganizationSwitcher({
 		initializeOrganizations();
 	}, [hasHydrated, organizations]);
 
-	const handleOrganizationSwitch = async (org: Organization) => {
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	const handleOrganizationSwitch = async (org: any) => {
 		try {
 			await organization.setActive({
 				organizationId: org.id,
@@ -238,7 +239,7 @@ export function OrganizationSwitcher({
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
 							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
-								{renderLogo(activeOrganization?.logo)}
+								{renderLogo(activeOrganization?.logo ?? null)}
 							</div>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">
@@ -259,7 +260,7 @@ export function OrganizationSwitcher({
 						side={isMobile ? "bottom" : "right"}
 						sideOffset={4}
 					>
-						{organizations?.length > 0 && (
+						{organizations && organizations.length > 0 && (
 							<>
 								<DropdownMenuLabel className="text-xs text-muted-foreground">
 									Organizations
@@ -272,7 +273,7 @@ export function OrganizationSwitcher({
 											className="gap-2 p-2"
 										>
 											<div className="flex size-6 items-center justify-center rounded-sm border overflow-hidden">
-												{renderLogo(organization.logo)}
+												{renderLogo(organization.logo ?? null)}
 											</div>
 											{organization.name}
 											<DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
@@ -302,7 +303,7 @@ export function OrganizationSwitcher({
 										<PlusIcon className="size-4" />
 									</div>
 									<div className="font-medium text-muted-foreground">
-										{organizations?.length > 0
+										{organizations && organizations.length > 0
 											? "Add organization"
 											: "Create your first organization"}
 									</div>

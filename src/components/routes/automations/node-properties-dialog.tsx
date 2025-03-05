@@ -20,12 +20,19 @@ import type { Node } from "@xyflow/react";
 import { Trash } from "lucide-react";
 import { nodeTypes } from "./node-types";
 
+// Define the structure of node data
+interface NodeData {
+	label: string;
+	properties: Record<string, string>;
+	[key: string]: unknown;
+}
+
 interface NodePropertiesDialogProps {
 	isOpen: boolean;
 	onClose: () => void;
-	node: Node | null;
+	node: Node<NodeData> | null;
 	onDelete: () => void;
-	onUpdate: (data: any) => void;
+	onUpdate: (data: NodeData) => void;
 }
 
 export function NodePropertiesDialog({
@@ -43,19 +50,20 @@ export function NodePropertiesDialog({
 	const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
-		const properties: Record<string, any> = {};
+		const properties: Record<string, string> = {};
 
-		nodeType.properties?.forEach((prop) => {
+		for (const prop of nodeType.properties || []) {
 			const value = formData.get(prop.name);
-			if (value) {
+			if (value && typeof value === "string") {
 				properties[prop.name] = value;
 			}
-		});
+		}
 
 		onUpdate({
 			...node.data,
 			properties,
 		});
+
 		onClose();
 	};
 

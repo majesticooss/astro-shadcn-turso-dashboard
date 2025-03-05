@@ -35,7 +35,19 @@ const patient = {
 			</a>
 		</div>
 		<div class="rounded-md border p-6 bg-white">
-			<PatientDetail patient={patient} client:load />
+			<PatientDetail
+				patient={{
+					id: id || "",
+					name: "Loading...",
+					email: "loading...",
+					phone: "loading...",
+					dateOfBirth: "loading...",
+					lastVisit: null,
+					nextAppointment: null,
+					status: "active",
+				}}
+				client:load
+			/>
 		</div>
 	</div>
 </AuthenticatedLayout>

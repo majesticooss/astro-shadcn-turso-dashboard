@@ -14,5 +14,5 @@ const title = "Video";
 ---
 
 <AuthenticatedLayout {...pageData} title={title}>
-	<VideoDetailPage videoId={id} client:load />
+	<VideoDetailPage videoId={id || ""} client:load />
 </AuthenticatedLayout>

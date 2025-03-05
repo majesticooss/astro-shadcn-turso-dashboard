@@ -24,12 +24,14 @@ export type Patient = {
 	status: "active" | "inactive";
 };
 
-const PatientActions = ({ patient }: PatientActionsProps) => {
+const PatientActions = ({ patient }: { patient: Patient }) => {
 	return (
 		<Button
 			variant="outline"
 			size="sm"
-			onClick={() => (window.location.href = `/patients/${patient.id}`)}
+			onClick={() => {
+				window.location.href = `/patients/${patient.id}`;
+			}}
 		>
 			View
 		</Button>

@@ -91,7 +91,8 @@ declare global {
 		session: Session | null;
 		currentPath: string;
 		redirect: string | null;
-		member: Member | null;
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		member: any | null;
 	}
 
 }

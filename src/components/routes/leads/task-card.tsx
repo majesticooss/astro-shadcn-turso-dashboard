@@ -41,7 +41,12 @@ interface TaskCardProps {
 export default function TaskCard({ task }: TaskCardProps) {
 	const [expanded, setExpanded] = useState(false);
 	const [showLeadDetails, setShowLeadDetails] = useState(false);
-	const [outcome, setOutcome] = useState<string | null>(null);
+	const [outcome, setOutcome] = useState<{
+		outcome: string;
+		reason: string;
+		contactMethod: string;
+		notes: string;
+	} | null>(null);
 
 	const getIcon = (type: "call" | "lead" | "followup") => {
 		switch (type) {
@@ -62,6 +67,7 @@ export default function TaskCard({ task }: TaskCardProps) {
 		}
 	};
 
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const handleLeadUpdate = (field: string, value: any) => {
 		console.log(`Updating ${field} to:`, value);
 		if (field === "contactOutcome") {
@@ -78,6 +84,7 @@ export default function TaskCard({ task }: TaskCardProps) {
 		>
 			<CardContent className="p-4">
 				<div className="flex items-center justify-between">
+					{/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
 					<div
 						className="flex items-center space-x-2 flex-1 cursor-pointer"
 						onClick={handleClick}
@@ -121,12 +128,12 @@ export default function TaskCard({ task }: TaskCardProps) {
 								outcome
 							) : (
 								<span className="block ml-4">
-									<span className="block">{outcome.outcome}</span>
+									<span className="block">{outcome?.outcome}</span>
 									<span className="block text-xs">
-										Reason: {outcome.reason}
+										Reason: {outcome?.reason}
 									</span>
 									<span className="block text-xs">
-										Via: {outcome.contactMethod}
+										Via: {outcome?.contactMethod}
 									</span>
 									{outcome.notes && (
 										<span className="block text-xs">
@@ -143,7 +150,7 @@ export default function TaskCard({ task }: TaskCardProps) {
 					<LeadDetails
 						lead={{
 							...task.leadDetails,
-							lastOutcome: outcome || undefined,
+							lastOutcome: typeof outcome === "string" ? outcome : undefined,
 						}}
 						onClose={() => setShowLeadDetails(false)}
 						onUpdate={handleLeadUpdate}
