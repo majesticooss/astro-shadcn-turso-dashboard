@@ -61,7 +61,7 @@ export function SearchCommand({ links, onNavigate }: SearchCommandProps) {
 					<CommandEmpty>No results found.</CommandEmpty>
 					{links?.map((section) => (
 						<CommandGroup key={section.title} heading={section.title}>
-							{section.items.map((item) => {
+							{section.items?.map((item) => {
 								const Icon =
 									Icons[(item.icon as keyof typeof Icons) || "arrowRight"];
 								return (

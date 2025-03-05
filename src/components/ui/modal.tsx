@@ -34,7 +34,7 @@ export function Modal({
 			return;
 		}
 		// fire onClose event if provided
-		onClose && onClose();
+		onClose?.();
 
 		// if setShowModal is defined, use it to close modal
 		if (setShowModal) {

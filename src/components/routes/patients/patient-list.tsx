@@ -59,7 +59,7 @@ const MOCK_NAMES = [
 const generateMockData = (count: number): Patient[] => {
 	return Array.from({ length: count }, (_, i) => {
 		const name = MOCK_NAMES[i % MOCK_NAMES.length];
-		const email = name.toLowerCase().replace(" ", ".") + "@example.com";
+		const email = `${name.toLowerCase().replace(" ", ".")}@example.com`;
 		const today = new Date();
 		const lastVisitDate = new Date(today);
 		lastVisitDate.setDate(today.getDate() - Math.floor(Math.random() * 60));
