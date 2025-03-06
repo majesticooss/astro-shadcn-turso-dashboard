@@ -21,120 +21,122 @@ function getPrimaryDatabaseUrl() {
 	return import.meta.env.ASTRO_DB_REMOTE_URL ?? process.env.ASTRO_DB_REMOTE_URL
 }
 
-const config: BetterAuthOptions = {
-	database: {
-		dialect: new LibsqlDialect({
-			url: getPrimaryDatabaseUrl(),
-			// Only include authToken for remote database
-			...(import.meta.env.DEV
-				? {}
-				: { authToken: import.meta.env.ASTRO_DB_APP_TOKEN ?? process.env.ASTRO_DB_APP_TOKEN }
-			),
-		}),
-		type: "sqlite",
-	},
-	account: {
-		accountLinking: {
-			enabled: true,
-			trustedProviders: ["google"],
+const getConfig = (): BetterAuthOptions => {
+	return {
+		database: {
+			dialect: new LibsqlDialect({
+				url: getPrimaryDatabaseUrl(),
+				// Only include authToken for remote database
+				...(import.meta.env.DEV
+					? {}
+					: { authToken: import.meta.env.ASTRO_DB_APP_TOKEN ?? process.env.ASTRO_DB_APP_TOKEN }
+				),
+			}),
+			type: "sqlite",
 		},
-	},
-	emailVerification: {
-		sendOnSignUp: true,
-		autoSignInAfterVerification: true,
-		sendVerificationEmail: async ({ user, url, token }, request) => {
-			const resend = getResend();
-			await resend.emails.send({
-				from: mailConfig.from,
-				to: user.email,
-				subject: "Verify your email",
-				html: `Click this link to verify your account: <a href="${url}">${url}</a>`,
-			});
-		}
-	},
-	emailAndPassword: {
-		enabled: true,
-		requireEmailVerification: true,
-		autoSignIn: true,
-		sendResetPassword: async ({ user, url, token }, request) => {
-			const resend = getResend();
-			await resend.emails.send({
-				from: mailConfig.from,
-				to: user.email,
-				subject: "Reset your password",
-				html: `Click this link to reset your password: <a href="${url}">${url}</a>`,
-			});
-		}
-	},
-	plugins: [
-		phoneNumber({
-			sendOTP: ({ phoneNumber, code }, request) => {
-				// Implement sending OTP code via SMS
+		account: {
+			accountLinking: {
+				enabled: true,
+				trustedProviders: ["google"],
 			},
-			signUpOnVerification: {
-				getTempEmail: (phoneNumber) => {
-					return `${phoneNumber}@my-site.com`
-				},
-				//optionally you can alos pass `getTempName` function to generate a temporary name for the user
-				getTempName: (phoneNumber) => {
-					return phoneNumber //by default it will use the phone number as the name
-				}
-			}
-		}),
-		emailOTP({
-			async sendVerificationOTP({
-				email,
-				otp,
-				type
-			}) {
-				if (type === "sign-in") {
-					// Send the OTP for sign-in
-				} else if (type === "email-verification") {
-					// Send the OTP for email verification
-				} else {
-					// Send the OTP for password reset
-				}
-			},
-		}),
-		magicLink({
-			sendMagicLink: async ({ email, token, url }, request) => {
-				// send email to user
-			}
-		}),
-		organization({
-			async sendInvitationEmail(data) {
+		},
+		emailVerification: {
+			sendOnSignUp: true,
+			autoSignInAfterVerification: true,
+			sendVerificationEmail: async ({ user, url, token }, request) => {
 				const resend = getResend();
 				await resend.emails.send({
 					from: mailConfig.from,
-					to: data.email,
-					subject: "You've been invited to join an organization",
-					html: `You've been invited to join an organization:`,
+					to: user.email,
+					subject: "Verify your email",
+					html: `Click this link to verify your account: <a href="${url}">${url}</a>`,
 				});
-			},
-			allowUserToCreateOrganization: async (user) => {
-				return true;
-			},
-		}),
-		admin(),
-		twoFactor({
-			otpOptions: {
-				async sendOTP({ user, otp }, request) {
-					console.log(`Sending OTP to ${user.email}: ${otp}`);
+			}
+		},
+		emailAndPassword: {
+			enabled: true,
+			requireEmailVerification: true,
+			autoSignIn: true,
+			sendResetPassword: async ({ user, url, token }, request) => {
+				const resend = getResend();
+				await resend.emails.send({
+					from: mailConfig.from,
+					to: user.email,
+					subject: "Reset your password",
+					html: `Click this link to reset your password: <a href="${url}">${url}</a>`,
+				});
+			}
+		},
+		plugins: [
+			phoneNumber({
+				sendOTP: ({ phoneNumber, code }, request) => {
+					// Implement sending OTP code via SMS
+				},
+				signUpOnVerification: {
+					getTempEmail: (phoneNumber) => {
+						return `${phoneNumber}@my-site.com`
+					},
+					//optionally you can alos pass `getTempName` function to generate a temporary name for the user
+					getTempName: (phoneNumber) => {
+						return phoneNumber //by default it will use the phone number as the name
+					}
+				}
+			}),
+			emailOTP({
+				async sendVerificationOTP({
+					email,
+					otp,
+					type
+				}) {
+					if (type === "sign-in") {
+						// Send the OTP for sign-in
+					} else if (type === "email-verification") {
+						// Send the OTP for email verification
+					} else {
+						// Send the OTP for password reset
+					}
+				},
+			}),
+			magicLink({
+				sendMagicLink: async ({ email, token, url }, request) => {
+					// send email to user
+				}
+			}),
+			organization({
+				async sendInvitationEmail(data) {
 					const resend = getResend();
 					await resend.emails.send({
 						from: mailConfig.from,
-						to: user.email,
-						subject: "Your OTP",
-						html: `Your OTP is ${otp}`,
+						to: data.email,
+						subject: "You've been invited to join an organization",
+						html: `You've been invited to join an organization:`,
 					});
 				},
-			},
-		}),
-	],
-	rateLimit: {
-		enabled: true,
-	},
+				allowUserToCreateOrganization: async (user) => {
+					return true;
+				},
+			}),
+			admin(),
+			twoFactor({
+				otpOptions: {
+					async sendOTP({ user, otp }, request) {
+						console.log(`Sending OTP to ${user.email}: ${otp}`);
+						const resend = getResend();
+						await resend.emails.send({
+							from: mailConfig.from,
+							to: user.email,
+							subject: "Your OTP",
+							html: `Your OTP is ${otp}`,
+						});
+					},
+				},
+			}),
+		],
+		rateLimit: {
+			enabled: true,
+		},
+	}
 }
 
-export const auth = betterAuth(config);
+export const auth = betterAuth(getConfig());
 
