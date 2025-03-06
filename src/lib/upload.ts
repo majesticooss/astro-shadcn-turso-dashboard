@@ -1,16 +1,10 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
-const R2_ACCOUNT_ID = import.meta.env.R2_ACCOUNT_ID || process.env.R2_ACCOUNT_ID;
-const R2_ACCESS_KEY_ID = import.meta.env.R2_ACCESS_KEY_ID || process.env.R2_ACCESS_KEY_ID;
-const R2_SECRET_ACCESS_KEY = import.meta.env.R2_SECRET_ACCESS_KEY || process.env.R2_SECRET_ACCESS_KEY;
-const R2_BUCKET_NAME = import.meta.env.R2_BUCKET_NAME || process.env.R2_BUCKET_NAME;
-const R2_PUBLIC_URL = import.meta.env.R2_PUBLIC_URL || process.env.R2_PUBLIC_URL;
-
-if (!R2_ACCOUNT_ID) throw new Error("R2_ACCOUNT_ID is required");
-if (!R2_ACCESS_KEY_ID) throw new Error("R2_ACCESS_KEY_ID is required");
-if (!R2_SECRET_ACCESS_KEY) throw new Error("R2_SECRET_ACCESS_KEY is required");
-if (!R2_BUCKET_NAME) throw new Error("R2_BUCKET_NAME is required");
-if (!R2_PUBLIC_URL) throw new Error("R2_PUBLIC_URL is required");
+const R2_ACCOUNT_ID = import.meta.env.R2_ACCOUNT_ID ?? process.env.R2_ACCOUNT_ID;
+const R2_ACCESS_KEY_ID = import.meta.env.R2_ACCESS_KEY_ID ?? process.env.R2_ACCESS_KEY_ID;
+const R2_SECRET_ACCESS_KEY = import.meta.env.R2_SECRET_ACCESS_KEY ?? process.env.R2_SECRET_ACCESS_KEY;
+const R2_BUCKET_NAME = import.meta.env.R2_BUCKET_NAME ?? process.env.R2_BUCKET_NAME;
+const R2_PUBLIC_URL = import.meta.env.R2_PUBLIC_URL ?? process.env.R2_PUBLIC_URL;
 
 const S3 = new S3Client({
 	region: "auto",
@@ -28,12 +22,28 @@ export interface UploadOptions {
 	maxSize?: number;
 }
 
+
+function checkEnv(): boolean {
+	if (!R2_ACCOUNT_ID) return false;
+	if (!R2_ACCESS_KEY_ID) return false;
+	if (!R2_SECRET_ACCESS_KEY) return false;
+	if (!R2_BUCKET_NAME) return false;
+	if (!R2_PUBLIC_URL) return false;
+
+	return true;
+}
+
 export async function uploadFile({
 	file,
 	folder = "uploads",
 	allowedTypes = ["image/*"],
 	maxSize = 200 * 1024, // 200KB default
-}: UploadOptions): Promise<string> {
+}: UploadOptions): Promise<string | undefined> {
+
+	const validEnv = checkEnv();
+
+	if (!validEnv) return;
+
 	// Validate file type
 	const isValidType = allowedTypes.some(type => {
 		if (type.endsWith('/*')) {
