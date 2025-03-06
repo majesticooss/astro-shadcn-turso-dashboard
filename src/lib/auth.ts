@@ -5,14 +5,14 @@ import { admin, emailOTP, magicLink, organization, phoneNumber, twoFactor } from
 import { mailConfig } from "config";
 import { Resend } from 'resend';
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY);
+const resend = new Resend(import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY);
 
 // Primary database connection for auth and organizations
 function getPrimaryDatabaseUrl() {
 	if (import.meta.env.DEV) {
 		return 'file:./.astro/content.db'
 	}
-	return import.meta.env.ASTRO_DB_REMOTE_URL || process.env.ASTRO_DB_REMOTE_URL
+	return import.meta.env.ASTRO_DB_REMOTE_URL ?? process.env.ASTRO_DB_REMOTE_URL
 }
 
 const config: BetterAuthOptions = {
@@ -22,7 +22,7 @@ const config: BetterAuthOptions = {
 			// Only include authToken for remote database
 			...(import.meta.env.DEV
 				? {}
-				: { authToken: import.meta.env.ASTRO_DB_APP_TOKEN || process.env.ASTRO_DB_APP_TOKEN }
+				: { authToken: import.meta.env.ASTRO_DB_APP_TOKEN ?? process.env.ASTRO_DB_APP_TOKEN }
 			),
 		}),
 		type: "sqlite",
