@@ -6,14 +6,20 @@ const R2_SECRET_ACCESS_KEY = import.meta.env.R2_SECRET_ACCESS_KEY ?? process.env
 const R2_BUCKET_NAME = import.meta.env.R2_BUCKET_NAME ?? process.env.R2_BUCKET_NAME;
 const R2_PUBLIC_URL = import.meta.env.R2_PUBLIC_URL ?? process.env.R2_PUBLIC_URL;
 
-const S3 = new S3Client({
-	region: "auto",
-	endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-	credentials: {
-		accessKeyId: R2_ACCESS_KEY_ID,
-		secretAccessKey: R2_SECRET_ACCESS_KEY,
-	},
-});
+let s3Instance: S3Client | null = null;
+function getS3(): S3Client {
+	if (!s3Instance) {
+		s3Instance = new S3Client({
+			region: "auto",
+			endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+			credentials: {
+				accessKeyId: R2_ACCESS_KEY_ID,
+				secretAccessKey: R2_SECRET_ACCESS_KEY,
+			},
+		});
+	}
+	return s3Instance;
+}
 
 export interface UploadOptions {
 	file: File;
@@ -23,26 +29,12 @@ export interface UploadOptions {
 }
 
 
-function checkEnv(): boolean {
-	if (!R2_ACCOUNT_ID) return false;
-	if (!R2_ACCESS_KEY_ID) return false;
-	if (!R2_SECRET_ACCESS_KEY) return false;
-	if (!R2_BUCKET_NAME) return false;
-	if (!R2_PUBLIC_URL) return false;
-
-	return true;
-}
-
 export async function uploadFile({
 	file,
 	folder = "uploads",
 	allowedTypes = ["image/*"],
 	maxSize = 200 * 1024, // 200KB default
 }: UploadOptions): Promise<string | undefined> {
-
-	const validEnv = checkEnv();
-
-	if (!validEnv) return;
 
 	// Validate file type
 	const isValidType = allowedTypes.some(type => {
@@ -65,6 +57,7 @@ export async function uploadFile({
 	const buffer = await file.arrayBuffer();
 	const fileKey = `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
 
+	const S3 = getS3();
 	await S3.send(
 		new PutObjectCommand({
 			Bucket: R2_BUCKET_NAME,
