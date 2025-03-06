@@ -76,7 +76,10 @@ const formSchema = z.object({
 		}, "File size should be less than 200KB"),
 });
 
-async function uploadToR2(file: File, name: string): Promise<string> {
+async function uploadToR2(
+	file: File,
+	name: string,
+): Promise<string | undefined> {
 	// Create a FormData and append the file
 	const formData = new FormData();
 	formData.append("file", file);
