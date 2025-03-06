@@ -5,7 +5,13 @@ import { admin, emailOTP, magicLink, organization, phoneNumber, twoFactor } from
 import { mailConfig } from "config";
 import { Resend } from 'resend';
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY);
+let resendInstance: Resend | null = null;
+function getResend(): Resend {
+	if (!resendInstance) {
+		resendInstance = new Resend(import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY);
+	}
+	return resendInstance;
+}
 
 // Primary database connection for auth and organizations
 function getPrimaryDatabaseUrl() {
@@ -37,6 +43,7 @@ const config: BetterAuthOptions = {
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
 		sendVerificationEmail: async ({ user, url, token }, request) => {
+			const resend = getResend();
 			await resend.emails.send({
 				from: mailConfig.from,
 				to: user.email,
@@ -50,6 +57,7 @@ const config: BetterAuthOptions = {
 		requireEmailVerification: true,
 		autoSignIn: true,
 		sendResetPassword: async ({ user, url, token }, request) => {
+			const resend = getResend();
 			await resend.emails.send({
 				from: mailConfig.from,
 				to: user.email,
@@ -95,6 +103,7 @@ const config: BetterAuthOptions = {
 		}),
 		organization({
 			async sendInvitationEmail(data) {
+				const resend = getResend();
 				await resend.emails.send({
 					from: mailConfig.from,
 					to: data.email,
@@ -111,6 +120,7 @@ const config: BetterAuthOptions = {
 			otpOptions: {
 				async sendOTP({ user, otp }, request) {
 					console.log(`Sending OTP to ${user.email}: ${otp}`);
+					const resend = getResend();
 					await resend.emails.send({
 						from: mailConfig.from,
 						to: user.email,
