@@ -169,7 +169,7 @@ export function OrganizationSwitcher({
 			setIsLoading(true);
 
 			// Handle file upload if exists
-			let logoUrl = values.logo as string;
+			let logoUrl = values.logo as string | undefined;
 			if (values.logo instanceof File) {
 				try {
 					logoUrl = await uploadToR2(values.logo, values.slug);
