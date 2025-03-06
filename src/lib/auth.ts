@@ -5,6 +5,7 @@ import { admin, emailOTP, magicLink, organization, phoneNumber, twoFactor } from
 import { mailConfig } from "config";
 import { Resend } from 'resend';
 
+// Singleton pattern for Resend instance
 let resendInstance: Resend | null = null;
 function getResend(): Resend {
 	if (!resendInstance) {
@@ -21,8 +22,14 @@ function getPrimaryDatabaseUrl() {
 	return import.meta.env.ASTRO_DB_REMOTE_URL ?? process.env.ASTRO_DB_REMOTE_URL
 }
 
+// Cache for auth configuration
+let authConfigInstance: BetterAuthOptions | null = null;
 const getConfig = (): BetterAuthOptions => {
-	return {
+	if (authConfigInstance) {
+		return authConfigInstance;
+	}
+
+	authConfigInstance = {
 		database: {
 			dialect: new LibsqlDialect({
 				url: getPrimaryDatabaseUrl(),
@@ -135,8 +142,20 @@ const getConfig = (): BetterAuthOptions => {
 		rateLimit: {
 			enabled: true,
 		},
-	}
+	};
+
+	return authConfigInstance;
 }
 
-export const auth = betterAuth(getConfig());
+// Singleton pattern for auth instance
+let authInstance: ReturnType<typeof betterAuth> | null = null;
+export function getAuth() {
+	if (!authInstance) {
+		authInstance = betterAuth(getConfig());
+	}
+	return authInstance;
+}
+
+// For backward compatibility, also export a pre-initialized instance
+export const auth = getAuth();
 
